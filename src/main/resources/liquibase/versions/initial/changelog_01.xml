@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
+
+	<changeSet id="insert_data_into_user_role_25012015" author="velikanova.alena">
+		<insert tableName="USER_ROLE">
+			<column name="USER_ROLE_ID">5c95fc32f7a04fff9b2834209367b74c</column>
+			<column name="USER_ROLE_CODE">ROLE_ADMIN</column>
+			<column name="USER_ROLE_NAME">Administrator</column>
+		</insert>
+		<insert tableName="USER_ROLE">
+			<column name="USER_ROLE_ID">428608dedc954ef9bf76da327bb78dd0</column>
+			<column name="USER_ROLE_CODE">ROLE_USER</column>
+			<column name="USER_ROLE_NAME">User</column>
+		</insert>
+	</changeSet>
+
+	<changeSet id="insert_data_into_project_25012015" author="velikanova.alena">
+		<insert tableName="PROJECT">
+			<column name="PROJECT_ID">b9552c5869324a30958b95cbdaa6bad5</column>
+			<column name="PROJECT_NAME">Sample project</column>
+		</insert>
+	</changeSet>
+
+	<changeSet id="insert_data_into_user_25012015" author="velikanova.alena">
+		<insert tableName="USERS">
+			<column name="USERS_ID">9055dc871d544055b0d381ec3cbf74c3</column>
+			<column name="USERS_NAME">admin</column>
+			<column name="USERS_PASSWORD">$2a$11$wQ5kQ2c5pGU2KsfoIo8z9uQ6WgkPDEq5lj3uEQwBfovUeSjN1Tx2q
+			</column>
+			<column name="USERS_ROLE_ID">5c95fc32f7a04fff9b2834209367b74c</column>
+		</insert>
+	</changeSet>
+
+</databaseChangeLog>

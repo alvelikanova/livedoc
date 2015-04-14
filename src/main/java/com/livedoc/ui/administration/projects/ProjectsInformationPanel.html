@@ -1,0 +1,20 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.3-strict.dtd"
+	xml:lang="en" lang="en">
+<wicket:panel>
+	<div class="panel panel-primary" wicket:id="projects-container">
+		<div class="panel-heading">
+			<h3 class="panel-title">
+				<wicket:message key="projects.title"></wicket:message>
+			</h3>
+		</div>
+		<div class="panel-body">
+			<div class="table-responsive">
+				<table class="table table-striped" wicket:id="projects"></table>
+			</div>
+		</div>
+	</div>
+	<div wicket:id="edit-project-panel" />
+</wicket:panel>
+</html>

@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
+
+	<changeSet id="create_table_user_role_25012015" author="velikanova.alena">
+		<createTable tableName="USER_ROLE" remarks="User role">
+			<column name="USER_ROLE_ID" type="varchar(32)" remarks="Id">
+				<constraints primaryKey="true" />
+			</column>
+			<column name="USER_ROLE_CODE" type="varchar(16)"
+				remarks="Role's code which is used for Spring Security, always starts with 'ROLE_'">
+				<constraints nullable="false" />
+			</column>
+			<column name="USER_ROLE_NAME" type="varchar(32)"
+				remarks="Role's name which is displayed in UI">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+	</changeSet>
+
+	<changeSet id="add_uq_role_code_to_user_role_25012015"
+		author="velikanova.alena">
+		<addUniqueConstraint columnNames="USER_ROLE_CODE"
+			tableName="USER_ROLE" />
+	</changeSet>
+
+	<changeSet id="add_uq_role_name_to_user_role_25012015"
+		author="velikanova.alena">
+		<addUniqueConstraint columnNames="USER_ROLE_NAME"
+			tableName="USER_ROLE" />
+	</changeSet>
+
+	<changeSet id="create_table_project_25012015" author="velikanova.alena">
+		<createTable tableName="PROJECT" remarks="Project">
+			<column name="PROJECT_ID" type="varchar(32)" remarks="Id">
+				<constraints primaryKey="true" />
+			</column>
+			<column name="PROJECT_NAME" type="varchar(32)" remarks="Project's name">
+				<constraints nullable="false" />
+			</column>
+			<column name="PROJECT_DESCRIPTION" type="varchar(256)"
+				remarks="Project's description" />
+		</createTable>
+	</changeSet>
+
+	<changeSet id="add_uq_project_name_to_project_25012015"
+		author="velikanova.alena">
+		<addUniqueConstraint columnNames="PROJECT_NAME"
+			tableName="PROJECT" />
+	</changeSet>
+
+	<changeSet id="create_table_users_25012015" author="velikanova.alena">
+		<createTable tableName="USERS" remarks="User">
+			<column name="USERS_ID" type="varchar(32)" remarks="Id">
+				<constraints primaryKey="true" />
+			</column>
+			<column name="USERS_NAME" type="varchar(32)" remarks="User's login name">
+				<constraints nullable="false" />
+			</column>
+			<column name="USERS_PASSWORD" type="varchar(64)" remarks="User's password">
+				<constraints nullable="false" />
+			</column>
+			<column name="USERS_ROLE_ID" type="varchar(32)" remarks="Role's id">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+	</changeSet>
+
+	<changeSet id="add_fk_users_role_25012015" author="velikanova.alena">
+		<addForeignKeyConstraint baseColumnNames="USERS_ROLE_ID"
+			baseTableName="USERS" constraintName="FK_USERS_ROLE_ID"
+			referencedColumnNames="USER_ROLE_ID" referencedTableName="USER_ROLE" />
+	</changeSet>
+
+	<changeSet id="add_uq_users_name_to_users_25012015" author="velikanova.alena">
+		<addUniqueConstraint columnNames="USERS_NAME"
+			tableName="USERS" />
+	</changeSet>
+
+	<changeSet id="create_table_users_to_project_25012015"
+		author="velikanova.alena">
+		<createTable tableName="USERS_TO_PROJECT"
+			remarks="Junction table for many-to-many relationship between USERS and PROJECT tables">
+			<column name="PROJECT_ID" type="varchar(32)" remarks="Project id">
+				<constraints nullable="false" />
+			</column>
+			<column name="USERS_ID" type="varchar(32)" remarks="User id">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+	</changeSet>
+
+	<changeSet id="add_fk_users_to_project_project_25012015" author="velikanova.alena">
+		<addForeignKeyConstraint baseColumnNames="PROJECT_ID"
+			baseTableName="USERS_TO_PROJECT" constraintName="FK_PROJECT_ID"
+			referencedColumnNames="PROJECT_ID" referencedTableName="PROJECT" />
+	</changeSet>
+	
+	<changeSet id="add_fk_users_to_project_user_25012015" author="velikanova.alena">
+		<addForeignKeyConstraint baseColumnNames="USERS_ID"
+			baseTableName="USERS_TO_PROJECT" constraintName="FK_USERS_ID"
+			referencedColumnNames="USERS_ID" referencedTableName="USERS" />
+	</changeSet>
+
+	<changeSet id="add_primary_key_to_users_to_project_25012015"
+		author="velikanova.alena">
+		<addPrimaryKey columnNames="PROJECT_ID, USERS_ID"
+			constraintName="PK_USERS_TO_PROJECT" tableName="USERS_TO_PROJECT" />
+	</changeSet>
+
+	<changeSet id="create_table_category_25012015" author="velikanova.alena">
+		<createTable tableName="CATEGORY" remarks="Section of documentation">
+			<column name="CATEGORY_ID" type="varchar(32)" remarks="Id">
+				<constraints primaryKey="true" />
+			</column>
+			<column name="CATEGORY_NAME" type="varchar(64)" remarks="Section name">
+				<constraints nullable="false" />
+			</column>
+			<column name="CATEGORY_DESCRIPTION" type="varchar(256)"
+				remarks="Section description" />
+			<column name="CATEGORY_PROJECT_ID" type="varchar(32)" remarks="Project's id">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+	</changeSet>
+
+	<changeSet id="add_uq_category_name_to_section_25012015"
+		author="velikanova.alena">
+		<addUniqueConstraint columnNames="CATEGORY_NAME"
+			tableName="CATEGORY" />
+	</changeSet>
+
+	<changeSet id="add_fk_category_project_25012015" author="velikanova.alena">
+		<addForeignKeyConstraint baseColumnNames="CATEGORY_PROJECT_ID"
+			baseTableName="CATEGORY" constraintName="FK_CATEGORY_PROJECT_ID"
+			referencedColumnNames="PROJECT_ID" referencedTableName="PROJECT" />
+	</changeSet>
+
+	<changeSet id="create_table_doc_data_25012015" author="velikanova.alena">
+		<createTable tableName="DOC_DATA"
+			remarks="Table which contains general document information such as title, related project, etc.">
+			<column name="DOC_DATA_ID" type="varchar(32)" remarks="Id">
+				<constraints primaryKey="true" />
+			</column>
+			<column name="DOC_DATA_TITLE" type="varchar(64)" remarks="Document's title">
+				<constraints nullable="false" />
+			</column>
+			<column name="DOC_DATA_DESCRIPTION" type="varchar(256)" remarks="Document's description" />
+			<column name="DOC_DATA_CREATE_USER_ID" type="varchar(32)"
+				remarks="User who has created document">
+				<constraints nullable="false" />
+			</column>
+			<column name="DOC_DATA_CREATE_TS" type="timestamp" remarks="Creation timestamp">
+				<constraints nullable="false" />
+			</column>
+			<column name="DOC_DATA_LAST_MOD_USER_ID" type="varchar(32)"
+				remarks="User who has last modified document">
+				<constraints nullable="false" />
+			</column>
+			<column name="DOC_DATA_LAST_MOD_TS" type="timestamp"
+				remarks="Last modification timestamp">
+				<constraints nullable="false" />
+			</column>
+			<column name="DOC_DATA_PROJECT_ID" type="varchar(32)" remarks="Project's id">
+				<constraints nullable="false" />
+			</column>
+			<column name="DOC_DATA_CATEGORY_ID" type="varchar(32)" remarks="Section's id">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+	</changeSet>
+
+	<changeSet id="add_fk_doc_data_create_user_25012015" author="velikanova.alena">
+		<addForeignKeyConstraint baseColumnNames="DOC_DATA_CREATE_USER_ID"
+			baseTableName="DOC_DATA" constraintName="FK_DOC_DATA_CREATE_USER_ID"
+			referencedColumnNames="USERS_ID" referencedTableName="USERS" />
+	</changeSet>
+
+	<changeSet id="add_fk_doc_data_last_mod_user_25012015"
+		author="velikanova.alena">
+		<addForeignKeyConstraint baseColumnNames="DOC_DATA_LAST_MOD_USER_ID"
+			baseTableName="DOC_DATA" constraintName="FK_DOC_DATA_LAST_MOD_USER_ID"
+			referencedColumnNames="USERS_ID" referencedTableName="USERS" />
+	</changeSet>
+
+	<changeSet id="add_fk_doc_data_project_25012015" author="velikanova.alena">
+		<addForeignKeyConstraint baseColumnNames="DOC_DATA_PROJECT_ID"
+			baseTableName="DOC_DATA" constraintName="FK_DOC_DATA_PROJECT_ID"
+			referencedColumnNames="PROJECT_ID" referencedTableName="PROJECT" />
+	</changeSet>
+
+	<changeSet id="add_fk_doc_data_category_25012015" author="velikanova.alena">
+		<addForeignKeyConstraint baseColumnNames="DOC_DATA_CATEGORY_ID"
+			baseTableName="DOC_DATA" constraintName="FK_DOC_DATA_CATEGORY_ID"
+			referencedColumnNames="CATEGORY_ID" referencedTableName="CATEGORY" />
+	</changeSet>
+
+</databaseChangeLog>
