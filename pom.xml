@@ -189,6 +189,14 @@
 				<db.dialect>org.hibernate.dialect.PostgreSQLDialect</db.dialect>
 			</properties>
 		</profile>
+		<profile>
+			<id>dev</id>
+			<properties>
+				<db.driver.class.name>org.postgresql.Driver</db.driver.class.name>
+				<db.url><![CDATA[jdbc:postgresql://ec2-107-20-159-103.compute-1.amazonaws.com:5432/d34ik6a5m34ptd?user=beeqfdbjlqrsla&password=rB-0W_OFuMkNjP4NCA-3ryqFVk&ssl=true&sslfactory=org.postgresql.ssl.NonValidatingFactory]]></db.url>
+				<db.dialect>org.hibernate.dialect.PostgreSQLDialect</db.dialect>
+			</properties>
+		</profile>
 	</profiles>
 
 </project>
