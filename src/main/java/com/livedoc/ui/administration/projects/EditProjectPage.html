@@ -12,14 +12,25 @@
 						<label class="col-sm-2 control-label"><wicket:message
 								key="projectinfopanel.name"></wicket:message></label>
 						<div class="col-sm-9">
-							<input class="form-control" type="text" wicket:id="project-name"></input>
+							<input class="form-control"
+								wicket:message="placeholder:projectinfopanel.name.placeholder"
+								type="text" wicket:id="project-name"></input>
 						</div>
 					</div>
 					<div class="form-group">
 						<label class="col-sm-2 control-label"><wicket:message
 								key="projectinfopanel.description"></wicket:message></label>
 						<div class="col-sm-9">
-							<textarea class="form-control" style="resize:none;" rows="3" wicket:id="project-description"></textarea>
+							<textarea class="form-control" style="resize: none;" rows="3"
+								wicket:message="placeholder:projectinfopanel.description.placeholder"
+								wicket:id="project-description"></textarea>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label"><wicket:message
+								key="projectinfopanel.categories"></wicket:message></label>
+						<div class="col-sm-9">
+							<div wicket:id="categories"></div>
 						</div>
 					</div>
 					<div class="form-group last">
@@ -27,8 +38,7 @@
 							<input type="submit" class="btn btn-primary"
 								wicket:id="save-button"
 								wicket:message="value:projectinfopanel.save"></input> <input
-								type="button" class="btn btn-default"
-								wicket:id="cancel-button"
+								type="button" class="btn btn-default" wicket:id="cancel-button"
 								wicket:message="value:projectinfopanel.cancel"></input>
 						</div>
 					</div>

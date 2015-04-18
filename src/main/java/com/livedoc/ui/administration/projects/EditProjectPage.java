@@ -55,6 +55,8 @@ public class EditProjectPage extends MasterPage {
 						form.getModel(), "description"));
 		projectDescriptionField.add(StringValidator.maximumLength(256));
 
+		form.add(new EditCategoriesPanel("categories", form.getModel()));
+		
 		AjaxButton saveButton = new AjaxButton("save-button", form) {
 
 			private static final long serialVersionUID = 131954482957027000L;

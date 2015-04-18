@@ -36,6 +36,9 @@ public class ProjectEntity extends BaseDalEntity {
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "project")
 	private Set<DocumentDataEntity> documentDataEntities = new HashSet<DocumentDataEntity>(0);
 
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "project")
+	private Set<CategoryEntity> categories = new HashSet<CategoryEntity>(0);
+
 	@ManyToMany(fetch = FetchType.LAZY, mappedBy = "projects")
 	private Set<UserEntity> users = new HashSet<UserEntity>(0);
 
@@ -47,8 +50,8 @@ public class ProjectEntity extends BaseDalEntity {
 		this.projectName = projectName;
 	}
 
-	public ProjectEntity(String projectId, String projectName, Set<DocumentDataEntity> documentDataEntities,
-			Set<UserEntity> users) {
+	public ProjectEntity(String projectId, String projectName,
+			Set<DocumentDataEntity> documentDataEntities, Set<UserEntity> users) {
 		this.projectId = projectId;
 		this.projectName = projectName;
 		this.documentDataEntities = documentDataEntities;
@@ -75,7 +78,8 @@ public class ProjectEntity extends BaseDalEntity {
 		return documentDataEntities;
 	}
 
-	public void setDocumentDataEntities(Set<DocumentDataEntity> documentDataEntities) {
+	public void setDocumentDataEntities(
+			Set<DocumentDataEntity> documentDataEntities) {
 		this.documentDataEntities = documentDataEntities;
 	}
 
@@ -93,6 +97,14 @@ public class ProjectEntity extends BaseDalEntity {
 
 	public void setProjectDescription(String projectDescription) {
 		this.projectDescription = projectDescription;
+	}
+
+	public Set<CategoryEntity> getCategories() {
+		return categories;
+	}
+
+	public void setCategories(Set<CategoryEntity> categories) {
+		this.categories = categories;
 	}
 
 }

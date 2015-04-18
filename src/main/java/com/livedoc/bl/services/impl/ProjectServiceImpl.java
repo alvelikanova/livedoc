@@ -8,24 +8,36 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.livedoc.bl.domain.entities.Category;
 import com.livedoc.bl.domain.entities.Project;
 import com.livedoc.bl.services.ProjectService;
+import com.livedoc.dal.entities.CategoryEntity;
 import com.livedoc.dal.entities.ProjectEntity;
+import com.livedoc.dal.providers.CategoryDataProvider;
 import com.livedoc.dal.providers.ProjectDataProvider;
 
 @Service
+@Transactional
 public class ProjectServiceImpl implements ProjectService {
 
 	@Autowired
 	private ProjectDataProvider projectDataProvider;
 	@Autowired
+	private CategoryDataProvider categoryDataProvider;
+	@Autowired
 	private DozerBeanMapper mapper;
 
-	@Transactional
 	public Project findProjectById(String id) {
 		ProjectEntity entity = projectDataProvider.findById(id);
 		if (entity != null) {
-			return mapper.map(entity, Project.class);
+			Project project = mapper.map(entity, Project.class);
+			List<CategoryEntity> categoryEntities = categoryDataProvider
+					.findAllCategoriesByProjectId(entity.getProjectId());
+			for (CategoryEntity categoryEntity : categoryEntities) {
+				Category category = mapper.map(categoryEntity, Category.class);
+				project.getCategories().add(category);
+			}
+			return project;
 		}
 		return null;
 	}
@@ -35,6 +47,12 @@ public class ProjectServiceImpl implements ProjectService {
 		List<ProjectEntity> projectEntities = projectDataProvider.findAll();
 		for (ProjectEntity projectEntity : projectEntities) {
 			Project project = mapper.map(projectEntity, Project.class);
+			List<CategoryEntity> categoryEntities = categoryDataProvider
+					.findAllCategoriesByProjectId(projectEntity.getProjectId());
+			for (CategoryEntity categoryEntity : categoryEntities) {
+				Category category = mapper.map(categoryEntity, Category.class);
+				project.getCategories().add(category);
+			}
 			projects.add(project);
 		}
 		return projects;
