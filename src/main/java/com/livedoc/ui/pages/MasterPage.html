@@ -7,7 +7,13 @@
 	rel="stylesheet" />
 </head>
 <body>
-	<div wicket:id="header-panel"></div>
-	<wicket:child />
+	<nav class="navbar navbar-inverse navbar-fixed-top">
+		<div wicket:id="header-panel"></div>
+	</nav>
+	<div class="container-fluid">
+		<div class="row">
+			<wicket:child />
+		</div>
+	</div>
 </body>
 </html>

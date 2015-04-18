@@ -1,0 +1,66 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.3-strict.dtd"
+	xml:lang="en" lang="en">
+<body>
+	<wicket:extend>
+		<div class="container">
+			<div class="well well-lg">
+				<form class="form-horizontal" wicket:id="form">
+					<div wicket:id="feedback"></div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label"><wicket:message
+								key="userinfopanel.username"></wicket:message></label>
+						<div class="col-sm-9">
+							<input class="form-control" type="text"
+								wicket:id="username"></input>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label"><wicket:message
+								key="userinfopanel.password"></wicket:message></label>
+						<div class="col-sm-9">
+							<input class="form-control" type="password"
+								wicket:id="password"></input>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label"><wicket:message
+								key="userinfopanel.repeat_password"></wicket:message></label>
+						<div class="col-sm-9">
+							<input class="form-control" type="password"
+								wicket:id="repeat-password"></input>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label"><wicket:message
+								key="userinfopanel.roles"></wicket:message></label>
+						<div class="col-sm-9">
+							<div class="dropdown">
+								<select class="dropdown-menu" style="display:inline; width:100%; box-shadow: none;" wicket:id="roles-choices">
+								</select>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label"><wicket:message
+								key="userinfopanel.projects"></wicket:message></label>
+						<div class="dropdown col-sm-9">
+							<input wicket:id="projects" type="hidden" style="width: 100%;" />
+						</div>
+					</div>
+					<div class="form-group last">
+						<div class="col-sm-offset-2 col-sm-9">
+							<input type="submit" class="btn btn-primary"
+								wicket:id="save-button"
+								wicket:message="value:userinfopanel.save"></input> <input
+								type="button" class="btn btn-default" wicket:id="cancel-button"
+								wicket:message="value:userinfopanel.cancel"></input>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</wicket:extend>
+</body>
+</html>

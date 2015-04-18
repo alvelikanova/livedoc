@@ -4,15 +4,11 @@
 	xml:lang="en" lang="en">
 <body>
 	<wicket:extend>
-		<div class="container">
-			<div class="row">
-				<div class="col-sm-3 col-md-2">
-					<div wicket:id="menu-panel" />
-				</div>
-				<div class="col-sm-9 col-sm-offset-3 col-md-9 col-md-offset-2">
-					<wicket:child />
-				</div>
-			</div>
+		<div class="col-sm-3 col-md-2 affix">
+			<div wicket:id="menu-panel" />
+		</div>
+		<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 affix">
+			<wicket:child />
 		</div>
 	</wicket:extend>
 </body>
