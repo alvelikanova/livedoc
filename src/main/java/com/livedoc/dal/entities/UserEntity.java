@@ -39,17 +39,17 @@ public class UserEntity extends BaseDalEntity {
 
 	@Column(name = "users_password", nullable = false, length = 64)
 	private String password;
-	
-	@ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
-	@JoinTable(name = "users_to_project", 
-				joinColumns = { @JoinColumn(name = "USERS_ID", nullable = false) }, 
-				inverseJoinColumns = { @JoinColumn(name = "PROJECT_ID", nullable = false) })
+
+	@ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.MERGE,
+			CascadeType.PERSIST, CascadeType.REFRESH })
+	@JoinTable(name = "users_to_project", joinColumns = { @JoinColumn(name = "USERS_ID", nullable = false) }, inverseJoinColumns = { @JoinColumn(name = "PROJECT_ID", nullable = false) })
 	private Set<ProjectEntity> projects = new HashSet<ProjectEntity>();
 
 	public UserEntity() {
 	}
 
-	public UserEntity(String userId, RoleEntity role, String username, String password) {
+	public UserEntity(String userId, RoleEntity role, String username,
+			String password) {
 		this.userId = userId;
 		this.role = role;
 		this.username = username;

@@ -13,4 +13,6 @@ public interface UserService {
 	List<User> findAllUsers();
 	
 	void saveUser(User user);
+	
+	void deleteUser(User user);
 }

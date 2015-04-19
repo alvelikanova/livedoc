@@ -17,6 +17,7 @@ import com.livedoc.dal.entities.UserEntity;
 import com.livedoc.dal.providers.UserDataProvider;
 
 @Service
+@Transactional
 public class UserServiceImpl implements UserService {
 
 	@Autowired
@@ -24,7 +25,6 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	private DozerBeanMapper mapper;
 
-	@Transactional
 	public User findUserByLoginName(String loginName) {
 		UserEntity usersEntity = userDataProvider.findByLoginName(loginName);
 		if (usersEntity != null) {
@@ -35,7 +35,6 @@ public class UserServiceImpl implements UserService {
 		return null;
 	}
 
-	@Transactional
 	public User findUserById(String id) {
 		UserEntity usersEntity = userDataProvider.findById(id);
 		if (usersEntity != null) {
@@ -52,7 +51,6 @@ public class UserServiceImpl implements UserService {
 		return null;
 	}
 
-	@Transactional
 	public List<User> findAllUsers() {
 		List<User> users = new ArrayList<User>();
 		List<UserEntity> usersEntities = userDataProvider.findAll();
@@ -63,10 +61,14 @@ public class UserServiceImpl implements UserService {
 		return users;
 	}
 
-	@Transactional
 	public void saveUser(User user) {
 		UserEntity userEntity = mapper.map(user, UserEntity.class);
 		userDataProvider.saveOrUpdate(userEntity);
 
+	}
+
+	public void deleteUser(User user) {
+		UserEntity userEntity = mapper.map(user, UserEntity.class);
+		userDataProvider.delete(userEntity);
 	}
 }

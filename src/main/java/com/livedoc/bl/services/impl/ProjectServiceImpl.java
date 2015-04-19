@@ -8,10 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.livedoc.bl.domain.entities.Category;
 import com.livedoc.bl.domain.entities.Project;
 import com.livedoc.bl.services.ProjectService;
-import com.livedoc.dal.entities.CategoryEntity;
 import com.livedoc.dal.entities.ProjectEntity;
 import com.livedoc.dal.providers.CategoryDataProvider;
 import com.livedoc.dal.providers.ProjectDataProvider;
@@ -31,12 +29,6 @@ public class ProjectServiceImpl implements ProjectService {
 		ProjectEntity entity = projectDataProvider.findById(id);
 		if (entity != null) {
 			Project project = mapper.map(entity, Project.class);
-			List<CategoryEntity> categoryEntities = categoryDataProvider
-					.findAllCategoriesByProjectId(entity.getProjectId());
-			for (CategoryEntity categoryEntity : categoryEntities) {
-				Category category = mapper.map(categoryEntity, Category.class);
-				project.getCategories().add(category);
-			}
 			return project;
 		}
 		return null;
@@ -47,12 +39,6 @@ public class ProjectServiceImpl implements ProjectService {
 		List<ProjectEntity> projectEntities = projectDataProvider.findAll();
 		for (ProjectEntity projectEntity : projectEntities) {
 			Project project = mapper.map(projectEntity, Project.class);
-			List<CategoryEntity> categoryEntities = categoryDataProvider
-					.findAllCategoriesByProjectId(projectEntity.getProjectId());
-			for (CategoryEntity categoryEntity : categoryEntities) {
-				Category category = mapper.map(categoryEntity, Category.class);
-				project.getCategories().add(category);
-			}
 			projects.add(project);
 		}
 		return projects;
@@ -61,6 +47,11 @@ public class ProjectServiceImpl implements ProjectService {
 	public void saveProject(Project project) {
 		ProjectEntity projectEntity = mapper.map(project, ProjectEntity.class);
 		projectDataProvider.saveOrUpdate(projectEntity);
+	}
+
+	public void deleteProject(Project project) {
+		ProjectEntity projectEntity = mapper.map(project, ProjectEntity.class);
+		projectDataProvider.delete(projectEntity);
 	}
 
 }

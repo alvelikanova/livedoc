@@ -18,6 +18,7 @@ public class Settings implements Serializable {
 
 	private List<SettingsItem> properties = new ArrayList<SettingsItem>();
 	private int rowCount;
+	private boolean includeButtons;
 
 	public int getRowCount() {
 		return rowCount;
@@ -25,6 +26,14 @@ public class Settings implements Serializable {
 
 	public void setRowCount(int rowCount) {
 		this.rowCount = rowCount;
+	}
+
+	public boolean isIncludeButtons() {
+		return includeButtons;
+	}
+
+	public void setIncludeButtons(boolean includeButtons) {
+		this.includeButtons = includeButtons;
 	}
 
 	public List<SettingsItem> getProperties() {

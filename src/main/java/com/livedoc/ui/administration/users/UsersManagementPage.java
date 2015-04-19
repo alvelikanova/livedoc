@@ -12,6 +12,8 @@ public class UsersManagementPage extends AdministrationPage {
 
 	private static final long serialVersionUID = -5700112539037765027L;
 
+	private Table<User, String> table;
+
 	@Override
 	public void onInitialize() {
 		super.onInitialize();
@@ -28,10 +30,13 @@ public class UsersManagementPage extends AdministrationPage {
 		add(createUserLink);
 		Settings settings = new Settings();
 		settings.setRowCount(5);
+		settings.setIncludeButtons(true);
 		settings.addItem("name", getString("table.users.name"), 1);
 		settings.addItem("role.name", getString("table.users.role"), 2);
-		Table<User, String> table = new Table<User, String>("users-table",
-				settings, new UsersProvider());
+		table = new Table<User, String>("users-table", settings,
+				new UsersProvider());
+		table.setCellFunctionsProvider(new UserCellFunctionsProvider(
+				UsersManagementPage.this, table));
 		add(table);
 	}
 }

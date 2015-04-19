@@ -14,6 +14,7 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.validation.EqualPasswordInputValidator;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -48,17 +49,24 @@ public class EditUserPage extends MasterPage {
 	private Feedback feedbackPanel;
 	private Form<User> form;
 	private Page pageToReturn;
+	private IModel<User> model = new Model<User>(new User());
 
 	public EditUserPage(Page pageToReturn) {
 		super();
 		this.pageToReturn = pageToReturn;
 	}
 
+	public EditUserPage(Page pageToReturn, IModel<User> model) {
+		super();
+		this.pageToReturn = pageToReturn;
+		this.model = model;
+	}
+
 	@Override
 	public void onInitialize() {
 		super.onInitialize();
 
-		form = new Form<User>("form", new Model<User>(new User()));
+		form = new Form<User>("form", model);
 		form.setOutputMarkupId(true);
 		add(form);
 
@@ -67,16 +75,14 @@ public class EditUserPage extends MasterPage {
 		form.add(feedbackPanel);
 
 		RequiredTextField<String> usernameField = new RequiredTextField<String>(
-				"username", new PropertyModel<String>(form.getModel(),
-						"name"));
+				"username", new PropertyModel<String>(form.getModel(), "name"));
 
-		PasswordTextField passwordField = new PasswordTextField(
-				"password", new PropertyModel<String>(form.getModel(),
-						"password"));
+		PasswordTextField passwordField = new PasswordTextField("password",
+				new PropertyModel<String>(form.getModel(), "password"));
 
 		PasswordTextField repeatPasswordField = new PasswordTextField(
-				"repeat-password", new PropertyModel<String>(
-						form.getModel(), "password"));
+				"repeat-password", new PropertyModel<String>(form.getModel(),
+						"password"));
 
 		EqualPasswordInputValidator passwordValidator = new EqualPasswordInputValidator(
 				passwordField, repeatPasswordField);
@@ -98,7 +104,7 @@ public class EditUserPage extends MasterPage {
 		Select2MultiChoice<Project> projectsSelector = new Select2MultiChoice<Project>(
 				"projects", new PropertyModel<Collection<Project>>(
 						form.getModel(), "projects"), new ProjectsProvider());
-		
+
 		form.add(usernameField, passwordField, repeatPasswordField,
 				rolesDropDownChoice, projectsSelector);
 

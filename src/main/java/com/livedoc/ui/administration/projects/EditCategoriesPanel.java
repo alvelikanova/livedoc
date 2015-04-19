@@ -28,7 +28,9 @@ public class EditCategoriesPanel extends GenericPanel<Project> {
 
 	public EditCategoriesPanel(String id, IModel<Project> projectModel) {
 		super(id, projectModel);
-		addEmptyCategory();
+		if (getModelObject().getCategories().isEmpty()) {
+			addEmptyCategory();
+		}
 	}
 
 	@Override

@@ -7,6 +7,7 @@ import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -23,20 +24,27 @@ public class EditProjectPage extends MasterPage {
 
 	@SpringBean
 	private ProjectService projectService;
-	
+
 	private Feedback feedbackPanel;
 	private Page pageToReturn;
 	private Form<Project> form;
+	private IModel<Project> model = new Model<Project>(new Project());
 
 	public EditProjectPage(Page pageToReturn) {
 		super();
 		this.pageToReturn = pageToReturn;
 	}
 
+	public EditProjectPage(Page pageToReturn, IModel<Project> model) {
+		super();
+		this.pageToReturn = pageToReturn;
+		this.model = model;
+	}
+
 	@Override
 	public void onInitialize() {
 		super.onInitialize();
-		form = new Form<Project>("form", new Model<Project>(new Project()));
+		form = new Form<Project>("form", model);
 		form.setOutputMarkupId(true);
 		add(form);
 
@@ -56,7 +64,7 @@ public class EditProjectPage extends MasterPage {
 		projectDescriptionField.add(StringValidator.maximumLength(256));
 
 		form.add(new EditCategoriesPanel("categories", form.getModel()));
-		
+
 		AjaxButton saveButton = new AjaxButton("save-button", form) {
 
 			private static final long serialVersionUID = 131954482957027000L;
@@ -80,7 +88,7 @@ public class EditProjectPage extends MasterPage {
 
 			@Override
 			public void onClick(AjaxRequestTarget target) {
-				//TODO confirmation dialog
+				// TODO confirmation dialog
 				setResponsePage(pageToReturn);
 			}
 		};

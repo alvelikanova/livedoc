@@ -28,10 +28,12 @@ public class ProjectsManagementPage extends AdministrationPage {
 		add(createProjectLink);
 		Settings settings = new Settings();
 		settings.setRowCount(5);
+		settings.setIncludeButtons(true);
 		settings.addItem("name", getString("table.projects.name"), 1);
 		settings.addItem("description", getString("table.projects.description"), 2);
 		Table<Project, String> table = new Table<Project, String>("projects-table",
 				settings, new ProjectsProvider());
+		table.setCellFunctionsProvider(new ProjectCellFunctionsProvider(ProjectsManagementPage.this, table));
 		add(table);
 	}
 

@@ -3,11 +3,14 @@ package com.livedoc.dal.entities;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -36,10 +39,14 @@ public class ProjectEntity extends BaseDalEntity {
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "project")
 	private Set<DocumentDataEntity> documentDataEntities = new HashSet<DocumentDataEntity>(0);
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "project")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "project", cascade = {CascadeType.ALL})
 	private Set<CategoryEntity> categories = new HashSet<CategoryEntity>(0);
 
-	@ManyToMany(fetch = FetchType.LAZY, mappedBy = "projects")
+	@ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.MERGE,
+			CascadeType.PERSIST, CascadeType.REFRESH })
+	@JoinTable(name = "users_to_project", 
+				joinColumns = { @JoinColumn(name = "PROJECT_ID", nullable = false) }, 
+				inverseJoinColumns = { @JoinColumn(name = "USERS_ID", nullable = false) })
 	private Set<UserEntity> users = new HashSet<UserEntity>(0);
 
 	public ProjectEntity() {
