@@ -17,6 +17,7 @@ public class UsersManagementPage extends AdministrationPage {
 	@Override
 	public void onInitialize() {
 		super.onInitialize();
+		setUsersMenuLinkSelected();
 
 		AjaxLink<Void> createUserLink = new AjaxLink<Void>("createUser") {
 			private static final long serialVersionUID = -6420561414459574501L;

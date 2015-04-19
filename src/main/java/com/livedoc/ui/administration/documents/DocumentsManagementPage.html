@@ -4,7 +4,18 @@
 	xml:lang="en" lang="en">
 <body>
 	<wicket:extend>
-		<h3>DOCUMENT</h3>
+		<div class="panel panel-default" wicket:id="projects-list">
+			<div class="panel-heading">
+				<label wicket:id="project-name"></label>
+			</div>
+			<div class="panel-body">
+				<label wicket:id="project-description"></label>
+			</div>
+			<div class="list-group" wicket:id="categories">
+				<a class="list-group-item" href="#" wicket:id="categoryLink"><label
+					wicket:id="category-name"></label></a>
+			</div>
+		</div>
 	</wicket:extend>
 </body>
 </html>
