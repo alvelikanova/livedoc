@@ -22,9 +22,10 @@ public class DocumentProvider extends
 	private DocumentService documentService;
 	private Category category;
 
-	public DocumentProvider() {
+	public DocumentProvider(Category category) {
 		super();
 		Injector.get().inject(this);
+		this.category = category;
 	}
 
 	protected List<DocumentData> getData() {
@@ -46,13 +47,5 @@ public class DocumentProvider extends
 
 	public IModel<DocumentData> model(DocumentData object) {
 		return new Model<DocumentData>(object);
-	}
-
-	public void setCategory(Category category) {
-		this.category = category;
-	}
-
-	public Category getCategory() {
-		return category;
 	}
 }

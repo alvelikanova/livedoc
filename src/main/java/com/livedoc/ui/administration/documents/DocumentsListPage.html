@@ -1,0 +1,26 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.3-strict.dtd"
+	xml:lang="en" lang="en">
+<body>
+	<wicket:extend>
+		<div class="container">
+			<div class="well well-lg">
+				<div wicket:id="documents-table"></div>
+				<div class="container-fluid">
+					<button type="button" class="btn btn-danger pull-left"
+						wicket:id="return-link">
+						<span class="glyphicon glyphicon-chevron-left" area-hidden="true"></span>
+						<wicket:message key="doc.button.return"></wicket:message>
+					</button>
+					<button type="button" class="btn btn-success pull-right"
+						wicket:id="create-document">
+						<span class="glyphicon glyphicon-plus" area-hidden="true"></span>
+						<wicket:message key="doc.button.create"></wicket:message>
+					</button>
+				</div>
+			</div>
+		</div>
+	</wicket:extend>
+</body>
+</html>

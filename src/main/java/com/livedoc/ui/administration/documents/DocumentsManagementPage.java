@@ -64,7 +64,7 @@ public class DocumentsManagementPage extends AdministrationPage {
 
 					@Override
 					public void onClick(AjaxRequestTarget target) {
-
+						// nothing to do
 					}
 
 					@Override
@@ -84,7 +84,7 @@ public class DocumentsManagementPage extends AdministrationPage {
 				// collapsibleContainer content
 				WebMarkupContainer projectDescriptionContainer = new WebMarkupContainer(
 						"project-description-container") {
-					
+
 					private static final long serialVersionUID = 4593014138879483249L;
 
 					@Override
@@ -111,7 +111,8 @@ public class DocumentsManagementPage extends AdministrationPage {
 
 							@Override
 							public void onClick(AjaxRequestTarget target) {
-								// TODO
+								DocumentsListPage page = new DocumentsListPage(item.getModel(), DocumentsManagementPage.this);
+								setResponsePage(page);
 							}
 						};
 						Label categoryName = new Label("category-name",
