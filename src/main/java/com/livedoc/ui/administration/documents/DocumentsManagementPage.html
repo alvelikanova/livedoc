@@ -4,16 +4,28 @@
 	xml:lang="en" lang="en">
 <body>
 	<wicket:extend>
-		<div class="panel panel-default" wicket:id="projects-list">
-			<div class="panel-heading">
-				<label wicket:id="project-name"></label>
-			</div>
-			<div class="panel-body">
-				<label wicket:id="project-description"></label>
-			</div>
-			<div class="list-group" wicket:id="categories">
-				<a class="list-group-item" href="#" wicket:id="categoryLink"><label
-					wicket:id="category-name"></label></a>
+		<div class="panel-group">
+			<div class="panel panel-default" wicket:id="projects-list">
+				<div class="panel-heading">
+					<h4 class="panel-title">
+						<a data-toggle="collapse" wicket:id="toggle-link"><label
+							wicket:id="project-name"></label></a>
+					</h4>
+				</div>
+				<div wicket:id="categories-container"
+					class="panel-collapse collapse">
+					<div class="panel-body">
+						<div wicket:id="project-description-container" class="well">
+							<label wicket:id="project-description"></label>
+						</div>
+						<div class="list-group">
+							<div class="list-group-item" wicket:id="categories">
+								<a class="list-group-item-text" href="#"
+									wicket:id="categoryLink"><label wicket:id="category-name"></label></a>
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 	</wicket:extend>

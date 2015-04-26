@@ -30,7 +30,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import com.livedoc.bl.domain.entities.DocumentData;
-import com.livedoc.ui.components.Feedback;
+import com.livedoc.ui.common.components.Feedback;
 
 public abstract class DocumentUploadPanel extends GenericPanel<DocumentData> {
 

@@ -6,7 +6,7 @@ import org.apache.wicket.model.Model;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.livedoc.security.SecurityUserDetails;
-import com.livedoc.ui.components.Header;
+import com.livedoc.ui.common.components.Header;
 
 public class MasterPage extends WebPage {
 

@@ -18,7 +18,7 @@ import org.apache.wicket.model.PropertyModel;
 
 import com.livedoc.bl.domain.entities.Category;
 import com.livedoc.bl.domain.entities.Project;
-import com.livedoc.ui.components.StubAjaxUpdate;
+import com.livedoc.ui.common.components.StubAjaxUpdate;
 
 public class EditCategoriesPanel extends GenericPanel<Project> {
 	private static final long serialVersionUID = -6417182211636805438L;

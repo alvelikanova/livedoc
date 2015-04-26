@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -29,8 +28,10 @@ import com.livedoc.bl.domain.entities.User;
 import com.livedoc.bl.services.ProjectService;
 import com.livedoc.bl.services.RoleService;
 import com.livedoc.bl.services.UserService;
+import com.livedoc.ui.common.components.Feedback;
+import com.livedoc.ui.common.components.MessageDialogContent;
+import com.livedoc.ui.common.components.ModalDialog;
 import com.livedoc.ui.common.helpers.DomainEntityChoiceRenderer;
-import com.livedoc.ui.components.Feedback;
 import com.livedoc.ui.pages.MasterPage;
 
 public class EditUserPage extends MasterPage {
@@ -50,6 +51,7 @@ public class EditUserPage extends MasterPage {
 	private Form<User> form;
 	private Page pageToReturn;
 	private IModel<User> model = new Model<User>(new User());
+	private ModalDialog dialog;
 
 	public EditUserPage(Page pageToReturn) {
 		super();
@@ -65,6 +67,9 @@ public class EditUserPage extends MasterPage {
 	@Override
 	public void onInitialize() {
 		super.onInitialize();
+
+		dialog = new ModalDialog("dialog");
+		add(dialog);
 
 		form = new Form<User>("form", model);
 		form.setOutputMarkupId(true);
@@ -137,8 +142,24 @@ public class EditUserPage extends MasterPage {
 
 			@Override
 			public void onClick(AjaxRequestTarget target) {
-				// TODO confirmation dialog?
-				setResponsePage(pageToReturn);
+				dialog.setContent(new MessageDialogContent(dialog
+						.getContentId(), dialog, getString("confirmation"),
+						getString("cancel.user-editing.confirm"),
+						MessageDialogContent.Buttons.OK,
+						MessageDialogContent.Buttons.CANCEL) {
+
+					private static final long serialVersionUID = -156937675362688835L;
+
+					@Override
+					protected void onConfirm(AjaxRequestTarget target) {
+						setResponsePage(pageToReturn);
+					}
+
+					@Override
+					protected void onCancel(AjaxRequestTarget target) {
+					}
+				});
+				dialog.show(target);
 			}
 		};
 		form.add(saveButton, cancelButton);

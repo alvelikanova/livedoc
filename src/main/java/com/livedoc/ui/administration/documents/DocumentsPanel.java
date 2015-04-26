@@ -5,7 +5,7 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 
 import com.livedoc.bl.domain.entities.DocumentData;
-import com.livedoc.ui.components.MarkupProviderPanel;
+import com.livedoc.ui.common.components.MarkupProviderPanel;
 
 public class DocumentsPanel extends Panel {
 

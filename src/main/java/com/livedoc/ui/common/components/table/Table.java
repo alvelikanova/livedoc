@@ -29,13 +29,9 @@ public class Table<T, M> extends Panel {
 			SortableDataProvider<T, M> dataProvider) {
 		super(id);
 		setOutputMarkupId(true);
+		setOutputMarkupPlaceholderTag(true);
 		this.settings = settings;
 		this.dataProvider = dataProvider;
-	}
-
-	public void setCellFunctionsProvider(
-			CellFunctionsProvider<T, M> cellFunctionsProvider) {
-		this.cellFunctionsProvider = cellFunctionsProvider;
 	}
 
 	@Override
@@ -72,5 +68,30 @@ public class Table<T, M> extends Panel {
 		table.addTopToolbar(new HeadersToolbar<M>(table, dataProvider));
 		table.addBottomToolbar(new TableNavigationToolbar(table));
 		add(table);
+	}
+
+	public Settings getSettings() {
+		return settings;
+	}
+
+	public void setSettings(Settings settings) {
+		this.settings = settings;
+	}
+
+	public SortableDataProvider<T, M> getDataProvider() {
+		return dataProvider;
+	}
+
+	public void setDataProvider(SortableDataProvider<T, M> dataProvider) {
+		this.dataProvider = dataProvider;
+	}
+
+	public CellFunctionsProvider<T, M> getCellFunctionsProvider() {
+		return cellFunctionsProvider;
+	}
+
+	public void setCellFunctionsProvider(
+			CellFunctionsProvider<T, M> cellFunctionsProvider) {
+		this.cellFunctionsProvider = cellFunctionsProvider;
 	}
 }

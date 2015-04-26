@@ -9,7 +9,7 @@ import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.model.PropertyModel;
 
 import com.livedoc.bl.domain.entities.User;
-import com.livedoc.ui.components.Feedback;
+import com.livedoc.ui.common.components.Feedback;
 
 public class LoginPage extends WebPage {
 

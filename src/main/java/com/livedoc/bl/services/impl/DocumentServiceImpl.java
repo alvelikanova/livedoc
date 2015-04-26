@@ -1,6 +1,8 @@
 package com.livedoc.bl.services.impl;
 
 import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -21,6 +23,7 @@ import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import com.livedoc.bl.domain.entities.Category;
 import com.livedoc.bl.domain.entities.DocumentData;
 import com.livedoc.bl.domain.entities.Project;
 import com.livedoc.bl.domain.entities.User;
@@ -31,6 +34,7 @@ import com.livedoc.dal.entities.UserEntity;
 import com.livedoc.dal.providers.DocumentDataProvider;
 
 @Service
+@Transactional
 public class DocumentServiceImpl implements DocumentService {
 
 	@Autowired
@@ -38,9 +42,9 @@ public class DocumentServiceImpl implements DocumentService {
 	@Autowired
 	private DozerBeanMapper mapper;
 
-	@Transactional
 	public void saveDocument(DocumentData document) {
-		DocumentDataEntity documentEntity = mapper.map(document, DocumentDataEntity.class);
+		DocumentDataEntity documentEntity = mapper.map(document,
+				DocumentDataEntity.class);
 
 		User user = document.getCreateUser();
 		UserEntity userEntity = mapper.map(user, UserEntity.class);
@@ -53,8 +57,9 @@ public class DocumentServiceImpl implements DocumentService {
 		documentDataProvider.saveOrUpdate(documentEntity);
 	}
 
-	//TODO snippet
-	public void doit() throws ParserConfigurationException, TransformerFactoryConfigurationError, TransformerException {
+	// TODO snippet
+	public void doit() throws ParserConfigurationException,
+			TransformerFactoryConfigurationError, TransformerException {
 
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder builder = factory.newDocumentBuilder();
@@ -67,16 +72,29 @@ public class DocumentServiceImpl implements DocumentService {
 
 		e2.setAttribute("url", "http://www.domain.com");
 		DOMSource domSource = new DOMSource(doc);
-		Transformer transformer = TransformerFactory.newInstance().newTransformer();
+		Transformer transformer = TransformerFactory.newInstance()
+				.newTransformer();
 		transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
 		transformer.setOutputProperty(OutputKeys.METHOD, "xml");
 		transformer.setOutputProperty(OutputKeys.ENCODING, "ISO-8859-1");
-		transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
+		transformer.setOutputProperty(
+				"{http://xml.apache.org/xslt}indent-amount", "4");
 		transformer.setOutputProperty(OutputKeys.INDENT, "yes");
 		StringWriter sw = new StringWriter();
 		StreamResult sr = new StreamResult(sw);
 		transformer.transform(domSource, sr);
 		System.out.println(sw.toString());
+	}
+
+	public List<DocumentData> getDocumentsByCategory(Category category) {
+		List<DocumentData> documents = new ArrayList<DocumentData>();
+		List<DocumentDataEntity> entities = documentDataProvider
+				.getDocumentsByCategoryId(category.getId());
+		for (DocumentDataEntity entity : entities) {
+			DocumentData document = mapper.map(entity, DocumentData.class);
+			documents.add(document);
+		}
+		return documents;
 	}
 
 }
