@@ -3,12 +3,11 @@
 	xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.3-strict.dtd"
 	xml:lang="en" lang="en">
 <wicket:panel>
-	<form wicket:id="form">
-		<div wicket:id="feedback" />
-		<div class="file-input-wrapper btn btn-default">
-			<input type="file" wicket:id="fileUpload" />
+	<form wicket:id="fileUploadForm" class="form-inline">
+		<div class="input-group">
+			<input type="file" class="file-input-wrapper btn btn-sm btn-default" wicket:id="fileUpload"/>
 		</div>
-		<div>
+		<div class="input-group">
 			<input type="submit" class="btn btn-primary"
 				wicket:id="uploadDocument"
 				wicket:message="value:docinfopanel.submit" />

@@ -50,10 +50,6 @@ public class DocumentDataEntity extends BaseDalEntity {
 	private Date documentModTs;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "doc_data_project_id", nullable = false)
-	private ProjectEntity project;
-
-	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "doc_data_category_id", nullable = false)
 	private CategoryEntity category;
 
@@ -61,9 +57,10 @@ public class DocumentDataEntity extends BaseDalEntity {
 		super();
 	}
 
-	public DocumentDataEntity(String documentDataId, String documentTitle, String docDataDescription,
-			UserEntity createUser, Date documentCreationTs, UserEntity lastModUser, Date documentModTs,
-			ProjectEntity project, CategoryEntity category) {
+	public DocumentDataEntity(String documentDataId, String documentTitle,
+			String docDataDescription, UserEntity createUser,
+			Date documentCreationTs, UserEntity lastModUser,
+			Date documentModTs, CategoryEntity category) {
 		super();
 		this.documentDataId = documentDataId;
 		this.documentTitle = documentTitle;
@@ -72,7 +69,6 @@ public class DocumentDataEntity extends BaseDalEntity {
 		this.documentCreationTs = documentCreationTs;
 		this.lastModUser = lastModUser;
 		this.documentModTs = documentModTs;
-		this.project = project;
 		this.category = category;
 	}
 
@@ -130,14 +126,6 @@ public class DocumentDataEntity extends BaseDalEntity {
 
 	public void setDocumentModTs(Date documentModTs) {
 		this.documentModTs = documentModTs;
-	}
-
-	public ProjectEntity getProject() {
-		return project;
-	}
-
-	public void setProject(ProjectEntity project) {
-		this.project = project;
 	}
 
 	public CategoryEntity getCategory() {

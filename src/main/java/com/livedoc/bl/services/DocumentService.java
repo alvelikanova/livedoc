@@ -9,4 +9,6 @@ public interface DocumentService {
 	void saveDocument(DocumentData document);
 
 	List<DocumentData> getDocumentsByCategory(Category category);
+
+	Long countDocumentsOfCategory(Category category);
 }

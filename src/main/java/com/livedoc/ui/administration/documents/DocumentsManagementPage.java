@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.ComponentTag;
@@ -21,6 +20,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import com.livedoc.bl.domain.entities.Category;
 import com.livedoc.bl.domain.entities.Project;
+import com.livedoc.bl.services.DocumentService;
 import com.livedoc.bl.services.ProjectService;
 import com.livedoc.ui.administration.AdministrationPage;
 
@@ -30,6 +30,8 @@ public class DocumentsManagementPage extends AdministrationPage {
 
 	@SpringBean
 	private ProjectService projectService;
+	@SpringBean
+	private DocumentService documentService;
 	private RefreshingView<Project> projectList;
 
 	@Override
@@ -77,28 +79,13 @@ public class DocumentsManagementPage extends AdministrationPage {
 				Label projectName = new Label(
 						"project-name",
 						new PropertyModel<String>(item.getModelObject(), "name"));
-				toggleLink.add(projectName);
-
-				item.add(toggleLink, collapsibleContainer);
-
-				// collapsibleContainer content
-				WebMarkupContainer projectDescriptionContainer = new WebMarkupContainer(
-						"project-description-container") {
-
-					private static final long serialVersionUID = 4593014138879483249L;
-
-					@Override
-					protected void onConfigure() {
-						super.onConfigure();
-						setVisible(!StringUtils.isBlank(item.getModelObject()
-								.getDescription()));
-					}
-				};
 				Label projectDescription = new Label("project-description",
 						new PropertyModel<String>(item.getModelObject(),
 								"description"));
-				collapsibleContainer.add(projectDescriptionContainer);
-				projectDescriptionContainer.add(projectDescription);
+				item.add(projectName, projectDescription, toggleLink,
+						collapsibleContainer);
+
+				// collapsibleContainer content
 				ListView<Category> categoryList = new ListView<Category>(
 						"categories", item.getModelObject().getCategories()) {
 					private static final long serialVersionUID = -5817919602635654686L;
@@ -111,15 +98,18 @@ public class DocumentsManagementPage extends AdministrationPage {
 
 							@Override
 							public void onClick(AjaxRequestTarget target) {
-								DocumentsListPage page = new DocumentsListPage(item.getModel(), DocumentsManagementPage.this);
+								DocumentsListPage page = new DocumentsListPage(
+										item.getModel(),
+										DocumentsManagementPage.this);
 								setResponsePage(page);
 							}
 						};
 						Label categoryName = new Label("category-name",
 								new PropertyModel<String>(item.getModel(),
 										"name"));
+						Label count = new Label("count", documentService.countDocumentsOfCategory(item.getModelObject()));
 						categoryLink.add(categoryName);
-						item.add(categoryLink);
+						item.add(categoryLink, count);
 					}
 				};
 				collapsibleContainer.add(categoryList);

@@ -8,4 +8,6 @@ public interface DocumentDataProvider extends
 		GenericDataProvider<DocumentDataEntity, String> {
 	List<DocumentDataEntity> getDocumentsByCategoryId(String categoryId);
 
+	Long countDocumentsOfCategory(String categoryId);
+
 }

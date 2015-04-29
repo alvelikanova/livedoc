@@ -9,18 +9,21 @@ public class DocumentData extends BaseDomainEntity {
 	private String title;
 	private Date createDate;
 	private User createUser;
-	private Project project;
+	private Date lastModDate;
+	private User lastModUser;
+	private String description;
+	private Category category;
 
 	public DocumentData() {
 		super();
 	}
 
-	public DocumentData(String id, String title, Date createDate, User createUser, Project project) {
+	public DocumentData(String id, String title, Date createDate,
+			User createUser) {
 		super(id);
 		this.title = title;
 		this.createDate = createDate;
 		this.createUser = createUser;
-		this.project = project;
 	}
 
 	public String getTitle() {
@@ -47,12 +50,36 @@ public class DocumentData extends BaseDomainEntity {
 		this.createUser = createUser;
 	}
 
-	public Project getProject() {
-		return project;
+	public String getDescription() {
+		return description;
 	}
 
-	public void setProject(Project project) {
-		this.project = project;
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public Date getLastModDate() {
+		return lastModDate;
+	}
+
+	public void setLastModDate(Date lastModDate) {
+		this.lastModDate = lastModDate;
+	}
+
+	public User getLastModUser() {
+		return lastModUser;
+	}
+
+	public void setLastModUser(User lastModUser) {
+		this.lastModUser = lastModUser;
+	}
+
+	public Category getCategory() {
+		return category;
+	}
+
+	public void setCategory(Category category) {
+		this.category = category;
 	}
 
 }

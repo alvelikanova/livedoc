@@ -36,9 +36,6 @@ public class ProjectEntity extends BaseDalEntity {
 	@Column(name = "project_description", length = 256)
 	private String projectDescription;
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "project")
-	private Set<DocumentDataEntity> documentDataEntities = new HashSet<DocumentDataEntity>(0);
-
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "project", cascade = {CascadeType.ALL})
 	private Set<CategoryEntity> categories = new HashSet<CategoryEntity>(0);
 
@@ -57,11 +54,9 @@ public class ProjectEntity extends BaseDalEntity {
 		this.projectName = projectName;
 	}
 
-	public ProjectEntity(String projectId, String projectName,
-			Set<DocumentDataEntity> documentDataEntities, Set<UserEntity> users) {
+	public ProjectEntity(String projectId, String projectName, Set<UserEntity> users) {
 		this.projectId = projectId;
 		this.projectName = projectName;
-		this.documentDataEntities = documentDataEntities;
 		this.users = users;
 	}
 
@@ -79,15 +74,6 @@ public class ProjectEntity extends BaseDalEntity {
 
 	public void setProjectName(String projectName) {
 		this.projectName = projectName;
-	}
-
-	public Set<DocumentDataEntity> getDocumentDataEntities() {
-		return documentDataEntities;
-	}
-
-	public void setDocumentDataEntities(
-			Set<DocumentDataEntity> documentDataEntities) {
-		this.documentDataEntities = documentDataEntities;
 	}
 
 	public Set<UserEntity> getUsers() {

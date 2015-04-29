@@ -1,6 +1,7 @@
 package com.livedoc.ui.administration.documents;
 
 import org.apache.wicket.Page;
+import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
@@ -12,12 +13,12 @@ import com.livedoc.ui.common.components.table.Table;
 public class DocumentCellFunctionsProvider extends
 		CellFunctionsProvider<DocumentData, String> {
 	private static final long serialVersionUID = -6724701427801287995L;
-	
+
 	@SpringBean
 	private DocumentService documentService;
-	private Page pageToReturn;
+	private WebPage pageToReturn;
 
-	public DocumentCellFunctionsProvider(Page pageToReturn,
+	public DocumentCellFunctionsProvider(WebPage pageToReturn,
 			Table<DocumentData, String> table) {
 		super(table);
 		this.pageToReturn = pageToReturn;
@@ -25,8 +26,8 @@ public class DocumentCellFunctionsProvider extends
 
 	@Override
 	public Page edit(IModel<DocumentData> model) {
-		// TODO Auto-generated method stub
-		return null;
+		EditDocumentPage page = new EditDocumentPage(pageToReturn, model);
+		return page;
 	}
 
 	@Override

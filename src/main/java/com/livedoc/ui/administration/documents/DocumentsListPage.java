@@ -4,6 +4,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 
 import com.livedoc.bl.domain.entities.Category;
 import com.livedoc.bl.domain.entities.DocumentData;
@@ -42,7 +43,12 @@ public class DocumentsListPage extends MasterPage {
 
 			@Override
 			public void onClick(AjaxRequestTarget target) {
-				// TODO
+				DocumentData documentData = new DocumentData();
+				documentData.setCategory(categoryModel.getObject());
+				documentData.setCreateUser(getUserData().getUser());
+				documentData.setLastModUser(getUserData().getUser());
+				EditDocumentPage page = new EditDocumentPage(DocumentsListPage.this, new Model<DocumentData>(documentData));
+				setResponsePage(page);
 			}
 		};
 		AjaxLink<Void> returnLink = new AjaxLink<Void>("return-link") {
@@ -61,9 +67,11 @@ public class DocumentsListPage extends MasterPage {
 		Settings settings = new Settings();
 		settings.setRowCount(5);
 		settings.setIncludeButtons(true);
-		settings.addItem("documentTitle", getString("table.doc.name"), 1);
-		settings.addItem("docDataDescription",
+		settings.addItem("title", getString("table.doc.name"), 1);
+		settings.addItem("description",
 				getString("table.doc.description"), 2);
+		settings.addItem("createUser.name",
+				getString("table.doc.creator"), 3);
 		return settings;
 	}
 }

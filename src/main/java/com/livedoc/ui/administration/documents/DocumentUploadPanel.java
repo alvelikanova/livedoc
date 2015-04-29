@@ -3,6 +3,7 @@ package com.livedoc.ui.administration.documents;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
+import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -23,26 +24,27 @@ import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.validation.ValidationError;
+import org.apache.wicket.validation.IValidatable;
+import org.apache.wicket.validation.IValidator;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import com.livedoc.bl.domain.entities.DocumentData;
-import com.livedoc.ui.common.components.Feedback;
 
 public abstract class DocumentUploadPanel extends GenericPanel<DocumentData> {
 
 	private static final long serialVersionUID = 3419403935384133578L;
-	private static final Logger logger = Logger.getLogger(DocumentUploadPanel.class);
+	private static final Logger logger = Logger
+			.getLogger(DocumentUploadPanel.class);
 
 	private static final String XML_CONTENT_TYPE = "text/xml";
 	private FileUploadField fileUploadField;
-	private Feedback feedback;
 	private IModel<String> htmlModel;
 
-	public DocumentUploadPanel(String id, IModel<DocumentData> model, IModel<String> htmlModel) {
+	public DocumentUploadPanel(String id, IModel<DocumentData> model,
+			IModel<String> htmlModel) {
 		super(id, model);
 		this.htmlModel = htmlModel;
 	}
@@ -50,15 +52,23 @@ public abstract class DocumentUploadPanel extends GenericPanel<DocumentData> {
 	@Override
 	public void onInitialize() {
 		super.onInitialize();
-		Form<Void> form = new Form<Void>("form");
+		Form<Void> form = new Form<Void>("fileUploadForm");
 		add(form);
 
 		fileUploadField = new FileUploadField("fileUpload");
-		fileUploadField.setRequired(true);
-		feedback = new Feedback("feedback");
-		feedback.setOutputMarkupId(true);
 
-		form.add(feedback, fileUploadField);
+		form.add(fileUploadField);
+		fileUploadField.add(new IValidator<List<FileUpload>>() {
+
+			private static final long serialVersionUID = 3294459995272626844L;
+
+			public void validate(IValidatable<List<FileUpload>> validatable) {
+				FileUpload uploadedFile = fileUploadField.getFileUpload();
+				if (!XML_CONTENT_TYPE.equals(uploadedFile.getContentType())) {
+					error(getString("error.notxml"));
+				}
+			}
+		});
 
 		AjaxButton submitButton = new AjaxButton("uploadDocument", form) {
 
@@ -66,15 +76,16 @@ public abstract class DocumentUploadPanel extends GenericPanel<DocumentData> {
 
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-				final FileUpload uploadedFile = fileUploadField.getFileUpload();
-				target.add(feedback);
-				if (!XML_CONTENT_TYPE.equals(uploadedFile.getContentType())) {
-					error(new ValidationError(getString("error.notxml")));
-					return;
-				}
-				Document document = parseDocumentFromInput(uploadedFile);
+				Document document = parseDocumentFromInput(fileUploadField
+						.getFileUpload());
 				htmlModel.setObject(transform(document));
 				DocumentUploadPanel.this.onSubmit(target);
+			}
+
+			@Override
+			protected void onError(AjaxRequestTarget target, Form<?> form) {
+				super.onError(target, form);
+				DocumentUploadPanel.this.onError(target);
 			}
 		};
 
@@ -82,7 +93,9 @@ public abstract class DocumentUploadPanel extends GenericPanel<DocumentData> {
 	}
 
 	protected abstract void onSubmit(AjaxRequestTarget target);
-	
+
+	protected abstract void onError(AjaxRequestTarget target);
+
 	private Document parseDocumentFromInput(FileUpload uploadedFile) {
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		Document doc = null;
@@ -100,13 +113,17 @@ public abstract class DocumentUploadPanel extends GenericPanel<DocumentData> {
 				System.out.println("" + nodes.item(i).getTextContent());
 			}
 		} catch (ParserConfigurationException ex) {
-			logger.error(String.format("Configuration error, cannot initialize DocumentBuilder: %s", ex.getMessage()));
+			logger.error(String
+					.format("Configuration error, cannot initialize DocumentBuilder: %s",
+							ex.getMessage()));
 		} catch (SAXException ex) {
-			logger.error(String.format("Error while parsing document with name %s: %s",
+			logger.error(String.format(
+					"Error while parsing document with name %s: %s",
 					uploadedFile.getClientFileName(), ex.getMessage()));
 		} catch (IOException ex) {
-			logger.error(String.format("An I/O Error occured while getting document with name %s: %s",
-					uploadedFile.getClientFileName(), ex.getMessage()));
+			logger.error(String
+					.format("An I/O Error occured while getting document with name %s: %s",
+							uploadedFile.getClientFileName(), ex.getMessage()));
 		}
 		return doc;
 	}
@@ -115,7 +132,8 @@ public abstract class DocumentUploadPanel extends GenericPanel<DocumentData> {
 		// source document in doc book which has to be transformed
 		DOMSource source = new DOMSource(document);
 		// xsl file
-		StreamSource xslStream = new StreamSource(this.getClass().getResourceAsStream("/xsl/docbook.xsl"));
+		StreamSource xslStream = new StreamSource(this.getClass()
+				.getResourceAsStream("/xsl/docbook.xsl"));
 		// output
 		StringWriter sw = new StringWriter();
 		StreamResult result = new StreamResult(sw);
@@ -125,9 +143,13 @@ public abstract class DocumentUploadPanel extends GenericPanel<DocumentData> {
 			Transformer transformer = factory.newTransformer(xslStream);
 			transformer.transform(source, result);
 		} catch (TransformerConfigurationException ex) {
-			logger.error(String.format("Configuration error, cannot initialize Transformer: %s", ex.getMessage()));
+			logger.error(String.format(
+					"Configuration error, cannot initialize Transformer: %s",
+					ex.getMessage()));
 		} catch (TransformerException ex) {
-			logger.error(String.format("Error occured while transforming document: %s", ex.getMessage()));
+			logger.error(String.format(
+					"Error occured while transforming document: %s",
+					ex.getMessage()));
 		}
 		return sw.toString();
 	}

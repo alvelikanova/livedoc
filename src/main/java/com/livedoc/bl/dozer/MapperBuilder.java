@@ -17,15 +17,21 @@ public class MapperBuilder extends BeanMappingBuilder {
 
 	@Override
 	protected void configure() {
-		mapping(UserEntity.class, User.class).fields("userId", "id").fields("username", "name")
-				.fields("password", "password");
-		mapping(RoleEntity.class, Role.class).fields("roleId", "id").fields("roleName", "name")
-				.fields("roleCode", "code");
-		mapping(ProjectEntity.class, Project.class).fields("projectId", "id").fields("projectName", "name")
+		mapping(UserEntity.class, User.class).fields("userId", "id")
+				.fields("username", "name").fields("password", "password");
+		mapping(RoleEntity.class, Role.class).fields("roleId", "id")
+				.fields("roleName", "name").fields("roleCode", "code");
+		mapping(ProjectEntity.class, Project.class).fields("projectId", "id")
+				.fields("projectName", "name")
 				.fields("projectDescription", "description");
-		mapping(DocumentDataEntity.class, DocumentData.class).fields("documentDataId", "id")
-				.fields("documentTitle", "title").fields("documentCreationTs", "createDate");
-		mapping(CategoryEntity.class, Category.class).fields("categoryId", "id").fields("categoryName", "name")
+		mapping(DocumentDataEntity.class, DocumentData.class)
+				.fields("documentDataId", "id")
+				.fields("documentTitle", "title")
+				.fields("documentCreationTs", "createDate")
+				.fields("docDataDescription", "description")
+				.fields("documentModTs", "lastModDate");
+		mapping(CategoryEntity.class, Category.class)
+				.fields("categoryId", "id").fields("categoryName", "name")
 				.fields("categoryDescription", "description");
 	}
 }

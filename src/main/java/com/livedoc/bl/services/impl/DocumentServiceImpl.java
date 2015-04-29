@@ -2,6 +2,7 @@ package com.livedoc.bl.services.impl;
 
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -25,12 +26,8 @@ import org.w3c.dom.Element;
 
 import com.livedoc.bl.domain.entities.Category;
 import com.livedoc.bl.domain.entities.DocumentData;
-import com.livedoc.bl.domain.entities.Project;
-import com.livedoc.bl.domain.entities.User;
 import com.livedoc.bl.services.DocumentService;
 import com.livedoc.dal.entities.DocumentDataEntity;
-import com.livedoc.dal.entities.ProjectEntity;
-import com.livedoc.dal.entities.UserEntity;
 import com.livedoc.dal.providers.DocumentDataProvider;
 
 @Service
@@ -43,17 +40,14 @@ public class DocumentServiceImpl implements DocumentService {
 	private DozerBeanMapper mapper;
 
 	public void saveDocument(DocumentData document) {
+		if (document.getId() == null) {
+			document.setCreateDate(new Date());
+			document.setLastModDate(document.getCreateDate());
+		} else {
+			document.setLastModDate(new Date());
+		}
 		DocumentDataEntity documentEntity = mapper.map(document,
 				DocumentDataEntity.class);
-
-		User user = document.getCreateUser();
-		UserEntity userEntity = mapper.map(user, UserEntity.class);
-		documentEntity.setCreateUser(userEntity);
-
-		Project project = document.getProject();
-		ProjectEntity projectEntity = mapper.map(project, ProjectEntity.class);
-		documentEntity.setProject(projectEntity);
-
 		documentDataProvider.saveOrUpdate(documentEntity);
 	}
 
@@ -95,6 +89,10 @@ public class DocumentServiceImpl implements DocumentService {
 			documents.add(document);
 		}
 		return documents;
+	}
+
+	public Long countDocumentsOfCategory(Category category) {
+		return documentDataProvider.countDocumentsOfCategory(category.getId());
 	}
 
 }

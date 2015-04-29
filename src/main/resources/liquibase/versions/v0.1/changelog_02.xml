@@ -5,8 +5,11 @@
 	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
 
-	<include file="versions/initial/changelog_00.xml" relativeToChangelogFile="true"/>
-	<include file="versions/initial/changelog_01.xml" relativeToChangelogFile="true"/>
-	<include file="versions/v0.1/changelog_02.xml" relativeToChangelogFile="true"/>
-	
-</databaseChangeLog> 
+	<changeSet id="document_data_drop_column_project_27042015"
+		author="velikanova.alena">
+		<dropForeignKeyConstraint baseTableName="DOC_DATA"
+			constraintName="FK_DOC_DATA_PROJECT_ID" />
+		<dropColumn columnName="DOC_DATA_PROJECT_ID" tableName="DOC_DATA" />
+	</changeSet>
+
+</databaseChangeLog>
