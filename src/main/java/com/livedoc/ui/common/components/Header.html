@@ -6,14 +6,23 @@
 	<div class="container-fluid">
 		<div id="navbar" class="navbar-collapse collapse">
 			<ul class="nav navbar-nav navbar-right">
+				<li><a href="#" data-toggle="tooltip" data-placement="bottom"
+					wicket:message="title:header.home" wicket:id="home"><span
+						class="glyphicon glyphicon-home" aria-hidden="true"></span></a></li>
 				<li><a href="#" wicket:id="profile"><wicket:message
 							key="header.profile"></wicket:message></a></li>
 				<li><a href="#" wicket:id="admin"><wicket:message
 							key="header.admin"></wicket:message></a></li>
-				<li><a href="#" wicket:id="logout"><wicket:message
-							key="header.logout"></wicket:message></a></li>
+				<li><a href="#" data-toggle="tooltip" data-placement="bottom"
+					wicket:message="title:header.logout" wicket:id="logout"><span
+						class="glyphicon glyphicon-log-out" aria-hidden="true"></span></a></li>
 			</ul>
 		</div>
 	</div>
+<script>
+$(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip();   
+});
+</script>
 </wicket:panel>
 </html>

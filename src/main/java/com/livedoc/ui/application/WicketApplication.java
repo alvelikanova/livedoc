@@ -7,14 +7,14 @@ import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
 
 import com.livedoc.security.SpringWicketWebSession;
 import com.livedoc.ui.administration.AdministrationPage;
+import com.livedoc.ui.pages.HomePage;
 import com.livedoc.ui.pages.LoginPage;
-import com.livedoc.ui.pages.MasterPage;
 
 public class WicketApplication extends AuthenticatedWebApplication {
 
 	@Override
-	public Class<MasterPage> getHomePage() {
-		return MasterPage.class;
+	public Class<HomePage> getHomePage() {
+		return HomePage.class;
 	}
 
 	public void init() {

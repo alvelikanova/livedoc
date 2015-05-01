@@ -8,6 +8,7 @@ import org.apache.wicket.model.IModel;
 
 import com.livedoc.security.SecurityUserDetails;
 import com.livedoc.ui.administration.AdministrationPage;
+import com.livedoc.ui.pages.HomePage;
 import com.livedoc.ui.pages.LoginPage;
 import com.livedoc.ui.profile.UserProfilePage;
 
@@ -24,6 +25,7 @@ public class Header extends GenericPanel<SecurityUserDetails> {
 		addLogoutLink();
 		addAdministrationPageLink();
 		addProfileLink();
+		addHomeLink();
 	}
 
 	// links
@@ -71,5 +73,17 @@ public class Header extends GenericPanel<SecurityUserDetails> {
 			}
 		};
 		add(profileLink);
+	}
+
+	private void addHomeLink() {
+		AjaxLink<Void> homeLink = new AjaxLink<Void>("home") {
+			private static final long serialVersionUID = 65530189341266805L;
+
+			@Override
+			public void onClick(AjaxRequestTarget target) {
+				setResponsePage(HomePage.class);
+			}
+		};
+		add(homeLink);
 	}
 }
