@@ -82,9 +82,11 @@ public class EditProjectPage extends MasterPage {
 						setResponsePage(pageToReturn);
 					} else {
 						feedbackPanel.error(getString("uniqueCategoryName"));
+						target.add(feedbackPanel);
 					}
 				} else {
 					feedbackPanel.error(getString("projectNameExists"));
+					target.add(feedbackPanel);
 				}
 			}
 
