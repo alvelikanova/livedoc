@@ -54,4 +54,13 @@ public class ProjectServiceImpl implements ProjectService {
 		projectDataProvider.delete(projectEntity);
 	}
 
+	public boolean checkProjectNameUniqueness(Project project) {
+		ProjectEntity projectEntity = projectDataProvider
+				.getProjectByName(project.getName());
+		if (projectEntity != null) {
+			return projectEntity.getProjectId().equals(project.getId());
+		}
+		return true;
+	}
+
 }

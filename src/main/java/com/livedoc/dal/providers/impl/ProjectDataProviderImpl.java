@@ -1,5 +1,8 @@
 package com.livedoc.dal.providers.impl;
 
+import org.hibernate.Session;
+import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
 import com.livedoc.dal.entities.ProjectEntity;
@@ -11,5 +14,12 @@ public class ProjectDataProviderImpl extends
 
 	public ProjectDataProviderImpl() {
 		super(ProjectEntity.class);
+	}
+
+	public ProjectEntity getProjectByName(String projectName) {
+		Session session = sessionFactory.getCurrentSession();
+		Criterion criterion = Restrictions.eq("projectName", projectName);
+		return (ProjectEntity) session.createCriteria(ProjectEntity.class)
+				.add(criterion).uniqueResult();
 	}
 }

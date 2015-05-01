@@ -23,13 +23,13 @@
 	<changeSet id="add_uq_role_code_to_user_role_25012015"
 		author="velikanova.alena">
 		<addUniqueConstraint columnNames="USER_ROLE_CODE"
-			tableName="USER_ROLE" />
+			constraintName="UQ_USER_ROLE_CODE" tableName="USER_ROLE" />
 	</changeSet>
 
 	<changeSet id="add_uq_role_name_to_user_role_25012015"
 		author="velikanova.alena">
 		<addUniqueConstraint columnNames="USER_ROLE_NAME"
-			tableName="USER_ROLE" />
+			constraintName="UQ_USER_ROLE_NAME" tableName="USER_ROLE" />
 	</changeSet>
 
 	<changeSet id="create_table_project_25012015" author="velikanova.alena">
@@ -48,7 +48,7 @@
 	<changeSet id="add_uq_project_name_to_project_25012015"
 		author="velikanova.alena">
 		<addUniqueConstraint columnNames="PROJECT_NAME"
-			tableName="PROJECT" />
+			constraintName="UQ_PROJECT_NAME" tableName="PROJECT" />
 	</changeSet>
 
 	<changeSet id="create_table_users_25012015" author="velikanova.alena">
@@ -76,7 +76,7 @@
 
 	<changeSet id="add_uq_users_name_to_users_25012015" author="velikanova.alena">
 		<addUniqueConstraint columnNames="USERS_NAME"
-			tableName="USERS" />
+			constraintName="UQ_USERS_NAME" tableName="USERS" />
 	</changeSet>
 
 	<changeSet id="create_table_users_to_project_25012015"
@@ -92,12 +92,13 @@
 		</createTable>
 	</changeSet>
 
-	<changeSet id="add_fk_users_to_project_project_25012015" author="velikanova.alena">
+	<changeSet id="add_fk_users_to_project_project_25012015"
+		author="velikanova.alena">
 		<addForeignKeyConstraint baseColumnNames="PROJECT_ID"
 			baseTableName="USERS_TO_PROJECT" constraintName="FK_PROJECT_ID"
 			referencedColumnNames="PROJECT_ID" referencedTableName="PROJECT" />
 	</changeSet>
-	
+
 	<changeSet id="add_fk_users_to_project_user_25012015" author="velikanova.alena">
 		<addForeignKeyConstraint baseColumnNames="USERS_ID"
 			baseTableName="USERS_TO_PROJECT" constraintName="FK_USERS_ID"
@@ -126,12 +127,6 @@
 		</createTable>
 	</changeSet>
 
-	<changeSet id="add_uq_category_name_to_section_25012015"
-		author="velikanova.alena">
-		<addUniqueConstraint columnNames="CATEGORY_NAME"
-			tableName="CATEGORY" />
-	</changeSet>
-
 	<changeSet id="add_fk_category_project_25012015" author="velikanova.alena">
 		<addForeignKeyConstraint baseColumnNames="CATEGORY_PROJECT_ID"
 			baseTableName="CATEGORY" constraintName="FK_CATEGORY_PROJECT_ID"
@@ -147,7 +142,8 @@
 			<column name="DOC_DATA_TITLE" type="varchar(64)" remarks="Document's title">
 				<constraints nullable="false" />
 			</column>
-			<column name="DOC_DATA_DESCRIPTION" type="varchar(256)" remarks="Document's description" />
+			<column name="DOC_DATA_DESCRIPTION" type="varchar(256)"
+				remarks="Document's description" />
 			<column name="DOC_DATA_CREATE_USER_ID" type="varchar(32)"
 				remarks="User who has created document">
 				<constraints nullable="false" />
@@ -166,7 +162,8 @@
 			<column name="DOC_DATA_PROJECT_ID" type="varchar(32)" remarks="Project's id">
 				<constraints nullable="false" />
 			</column>
-			<column name="DOC_DATA_CATEGORY_ID" type="varchar(32)" remarks="Section's id">
+			<column name="DOC_DATA_CATEGORY_ID" type="varchar(32)"
+				remarks="Section's id">
 				<constraints nullable="false" />
 			</column>
 		</createTable>

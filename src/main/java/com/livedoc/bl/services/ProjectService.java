@@ -5,12 +5,14 @@ import java.util.List;
 import com.livedoc.bl.domain.entities.Project;
 
 public interface ProjectService {
-	
+
 	Project findProjectById(String id);
 
 	List<Project> findAllProjects();
-	
+
 	void saveProject(Project project);
-	
+
 	void deleteProject(Project project);
+
+	boolean checkProjectNameUniqueness(Project project);
 }

@@ -12,4 +12,9 @@
 		<dropColumn columnName="DOC_DATA_PROJECT_ID" tableName="DOC_DATA" />
 	</changeSet>
 
+	<changeSet author="velikanova.alena" id="category_add_unique_constraint_01052015">
+		<addUniqueConstraint tableName="CATEGORY"
+			constraintName="UQ_CATEGORY_PROJECT_NAME" columnNames="CATEGORY_NAME, CATEGORY_PROJECT_ID" />
+	</changeSet>
+
 </databaseChangeLog>

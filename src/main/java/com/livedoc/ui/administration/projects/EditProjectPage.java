@@ -1,5 +1,8 @@
 package com.livedoc.ui.administration.projects;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -13,6 +16,7 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.validation.validator.StringValidator;
 
+import com.livedoc.bl.domain.entities.Category;
 import com.livedoc.bl.domain.entities.Project;
 import com.livedoc.bl.services.ProjectService;
 import com.livedoc.ui.common.components.Feedback;
@@ -28,6 +32,7 @@ public class EditProjectPage extends MasterPage {
 	private Feedback feedbackPanel;
 	private Page pageToReturn;
 	private Form<Project> form;
+	private TextField<String> projectNameField;
 	private IModel<Project> model = new Model<Project>(new Project());
 
 	public EditProjectPage(Page pageToReturn) {
@@ -52,9 +57,8 @@ public class EditProjectPage extends MasterPage {
 		feedbackPanel.setOutputMarkupId(true);
 		form.add(feedbackPanel);
 
-		TextField<String> projectNameField = new TextField<String>(
-				"project-name", new PropertyModel<String>(form.getModel(),
-						"name"));
+		projectNameField = new TextField<String>("project-name",
+				new PropertyModel<String>(form.getModel(), "name"));
 		projectNameField.add(StringValidator.maximumLength(32));
 		projectNameField.setRequired(true);
 
@@ -72,8 +76,16 @@ public class EditProjectPage extends MasterPage {
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 				Project project = (Project) form.getModelObject();
-				projectService.saveProject(project);
-				setResponsePage(pageToReturn);
+				if (projectService.checkProjectNameUniqueness(project)) {
+					if (checkCategoriesNamesAreUnique(project)) {
+						projectService.saveProject(project);
+						setResponsePage(pageToReturn);
+					} else {
+						feedbackPanel.error(getString("uniqueCategoryName"));
+					}
+				} else {
+					feedbackPanel.error(getString("projectNameExists"));
+				}
 			}
 
 			@Override
@@ -94,5 +106,18 @@ public class EditProjectPage extends MasterPage {
 		};
 		form.add(saveButton, cancelButton);
 		form.add(projectNameField, projectDescriptionField);
+	}
+
+	private boolean checkCategoriesNamesAreUnique(Project project) {
+		List<Category> categories = project.getCategories();
+		List<String> uniqueNames = new ArrayList<String>();
+		for (Category category : categories) {
+			if (!uniqueNames.contains(category.getName())) {
+				uniqueNames.add(category.getName());
+			} else {
+				return false;
+			}
+		}
+		return true;
 	}
 }
