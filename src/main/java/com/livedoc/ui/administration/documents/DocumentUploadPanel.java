@@ -2,28 +2,22 @@ package com.livedoc.ui.administration.documents;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.StringWriter;
 import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
-import javax.xml.transform.stream.StreamSource;
 
 import org.apache.log4j.Logger;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
+import org.apache.wicket.injection.Injector;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.IValidator;
 import org.w3c.dom.Document;
@@ -32,6 +26,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import com.livedoc.bl.domain.entities.DocumentData;
+import com.livedoc.bl.services.DocumentTransformationsService;
 
 public abstract class DocumentUploadPanel extends GenericPanel<DocumentData> {
 
@@ -43,9 +38,13 @@ public abstract class DocumentUploadPanel extends GenericPanel<DocumentData> {
 	private FileUploadField fileUploadField;
 	private IModel<String> htmlModel;
 
+	@SpringBean
+	private DocumentTransformationsService documentTransformationsService;
+
 	public DocumentUploadPanel(String id, IModel<DocumentData> model,
 			IModel<String> htmlModel) {
 		super(id, model);
+		Injector.get().inject(this);
 		this.htmlModel = htmlModel;
 	}
 
@@ -78,7 +77,8 @@ public abstract class DocumentUploadPanel extends GenericPanel<DocumentData> {
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 				Document document = parseDocumentFromInput(fileUploadField
 						.getFileUpload());
-				htmlModel.setObject(transform(document));
+				htmlModel.setObject(documentTransformationsService
+						.transformXMLToString(document));
 				DocumentUploadPanel.this.onSubmit(target);
 			}
 
@@ -126,31 +126,5 @@ public abstract class DocumentUploadPanel extends GenericPanel<DocumentData> {
 							uploadedFile.getClientFileName(), ex.getMessage()));
 		}
 		return doc;
-	}
-
-	private String transform(Document document) {
-		// source document in doc book which has to be transformed
-		DOMSource source = new DOMSource(document);
-		// xsl file
-		StreamSource xslStream = new StreamSource(this.getClass()
-				.getResourceAsStream("/xsl/docbook.xsl"));
-		// output
-		StringWriter sw = new StringWriter();
-		StreamResult result = new StreamResult(sw);
-
-		TransformerFactory factory = TransformerFactory.newInstance();
-		try {
-			Transformer transformer = factory.newTransformer(xslStream);
-			transformer.transform(source, result);
-		} catch (TransformerConfigurationException ex) {
-			logger.error(String.format(
-					"Configuration error, cannot initialize Transformer: %s",
-					ex.getMessage()));
-		} catch (TransformerException ex) {
-			logger.error(String.format(
-					"Error occured while transforming document: %s",
-					ex.getMessage()));
-		}
-		return sw.toString();
 	}
 }
