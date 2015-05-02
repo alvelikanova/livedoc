@@ -3,25 +3,18 @@
 	xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.3-strict.dtd"
 	xml:lang="en" lang="en">
 <wicket:panel>
-	<div class="modal-content">
-		<div class="modal-header">
-			<h4 class="modal-title">
-				<label class="text-center" wicket:id="title"></label>
-			</h4>
+	<form wicket:id="form" class="modal-body">
+		<p>
+			<label class="text-center" wicket:id="message"></label>
+		</p>
+		<div class="modal-footer">
+			<button type="button" wicket:id="ok" class="btn btn-primary">
+				<wicket:message key="buttons.ok"></wicket:message>
+			</button>
+			<button type="button" wicket:id="cancel" class="btn btn-default">
+				<wicket:message key="buttons.cancel"></wicket:message>
+			</button>
 		</div>
-		<form wicket:id="form" class="modal-body">
-			<p>
-				<label class="text-center" wicket:id="message"></label>
-			</p>
-			<div class="modal-footer">
-				<button type="button" wicket:id="ok" class="btn btn-primary">
-					<wicket:message key="buttons.ok"></wicket:message>
-				</button>
-				<button type="button" wicket:id="cancel" class="btn btn-default">
-					<wicket:message key="buttons.cancel"></wicket:message>
-				</button>
-			</div>
-		</form>
-	</div>
+	</form>
 </wicket:panel>
 </html>

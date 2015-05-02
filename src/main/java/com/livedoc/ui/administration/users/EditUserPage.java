@@ -142,8 +142,9 @@ public class EditUserPage extends MasterPage {
 
 			@Override
 			public void onClick(AjaxRequestTarget target) {
+				dialog.setTitle(getString("confirmation"));
 				dialog.setContent(new MessageDialogContent(dialog
-						.getContentId(), dialog, getString("confirmation"),
+						.getContentId(), dialog,
 						getString("cancel.user-editing.confirm"),
 						MessageDialogContent.Buttons.OK,
 						MessageDialogContent.Buttons.CANCEL) {

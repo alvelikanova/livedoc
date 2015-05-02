@@ -14,15 +14,13 @@ public abstract class MessageDialogContent extends Panel {
 
 	private Buttons[] buttons;
 	private String message;
-	private String title;
 	private ModalDialog parentDialog;
 
 	public MessageDialogContent(String id, ModalDialog parentDialog,
-			String title, String message, Buttons... buttons) {
+			String message, Buttons... buttons) {
 		super(id);
 		this.message = message;
 		this.buttons = buttons;
-		this.title = title;
 		this.parentDialog = parentDialog;
 	}
 
@@ -31,8 +29,6 @@ public abstract class MessageDialogContent extends Panel {
 		super.onInitialize();
 		Form<Void> form = new Form<Void>("form");
 		add(form);
-		Label titleLabel = new Label("title", title);
-		add(titleLabel);
 		Label messageLabel = new Label("message", message);
 		AjaxButton okButton = new AjaxButton("ok") {
 

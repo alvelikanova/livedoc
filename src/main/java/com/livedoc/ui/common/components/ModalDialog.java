@@ -2,13 +2,14 @@ package com.livedoc.ui.common.components;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
+import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
 
 public class ModalDialog extends ModalWindow {
 
 	private static final long serialVersionUID = 835902908037077662L;
 
-	public static final String CSS_CLASS = "modal-dialog";
+	public static final String CSS_CLASS = "modal-content";
 
 	public ModalDialog(String id) {
 		super(id);
@@ -30,6 +31,6 @@ public class ModalDialog extends ModalWindow {
 
 	@Override
 	protected ResourceReference newCssResource() {
-		return null;
+		return new CssResourceReference(ModalDialog.class, "modal.css");
 	}
 }
