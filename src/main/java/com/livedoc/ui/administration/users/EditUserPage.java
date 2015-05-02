@@ -16,6 +16,8 @@ import org.apache.wicket.markup.html.form.validation.EqualPasswordInputValidator
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.model.ResourceModel;
+import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.wicketstuff.select2.Response;
@@ -120,14 +122,33 @@ public class EditUserPage extends MasterPage {
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 				User user = (User) form.getModelObject();
-				if (userService.findUserByLoginName(user.getName()) != null) {
+				User savedUser = userService
+						.findUserByLoginName(user.getName());
+				if (savedUser != null
+						&& !savedUser.getId().equals(user.getId())) {
 					error(getString("saving.alreadyexists"));
 					target.add(feedbackPanel);
 					return;
 				}
 				user.setPassword(passwordEncoder.encode(user.getPassword()));
-				userService.saveUser(user);
-				setResponsePage(pageToReturn);
+				user = userService.saveUser(user);
+				model.setObject(user);
+				StringResourceModel messageModel = new StringResourceModel(
+						"saving.success", null, user.getName());
+				dialog.setTitle(getString("saving.success.title"));
+				dialog.setContent(new MessageDialogContent(dialog
+						.getContentId(), messageModel,
+						MessageDialogContent.Buttons.OK) {
+
+					private static final long serialVersionUID = -156937675362688835L;
+
+					@Override
+					protected void onConfirm(AjaxRequestTarget target) {
+						setResponsePage(pageToReturn);
+						dialog.close(target);
+					}
+				});
+				dialog.show(target);
 			}
 
 			@Override
@@ -144,8 +165,8 @@ public class EditUserPage extends MasterPage {
 			public void onClick(AjaxRequestTarget target) {
 				dialog.setTitle(getString("confirmation"));
 				dialog.setContent(new MessageDialogContent(dialog
-						.getContentId(), dialog,
-						getString("cancel.user-editing.confirm"),
+						.getContentId(), new ResourceModel(
+						"cancel.user-editing.confirm"),
 						MessageDialogContent.Buttons.OK,
 						MessageDialogContent.Buttons.CANCEL) {
 
@@ -154,10 +175,12 @@ public class EditUserPage extends MasterPage {
 					@Override
 					protected void onConfirm(AjaxRequestTarget target) {
 						setResponsePage(pageToReturn);
+						dialog.close(target);
 					}
 
 					@Override
 					protected void onCancel(AjaxRequestTarget target) {
+						dialog.close(target);
 					}
 				});
 				dialog.show(target);

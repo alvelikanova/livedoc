@@ -7,21 +7,20 @@ import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.IModel;
 
 public abstract class MessageDialogContent extends Panel {
 
 	private static final long serialVersionUID = -4122580888436007302L;
 
 	private Buttons[] buttons;
-	private String message;
-	private ModalDialog parentDialog;
+	private IModel<String> message;
 
-	public MessageDialogContent(String id, ModalDialog parentDialog,
-			String message, Buttons... buttons) {
+	public MessageDialogContent(String id, IModel<String> message,
+			Buttons... buttons) {
 		super(id);
 		this.message = message;
 		this.buttons = buttons;
-		this.parentDialog = parentDialog;
 	}
 
 	@Override
@@ -37,7 +36,6 @@ public abstract class MessageDialogContent extends Panel {
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 				onConfirm(target);
-				parentDialog.close(target);
 			}
 		};
 		okButton.setVisible(Arrays.asList(buttons).contains(Buttons.OK));
@@ -48,7 +46,6 @@ public abstract class MessageDialogContent extends Panel {
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 				onCancel(target);
-				parentDialog.close(target);
 			}
 		};
 		cancelButton
@@ -56,9 +53,13 @@ public abstract class MessageDialogContent extends Panel {
 		form.add(messageLabel, okButton, cancelButton);
 	}
 
-	protected abstract void onConfirm(AjaxRequestTarget target);
+	protected void onConfirm(AjaxRequestTarget target) {
 
-	protected abstract void onCancel(AjaxRequestTarget target);
+	}
+
+	protected void onCancel(AjaxRequestTarget target) {
+
+	}
 
 	public enum Buttons {
 		OK, CANCEL
