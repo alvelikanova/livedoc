@@ -33,14 +33,14 @@
 }
 
 .w_caption {
-	height: 1.4em;
+	height: 2em;
 	overflow: hidden;
 	position: relative;
 	background-color: #FFF;
 	cursor: default;
 	line-height: 1.4em;
 	color: #666;
-	margin: 15px;
+	margin: 10px;
 }
 
 .w_close {

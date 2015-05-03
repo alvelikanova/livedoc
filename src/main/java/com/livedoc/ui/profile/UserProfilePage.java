@@ -12,6 +12,7 @@ import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.validation.IFormValidator;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.lang.Objects;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -19,6 +20,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import com.livedoc.bl.domain.entities.User;
 import com.livedoc.bl.services.UserService;
 import com.livedoc.ui.common.components.Feedback;
+import com.livedoc.ui.common.components.MessageDialogContent;
+import com.livedoc.ui.common.components.MessageDialogContent.Buttons;
+import com.livedoc.ui.common.components.ModalDialog;
 import com.livedoc.ui.pages.MasterPage;
 
 public class UserProfilePage extends MasterPage {
@@ -34,6 +38,7 @@ public class UserProfilePage extends MasterPage {
 	@SpringBean
 	private BCryptPasswordEncoder passwordEncoder;
 	private String oldPasswordStub;
+	private ModalDialog dialog;
 
 	public UserProfilePage() {
 		super();
@@ -42,6 +47,9 @@ public class UserProfilePage extends MasterPage {
 	@Override
 	protected void onInitialize() {
 		super.onInitialize();
+
+		dialog = new ModalDialog("dialog");
+		add(dialog);
 
 		// User profile: username
 		Label label = new Label("title", String.format("%s: %s",
@@ -98,6 +106,16 @@ public class UserProfilePage extends MasterPage {
 				User user = getUserData().getUser();
 				user.setPassword(passwordEncoder.encode(user.getPassword()));
 				userService.saveUser(user);
+				dialog.setContent(new MessageDialogContent(dialog
+						.getContentId(), new ResourceModel("password.saved"),
+						Buttons.OK) {
+					private static final long serialVersionUID = 2587347608135756141L;
+
+					protected void onConfirm(AjaxRequestTarget target) {
+						dialog.close(target);
+					}
+				});
+				dialog.show(target);
 				collapseContainer(target);
 			}
 
