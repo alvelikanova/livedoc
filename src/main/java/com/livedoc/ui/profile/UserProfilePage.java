@@ -66,7 +66,7 @@ public class UserProfilePage extends MasterPage {
 
 			@Override
 			public void onClick(AjaxRequestTarget target) {
-				target.add(passwordChangeForm);
+				// nothing to do
 			}
 
 			@Override
@@ -138,7 +138,7 @@ public class UserProfilePage extends MasterPage {
 
 			@Override
 			public void onClick(AjaxRequestTarget target) {
-				// nothing to do
+				target.add(feedbackPanel);
 			}
 		};
 
