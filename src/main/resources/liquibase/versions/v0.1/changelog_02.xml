@@ -17,4 +17,36 @@
 			constraintName="UQ_CATEGORY_PROJECT_NAME" columnNames="CATEGORY_NAME, CATEGORY_PROJECT_ID" />
 	</changeSet>
 
+	<changeSet id="create_table_doc_part_06052015" author="velikanova.alena">
+		<createTable tableName="DOC_PART"
+			remarks="Contains top elements included in root element (metainfo, chapter, section etc.)">
+			<column name="DOC_PART_ID" type="varchar(32)" remarks="Id">
+				<constraints primaryKey="true" />
+			</column>
+			<column name="DOC_PART_DOC_DATA_ID" type="varchar(32)"
+				remarks="FK to document's information">
+				<constraints nullable="false" />
+			</column>
+			<column name="DOC_PART_ORDER" type="INTEGER"
+				remarks="Order of the current chapter(section)">
+				<constraints nullable="false" />
+			</column>
+			<column name="DOC_PART_CONTENT" type="CLOB"
+				remarks="Content of the document part">
+			</column>
+		</createTable>
+	</changeSet>
+
+	<changeSet id="add_fk_doc_part_doc_root_06052015" author="velikanova.alena">
+		<addForeignKeyConstraint baseColumnNames="DOC_PART_DOC_DATA_ID"
+			baseTableName="DOC_PART" constraintName="FK_DOC_PART_DOC_DATA_ID"
+			referencedColumnNames="DOC_DATA_ID" referencedTableName="DOC_DATA" />
+	</changeSet>
+
+	<changeSet id="doc_data_add_root_element_09052015" author="velikanova.alena">
+		<addColumn tableName="DOC_DATA">
+			<column name="DOC_DATA_ROOT_ELEM_TYPE" type="varchar(16)" />
+		</addColumn>
+	</changeSet>
+	
 </databaseChangeLog>

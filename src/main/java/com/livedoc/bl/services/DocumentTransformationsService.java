@@ -1,6 +1,6 @@
 package com.livedoc.bl.services;
 
-import org.w3c.dom.Document;
+import org.dom4j.Document;
 
 public interface DocumentTransformationsService {
 

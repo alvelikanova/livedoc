@@ -2,8 +2,12 @@ package com.livedoc.bl.services.impl;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
+import org.dom4j.Document;
+import org.dom4j.Element;
 import org.dozer.DozerBeanMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,7 +17,9 @@ import com.livedoc.bl.domain.entities.Category;
 import com.livedoc.bl.domain.entities.DocumentData;
 import com.livedoc.bl.services.DocumentService;
 import com.livedoc.dal.entities.DocumentDataEntity;
+import com.livedoc.dal.entities.DocumentPartEntity;
 import com.livedoc.dal.providers.DocumentDataProvider;
+import com.livedoc.dal.providers.DocumentPartProvider;
 
 @Service
 @Transactional
@@ -22,18 +28,42 @@ public class DocumentServiceImpl implements DocumentService {
 	@Autowired
 	private DocumentDataProvider documentDataProvider;
 	@Autowired
+	private DocumentPartProvider documentPartProvider;
+	@Autowired
 	private DozerBeanMapper mapper;
 
-	public void saveDocument(DocumentData document) {
-		if (document.getId() == null) {
-			document.setCreateDate(new Date());
-			document.setLastModDate(document.getCreateDate());
+	public DocumentData saveDocument(DocumentData documentData,
+			Document document) {
+		boolean newlyCreated = documentData.getId() == null;
+		if (newlyCreated) {
+			documentData.setCreateDate(new Date());
+			documentData.setLastModDate(documentData.getCreateDate());
 		} else {
-			document.setLastModDate(new Date());
+			documentData.setLastModDate(new Date());
 		}
-		DocumentDataEntity documentEntity = mapper.map(document,
+		DocumentDataEntity documentEntity = mapper.map(documentData,
 				DocumentDataEntity.class);
-		documentDataProvider.saveOrUpdate(documentEntity);
+		if (!newlyCreated) {
+			// TODO - how to handle content changing?
+			Set<DocumentPartEntity> parts = documentEntity.getParts();
+			for (DocumentPartEntity part : parts) {
+				documentPartProvider.delete(part);
+			}
+		}
+		Element rootElement = document.getRootElement();
+		documentEntity.setRootElementType(rootElement.getName());
+		documentEntity = documentDataProvider.saveOrUpdate(documentEntity);
+		int index = 0;
+		for (Iterator<?> i = rootElement.elementIterator(); i.hasNext(); index++) {
+			Element element = (Element) i.next();
+			DocumentPartEntity partEntity = new DocumentPartEntity();
+			partEntity.setDocumentData(documentEntity);
+			partEntity.setDocumentPartContent(element.asXML());
+			partEntity.setDocumentPartOrder(index);
+			partEntity = documentPartProvider.saveOrUpdate(partEntity);
+			documentEntity.getParts().add(partEntity);
+		}
+		return mapper.map(documentEntity, DocumentData.class);
 	}
 
 	public List<DocumentData> getDocumentsByCategory(Category category) {
@@ -55,8 +85,12 @@ public class DocumentServiceImpl implements DocumentService {
 		if (document != null && document.getId() != null) {
 			DocumentDataEntity documentEntity = mapper.map(document,
 					DocumentDataEntity.class);
+			List<DocumentPartEntity> parts = documentPartProvider
+					.getPartsOfDocument(document.getId());
+			for (DocumentPartEntity part : parts) {
+				documentPartProvider.delete(part);
+			}
 			documentDataProvider.delete(documentEntity);
 		}
 	}
-
 }

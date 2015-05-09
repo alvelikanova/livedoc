@@ -1,6 +1,11 @@
 package com.livedoc.ui.administration.documents;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.List;
+
 import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -8,13 +13,21 @@ import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextArea;
+import org.apache.wicket.markup.html.form.upload.FileUpload;
+import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.wicket.validation.IValidatable;
+import org.apache.wicket.validation.IValidator;
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.io.SAXReader;
 
 import com.livedoc.bl.domain.entities.DocumentData;
 import com.livedoc.bl.services.DocumentService;
+import com.livedoc.bl.services.DocumentTransformationsService;
 import com.livedoc.ui.common.components.Feedback;
 import com.livedoc.ui.common.components.MarkupProviderPanel;
 import com.livedoc.ui.pages.MasterPage;
@@ -22,23 +35,40 @@ import com.livedoc.ui.pages.MasterPage;
 public class EditDocumentPage extends MasterPage {
 
 	private static final long serialVersionUID = 5122942399253204854L;
+	private static final Logger logger = Logger
+			.getLogger(EditDocumentPage.class);
 
-	private IModel<DocumentData> model;
+	// services
+	@SpringBean
+	private DocumentService documentService;
+	@SpringBean
+	private DocumentTransformationsService documentTransformationsService;
 
-	private DocumentUploadPanel documentUploadPanel;
+	// models
+	private IModel<DocumentData> documentDatamodel;
+	private Model<String> htmlModel;
+	private Document document;
+
+	// components
 	private MarkupProviderPanel markupPanel;
 	private RequiredTextField<String> titleTextField;
 	private TextArea<String> descriptionTextField;
 	private WebMarkupContainer previewContainer;
 	private Feedback feedbackPanel;
+	private FileUploadField fileUploadField;
+	private AjaxButton uploadDocumentButton;
+	private Form<Document> fileUploadForm;
+
+	// pages
 	private WebPage pageToReturn;
 
-	@SpringBean
-	private DocumentService documentService;
+	// constants
+	private static final String XML_CONTENT_TYPE = "text/xml";
 
-	public EditDocumentPage(WebPage pageToReturn, IModel<DocumentData> model) {
+	public EditDocumentPage(WebPage pageToReturn,
+			IModel<DocumentData> documentDatamodel) {
 		super();
-		this.model = model;
+		this.documentDatamodel = documentDatamodel;
 		this.pageToReturn = pageToReturn;
 	}
 
@@ -52,28 +82,43 @@ public class EditDocumentPage extends MasterPage {
 		feedbackPanel.setOutputMarkupId(true);
 		form.add(feedbackPanel);
 
+		// document's title
 		titleTextField = new RequiredTextField<String>("title",
-				new PropertyModel<String>(model, "title"));
+				new PropertyModel<String>(documentDatamodel, "title"));
+		// document's description
 		descriptionTextField = new TextArea<String>("description",
-				new PropertyModel<String>(model, "description"));
+				new PropertyModel<String>(documentDatamodel, "description"));
 		form.add(titleTextField, descriptionTextField);
 
-		final Model<String> htmlModel = new Model<String>("");
-		documentUploadPanel = new DocumentUploadPanel("doc-upload-panel",
-				model, htmlModel) {
-			private static final long serialVersionUID = -4399736657121659245L;
+		// file upload field
+		fileUploadForm = new Form<Document>("fileUploadForm",
+				new PropertyModel<Document>(this, "document"));
+		form.add(fileUploadForm);
+		htmlModel = new Model<String>("");
+		fileUploadField = new FileUploadField("fileUpload");
+		fileUploadField.add(new XMLFileValidator());
+		uploadDocumentButton = new AjaxButton("uploadDocument", fileUploadForm) {
+			private static final long serialVersionUID = -1578455314617686312L;
 
 			@Override
-			protected void onSubmit(AjaxRequestTarget target) {
+			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+				Document document = parseDocumentFromInput(fileUploadField
+						.getFileUpload());
+				fileUploadForm.setModelObject(document);
+				htmlModel.setObject(documentTransformationsService
+						.transformXMLToString(document));
 				target.add(feedbackPanel, previewContainer);
 			}
 
 			@Override
-			protected void onError(AjaxRequestTarget target) {
-				target.add(feedbackPanel, previewContainer);
+			protected void onError(AjaxRequestTarget target, Form<?> form) {
+				super.onError(target, form);
+				target.add(feedbackPanel);
 			}
 		};
-		form.add(documentUploadPanel);
+		fileUploadForm.add(fileUploadField, uploadDocumentButton);
+
+		// document's transformed content preview
 		previewContainer = new WebMarkupContainer("preview") {
 			private static final long serialVersionUID = 6826422158800036268L;
 
@@ -89,14 +134,23 @@ public class EditDocumentPage extends MasterPage {
 		markupPanel.setOutputMarkupId(true);
 		form.add(previewContainer);
 		previewContainer.add(markupPanel);
+
+		// buttons
 		AjaxButton saveButton = new AjaxButton("save", form) {
 
 			private static final long serialVersionUID = 5736418898197587665L;
 
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-				documentService.saveDocument(model.getObject());
+				documentService.saveDocument(documentDatamodel.getObject(),
+						fileUploadForm.getModelObject());
 				setResponsePage(pageToReturn);
+			}
+
+			@Override
+			protected void onError(AjaxRequestTarget target, Form<?> form) {
+				super.onError(target, form);
+				target.add(feedbackPanel);
 			}
 		};
 		AjaxButton cancelButton = new AjaxButton("cancel") {
@@ -109,5 +163,55 @@ public class EditDocumentPage extends MasterPage {
 			}
 		};
 		form.add(saveButton, cancelButton);
+	}
+
+	/**
+	 * Checks if uploaded file has xml format
+	 */
+	class XMLFileValidator implements IValidator<List<FileUpload>> {
+		private static final long serialVersionUID = 3294459995272626844L;
+
+		public void validate(IValidatable<List<FileUpload>> validatable) {
+			FileUpload uploadedFile = fileUploadField.getFileUpload();
+			if (!XML_CONTENT_TYPE.equals(uploadedFile.getContentType())) {
+				error(getString("error.notxml"));
+			}
+		}
+	}
+
+	/**
+	 * Builds Document object from uploaded file
+	 * 
+	 * @param uploadedFile
+	 * @return Document
+	 */
+	private Document parseDocumentFromInput(FileUpload uploadedFile) {
+		Document doc = null;
+		try {
+			/*
+			 * The InputStream return will be closed by Wicket at the end of the
+			 * request.
+			 */
+			SAXReader reader = new SAXReader();
+			InputStream stream = uploadedFile.getInputStream();
+			doc = reader.read(stream);
+		} catch (IOException ex) {
+			logger.error(String
+					.format("An I/O Error occured while getting document with name %s: %s",
+							uploadedFile.getClientFileName(), ex.getMessage()));
+		} catch (DocumentException ex) {
+			logger.error(String
+					.format("An error occured while processing document with name %s: %s",
+							uploadedFile.getClientFileName(), ex.getMessage()));
+		}
+		return doc;
+	}
+
+	public Document getDocument() {
+		return document;
+	}
+
+	public void setDocument(Document document) {
+		this.document = document;
 	}
 }

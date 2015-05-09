@@ -1,7 +1,10 @@
 package com.livedoc.dal.entities;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -9,6 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -33,6 +37,9 @@ public class DocumentDataEntity extends BaseDalEntity {
 	@Column(name = "doc_data_description", length = 256)
 	private String docDataDescription;
 
+	@Column(name = "doc_data_root_elem_type", length = 16)
+	private String rootElementType;
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "doc_data_create_user_id", nullable = false)
 	private UserEntity createUser;
@@ -52,6 +59,9 @@ public class DocumentDataEntity extends BaseDalEntity {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "doc_data_category_id", nullable = false)
 	private CategoryEntity category;
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "documentData", cascade = {CascadeType.ALL})
+	private Set<DocumentPartEntity> parts = new HashSet<DocumentPartEntity>(0);
 
 	public DocumentDataEntity() {
 		super();
@@ -134,6 +144,22 @@ public class DocumentDataEntity extends BaseDalEntity {
 
 	public void setCategory(CategoryEntity category) {
 		this.category = category;
+	}
+
+	public Set<DocumentPartEntity> getParts() {
+		return parts;
+	}
+
+	public void setParts(Set<DocumentPartEntity> parts) {
+		this.parts = parts;
+	}
+
+	public String getRootElementType() {
+		return rootElementType;
+	}
+
+	public void setRootElementType(String rootElementType) {
+		this.rootElementType = rootElementType;
 	}
 
 }

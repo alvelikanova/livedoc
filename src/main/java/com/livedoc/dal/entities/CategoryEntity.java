@@ -12,11 +12,13 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
-@Table(name = "category", schema = "public")
+@Table(name = "category", schema = "public", uniqueConstraints = @UniqueConstraint(columnNames = {
+		"category_name", "category_project_id" }))
 public class CategoryEntity extends BaseDalEntity {
 
 	private static final long serialVersionUID = -7585918596502377748L;

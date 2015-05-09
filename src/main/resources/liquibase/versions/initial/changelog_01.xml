@@ -5,6 +5,8 @@
 	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
 
+	<!--  initial data -->
+	
 	<changeSet id="insert_data_into_user_role_25012015" author="velikanova.alena">
 		<insert tableName="USER_ROLE">
 			<column name="USER_ROLE_ID">5c95fc32f7a04fff9b2834209367b74c</column>

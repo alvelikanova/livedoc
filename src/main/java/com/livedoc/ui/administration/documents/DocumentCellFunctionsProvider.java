@@ -1,8 +1,10 @@
 package com.livedoc.ui.administration.documents;
 
 import org.apache.wicket.Page;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import com.livedoc.bl.domain.entities.DocumentData;
@@ -32,8 +34,8 @@ public class DocumentCellFunctionsProvider extends
 
 	@Override
 	public void delete(IModel<DocumentData> model) {
-		// TODO Auto-generated method stub
-
+		documentService.deleteDocument(model.getObject());
+		RequestCycle.get().find(AjaxRequestTarget.class).add(getTable());
 	}
 
 }

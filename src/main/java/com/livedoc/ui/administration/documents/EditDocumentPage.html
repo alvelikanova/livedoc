@@ -30,7 +30,20 @@
 						<label class="col-sm-2 control-label"><wicket:message
 								key="document.upload"></wicket:message></label>
 						<div class="col-sm-9">
-							<div wicket:id="doc-upload-panel" />
+							<form wicket:id="fileUploadForm">
+								<div class="input-group">
+									<div class="form-control">
+										<input type="file" wicket:id="fileUpload" />
+									</div>
+									<div class="input-group-btn">
+										<button type="button" class="btn btn-primary"
+											wicket:id="uploadDocument">
+											<span class="glyphicon glyphicon-upload" aria-hidden="true"></span>
+											<wicket:message key="docinfopanel.submit"></wicket:message>
+										</button>
+									</div>
+								</div>
+							</form>
 						</div>
 					</div>
 					<div class="form-group" wicket:id="preview">

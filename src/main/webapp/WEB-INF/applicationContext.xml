@@ -13,6 +13,7 @@
 		<property name="locations">
 			<list>
 				<value>/WEB-INF/dev.properties</value>
+				<value>/WEB-INF/parameters.properties</value>
 			</list>
 		</property>
 	</bean>
