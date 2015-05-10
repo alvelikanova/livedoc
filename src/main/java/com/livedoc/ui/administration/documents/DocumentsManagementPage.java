@@ -128,8 +128,8 @@ public class DocumentsManagementPage extends AdministrationPage {
 								new PropertyModel<String>(item.getModel(),
 										"name"));
 						Label count = new Label("count",
-								documentService.countDocumentsOfCategory(item
-										.getModelObject()));
+								CollectionUtils.size(item.getModelObject()
+										.getDocumentDataList()));
 						categoryLink.add(categoryName);
 						item.add(categoryLink, count);
 					}

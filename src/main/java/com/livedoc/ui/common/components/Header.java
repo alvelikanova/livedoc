@@ -7,7 +7,7 @@ import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.model.IModel;
 
 import com.livedoc.security.SecurityUserDetails;
-import com.livedoc.ui.administration.AdministrationPage;
+import com.livedoc.ui.administration.users.UsersManagementPage;
 import com.livedoc.ui.pages.HomePage;
 import com.livedoc.ui.pages.LoginPage;
 import com.livedoc.ui.profile.UserProfilePage;
@@ -50,7 +50,7 @@ public class Header extends GenericPanel<SecurityUserDetails> {
 
 			@Override
 			public void onClick(AjaxRequestTarget target) {
-				setResponsePage(AdministrationPage.class);
+				setResponsePage(UsersManagementPage.class);
 			}
 
 			@Override

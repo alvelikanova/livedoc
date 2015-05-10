@@ -76,10 +76,6 @@ public class DocumentServiceImpl implements DocumentService {
 		return documents;
 	}
 
-	public Long countDocumentsOfCategory(Category category) {
-		return documentDataProvider.countDocumentsOfCategory(category.getId());
-	}
-
 	public void deleteDocument(DocumentData document) {
 		if (document != null && document.getId() != null) {
 			DocumentDataEntity documentEntity = mapper.map(document,

@@ -4,7 +4,28 @@
 	xml:lang="en" lang="en">
 <body>
 	<wicket:extend>
-	HOME
+		<div class="container">
+			<div class="jumbotron">
+				<h2>
+					<wicket:message key="projects.title"></wicket:message>
+				</h2>
+			</div>
+			<ul class="list-group" wicket:id="projects-list">
+				<li href="#" class="list-group-item">
+					<h4 class="list-group-item-heading">
+						<label wicket:id="project-name"></label>
+					</h4>
+					<p class="list-group-item-text">
+						<label wicket:id="project-description"></label>
+					</p>
+					<button type="button" class="btn btn-success"
+						wicket:id="viewProject">
+						<wicket:message key="projects.button"></wicket:message>
+						<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+					</button>
+				</li>
+			</ul>
+		</div>
 	</wicket:extend>
 </body>
 </html>

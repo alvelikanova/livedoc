@@ -20,7 +20,5 @@ public interface DocumentService {
 
 	List<DocumentData> getDocumentsByCategory(Category category);
 
-	Long countDocumentsOfCategory(Category category);
-
 	void deleteDocument(DocumentData document);
 }

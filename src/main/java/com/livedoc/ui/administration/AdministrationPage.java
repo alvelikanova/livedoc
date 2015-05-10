@@ -27,11 +27,11 @@ public class AdministrationPage extends MasterPage {
 	}
 
 	protected void setProjectsMenuLinkSelected() {
-		projectsMenuLink.setSelected(true);
+		projectsMenuLink.setSelected(false);
 	}
 
 	protected void setDocumentMenuLinkSelected() {
-		documentMenuLink.setSelected(true);
+		documentMenuLink.setSelected(false);
 	}
 
 	@Override
