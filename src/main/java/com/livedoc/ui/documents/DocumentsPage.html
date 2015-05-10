@@ -4,7 +4,21 @@
 	xml:lang="en" lang="en">
 <body>
 	<wicket:extend>
-	DOCUMENT
+		<div class="col-sm-3 col-md-2 sidenav">
+			<ul class="nav nav-sidebar">
+				<li wicket:id="categories-list"><a data-toggle="collapse"
+					wicket:id="toggle-link"><label wicket:id="category-name"></label></a>
+					<div wicket:id="documents-container"
+						class="panel-collapse collapse">
+						<div class="list-group">
+							<div class="list-group-item" wicket:id="documents">
+								<a class="list-group-item-text" href="#"
+									wicket:id="documentLink"><label wicket:id="document-name"></label></a>
+							</div>
+						</div>
+					</div></li>
+			</ul>
+		</div>
 	</wicket:extend>
 </body>
 </html>
