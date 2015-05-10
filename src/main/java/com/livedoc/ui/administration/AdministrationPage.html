@@ -4,17 +4,18 @@
 	xml:lang="en" lang="en">
 <body>
 	<wicket:extend>
-		<div class="col-xs-6 col-sm-3 sidebar-offcanvas">
-			<div class="list-group">
-				<a class="list-group-item" href="#" wicket:id="users"><wicket:message
-						key="menu.users"></wicket:message></a> <a class="list-group-item"
-					href="#" wicket:id="projects"><wicket:message
-						key="menu.projects"></wicket:message></a> <a class="list-group-item"
-					href="#" wicket:id="documents"><wicket:message
-						key="menu.documents"></wicket:message></a>
-			</div>
+		<div class="col-sm-3 col-md-2 sidenav">
+			<ul class="nav nav-sidebar">
+				<li><a href="#" wicket:id="users"><wicket:message
+							key="menu.users"></wicket:message></a></li>
+				<li><a href="#" wicket:id="projects"><wicket:message
+							key="menu.projects"></wicket:message></a></li>
+				<li><a href="#" wicket:id="documents"><wicket:message
+							key="menu.documents"></wicket:message></a></li>
+			</ul>
 		</div>
-		<div class="col-xs-12 col-sm-9">
+		<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main"
+			style="top: 0px; margin-top: 15px;">
 			<wicket:child />
 		</div>
 	</wicket:extend>

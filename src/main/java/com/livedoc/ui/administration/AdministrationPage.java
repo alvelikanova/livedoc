@@ -65,9 +65,9 @@ public class AdministrationPage extends MasterPage {
 		public void onComponentTag(ComponentTag tag) {
 			super.onComponentTag(tag);
 			if (selected) {
-				tag.getAttributes().put("class", "list-group-item active");
+				tag.getAttributes().put("class", "active");
 			} else {
-				tag.getAttributes().put("class", "list-group-item");
+				tag.getAttributes().put("class", "");
 			}
 		}
 
