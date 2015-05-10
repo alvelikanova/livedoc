@@ -12,22 +12,27 @@
 						<label class="col-sm-2 control-label"><wicket:message
 								key="userinfopanel.username"></wicket:message></label>
 						<div class="col-sm-9">
-							<input class="form-control" type="text" wicket:id="username"></input>
+							<input class="form-control"
+								wicket:message="placeholder:userinfopanel.username.placeholder"
+								type="text" wicket:id="username"></input>
 						</div>
 					</div>
 					<div class="form-group">
 						<label class="col-sm-2 control-label"><wicket:message
 								key="userinfopanel.password"></wicket:message></label>
 						<div class="col-sm-9">
-							<input class="form-control" type="password" wicket:id="password"></input>
+							<input class="form-control"
+								wicket:message="placeholder:userinfopanel.password.placeholder"
+								type="password" wicket:id="password"></input>
 						</div>
 					</div>
 					<div class="form-group">
 						<label class="col-sm-2 control-label"><wicket:message
 								key="userinfopanel.repeat_password"></wicket:message></label>
 						<div class="col-sm-9">
-							<input class="form-control" type="password"
-								wicket:id="repeat-password"></input>
+							<input class="form-control"
+								wicket:message="placeholder:userinfopanel.repeat_password.placeholder"
+								type="password" wicket:id="repeat-password"></input>
 						</div>
 					</div>
 					<div class="form-group">
@@ -44,7 +49,9 @@
 						<label class="col-sm-2 control-label"><wicket:message
 								key="userinfopanel.projects"></wicket:message></label>
 						<div class="dropdown col-sm-9">
-							<input wicket:id="projects" type="hidden" style="width: 100%;" />
+							<input wicket:id="projects"
+								wicket:message="placeholder:userinfopanel.projects.placeholder"
+								type="hidden" style="width: 100%;" />
 						</div>
 					</div>
 					<div class="form-group last">
