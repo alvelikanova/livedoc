@@ -10,7 +10,9 @@ import com.livedoc.dal.entities.UserEntity;
 import com.livedoc.dal.providers.UserDataProvider;
 
 @Repository
-public class UserDataProviderImpl extends BaseDataProvider<UserEntity, String> implements UserDataProvider {
+@Transactional
+public class UserDataProviderImpl extends BaseDataProvider<UserEntity, String>
+		implements UserDataProvider {
 
 	public UserDataProviderImpl() {
 		super(UserEntity.class);
@@ -20,7 +22,8 @@ public class UserDataProviderImpl extends BaseDataProvider<UserEntity, String> i
 	public UserEntity findByLoginName(String loginName) {
 		Session session = sessionFactory.getCurrentSession();
 		Criterion criterion = Restrictions.eq("username", loginName);
-		return (UserEntity) session.createCriteria(UserEntity.class).add(criterion).uniqueResult();
+		return (UserEntity) session.createCriteria(UserEntity.class)
+				.add(criterion).uniqueResult();
 	}
 
 }

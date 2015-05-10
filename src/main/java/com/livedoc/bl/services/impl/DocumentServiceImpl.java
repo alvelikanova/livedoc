@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 import org.dom4j.Document;
 import org.dom4j.Element;
@@ -45,14 +44,14 @@ public class DocumentServiceImpl implements DocumentService {
 				DocumentDataEntity.class);
 		if (!newlyCreated) {
 			// TODO - how to handle content changing?
-			Set<DocumentPartEntity> parts = documentEntity.getParts();
+			List<DocumentPartEntity> parts = documentPartProvider
+					.getPartsOfDocument(documentEntity.getDocumentDataId());
 			for (DocumentPartEntity part : parts) {
 				documentPartProvider.delete(part);
 			}
 		}
 		Element rootElement = document.getRootElement();
 		documentEntity.setRootElementType(rootElement.getName());
-		documentEntity = documentDataProvider.saveOrUpdate(documentEntity);
 		int index = 0;
 		for (Iterator<?> i = rootElement.elementIterator(); i.hasNext(); index++) {
 			Element element = (Element) i.next();
@@ -60,9 +59,9 @@ public class DocumentServiceImpl implements DocumentService {
 			partEntity.setDocumentData(documentEntity);
 			partEntity.setDocumentPartContent(element.asXML());
 			partEntity.setDocumentPartOrder(index);
-			partEntity = documentPartProvider.saveOrUpdate(partEntity);
 			documentEntity.getParts().add(partEntity);
 		}
+		documentEntity = documentDataProvider.saveDocument(documentEntity);
 		return mapper.map(documentEntity, DocumentData.class);
 	}
 
@@ -85,12 +84,7 @@ public class DocumentServiceImpl implements DocumentService {
 		if (document != null && document.getId() != null) {
 			DocumentDataEntity documentEntity = mapper.map(document,
 					DocumentDataEntity.class);
-			List<DocumentPartEntity> parts = documentPartProvider
-					.getPartsOfDocument(document.getId());
-			for (DocumentPartEntity part : parts) {
-				documentPartProvider.delete(part);
-			}
-			documentDataProvider.delete(documentEntity);
+			documentDataProvider.deleteDocument(documentEntity);
 		}
 	}
 }

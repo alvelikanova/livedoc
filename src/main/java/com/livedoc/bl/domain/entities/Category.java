@@ -1,10 +1,14 @@
 package com.livedoc.bl.domain.entities;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Category extends BaseDomainEntity {
 	private static final long serialVersionUID = -7570534114497194327L;
 	private String name;
 	private String description;
 	private Project project;
+	private List<DocumentData> documentDataList = new ArrayList<DocumentData>();
 
 	public Category() {
 		super();
@@ -39,6 +43,14 @@ public class Category extends BaseDomainEntity {
 
 	public void setProject(Project project) {
 		this.project = project;
+	}
+
+	public List<DocumentData> getDocumentDataList() {
+		return documentDataList;
+	}
+
+	public void setDocumentDataList(List<DocumentData> documentDataList) {
+		this.documentDataList = documentDataList;
 	}
 
 }

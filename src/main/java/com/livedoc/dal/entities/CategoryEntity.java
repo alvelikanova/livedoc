@@ -40,20 +40,22 @@ public class CategoryEntity extends BaseDalEntity {
 	private ProjectEntity project;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "category")
-	private Set<DocumentDataEntity> documentDataEntities = new HashSet<DocumentDataEntity>(0);
-	
+	private Set<DocumentDataEntity> documentDataList = new HashSet<DocumentDataEntity>(
+			0);
+
 	public CategoryEntity() {
 		super();
 	}
 
-	public CategoryEntity(String categoryId, String categoryName, String categoryDescription, ProjectEntity project,
-			Set<DocumentDataEntity> documentDataEntities) {
+	public CategoryEntity(String categoryId, String categoryName,
+			String categoryDescription, ProjectEntity project,
+			Set<DocumentDataEntity> documentDataList) {
 		super();
 		this.categoryId = categoryId;
 		this.categoryName = categoryName;
 		this.categoryDescription = categoryDescription;
 		this.project = project;
-		this.documentDataEntities = documentDataEntities;
+		this.documentDataList = documentDataList;
 	}
 
 	public String getCategoryId() {
@@ -88,12 +90,12 @@ public class CategoryEntity extends BaseDalEntity {
 		this.project = project;
 	}
 
-	public Set<DocumentDataEntity> getDocumentDataEntities() {
-		return documentDataEntities;
+	public Set<DocumentDataEntity> getDocumentDataList() {
+		return documentDataList;
 	}
 
-	public void setDocumentDataEntities(Set<DocumentDataEntity> documentDataEntities) {
-		this.documentDataEntities = documentDataEntities;
+	public void setDocumentDataList(Set<DocumentDataEntity> documentDataList) {
+		this.documentDataList = documentDataList;
 	}
 
 }

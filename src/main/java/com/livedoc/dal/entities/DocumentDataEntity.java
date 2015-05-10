@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -60,7 +59,7 @@ public class DocumentDataEntity extends BaseDalEntity {
 	@JoinColumn(name = "doc_data_category_id", nullable = false)
 	private CategoryEntity category;
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "documentData", cascade = {CascadeType.ALL})
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "documentData")
 	private Set<DocumentPartEntity> parts = new HashSet<DocumentPartEntity>(0);
 
 	public DocumentDataEntity() {

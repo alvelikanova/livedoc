@@ -36,14 +36,12 @@ public class ProjectEntity extends BaseDalEntity {
 	@Column(name = "project_description", length = 256)
 	private String projectDescription;
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "project", cascade = {CascadeType.ALL})
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "project")
 	private Set<CategoryEntity> categories = new HashSet<CategoryEntity>(0);
 
 	@ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.MERGE,
 			CascadeType.PERSIST, CascadeType.REFRESH })
-	@JoinTable(name = "users_to_project", 
-				joinColumns = { @JoinColumn(name = "PROJECT_ID", nullable = false) }, 
-				inverseJoinColumns = { @JoinColumn(name = "USERS_ID", nullable = false) })
+	@JoinTable(name = "users_to_project", joinColumns = { @JoinColumn(name = "PROJECT_ID", nullable = false) }, inverseJoinColumns = { @JoinColumn(name = "USERS_ID", nullable = false) })
 	private Set<UserEntity> users = new HashSet<UserEntity>(0);
 
 	public ProjectEntity() {
@@ -54,7 +52,8 @@ public class ProjectEntity extends BaseDalEntity {
 		this.projectName = projectName;
 	}
 
-	public ProjectEntity(String projectId, String projectName, Set<UserEntity> users) {
+	public ProjectEntity(String projectId, String projectName,
+			Set<UserEntity> users) {
 		this.projectId = projectId;
 		this.projectName = projectName;
 		this.users = users;

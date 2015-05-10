@@ -10,4 +10,7 @@ public interface DocumentDataProvider extends
 
 	Long countDocumentsOfCategory(String categoryId);
 
+	void deleteDocument(DocumentDataEntity documentData);
+
+	DocumentDataEntity saveDocument(DocumentDataEntity documentData);
 }

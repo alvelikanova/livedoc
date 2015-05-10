@@ -17,6 +17,7 @@ public class MapperBuilder extends BeanMappingBuilder {
 
 	@Override
 	protected void configure() {
+		// TODO collections are mapped by name - ???
 		mapping(UserEntity.class, User.class).fields("userId", "id")
 				.fields("username", "name").fields("password", "password");
 		mapping(RoleEntity.class, Role.class).fields("roleId", "id")

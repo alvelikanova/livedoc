@@ -6,11 +6,13 @@ import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.livedoc.dal.entities.DocumentPartEntity;
 import com.livedoc.dal.providers.DocumentPartProvider;
 
 @Repository
+@Transactional
 public class DocumentPartProviderImpl extends
 		BaseDataProvider<DocumentPartEntity, String> implements
 		DocumentPartProvider {

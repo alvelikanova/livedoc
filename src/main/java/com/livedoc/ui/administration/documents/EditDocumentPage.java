@@ -18,6 +18,7 @@ import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.IValidator;
@@ -30,6 +31,8 @@ import com.livedoc.bl.services.DocumentService;
 import com.livedoc.bl.services.DocumentTransformationsService;
 import com.livedoc.ui.common.components.Feedback;
 import com.livedoc.ui.common.components.MarkupProviderPanel;
+import com.livedoc.ui.common.components.MessageDialogContent;
+import com.livedoc.ui.common.components.ModalDialog;
 import com.livedoc.ui.pages.MasterPage;
 
 public class EditDocumentPage extends MasterPage {
@@ -45,7 +48,7 @@ public class EditDocumentPage extends MasterPage {
 	private DocumentTransformationsService documentTransformationsService;
 
 	// models
-	private IModel<DocumentData> documentDatamodel;
+	private IModel<DocumentData> documentDataModel;
 	private Model<String> htmlModel;
 	private Document document;
 
@@ -58,6 +61,7 @@ public class EditDocumentPage extends MasterPage {
 	private FileUploadField fileUploadField;
 	private AjaxButton uploadDocumentButton;
 	private Form<Document> fileUploadForm;
+	private ModalDialog dialog;
 
 	// pages
 	private WebPage pageToReturn;
@@ -66,9 +70,9 @@ public class EditDocumentPage extends MasterPage {
 	private static final String XML_CONTENT_TYPE = "text/xml";
 
 	public EditDocumentPage(WebPage pageToReturn,
-			IModel<DocumentData> documentDatamodel) {
+			IModel<DocumentData> documentDataModel) {
 		super();
-		this.documentDatamodel = documentDatamodel;
+		this.documentDataModel = documentDataModel;
 		this.pageToReturn = pageToReturn;
 	}
 
@@ -77,6 +81,8 @@ public class EditDocumentPage extends MasterPage {
 
 		Form<Void> form = new Form<Void>("form");
 		add(form);
+		dialog = new ModalDialog("dialog");
+		add(dialog);
 
 		feedbackPanel = new Feedback("feedback");
 		feedbackPanel.setOutputMarkupId(true);
@@ -84,10 +90,10 @@ public class EditDocumentPage extends MasterPage {
 
 		// document's title
 		titleTextField = new RequiredTextField<String>("title",
-				new PropertyModel<String>(documentDatamodel, "title"));
+				new PropertyModel<String>(documentDataModel, "title"));
 		// document's description
 		descriptionTextField = new TextArea<String>("description",
-				new PropertyModel<String>(documentDatamodel, "description"));
+				new PropertyModel<String>(documentDataModel, "description"));
 		form.add(titleTextField, descriptionTextField);
 
 		// file upload field
@@ -96,6 +102,7 @@ public class EditDocumentPage extends MasterPage {
 		form.add(fileUploadForm);
 		htmlModel = new Model<String>("");
 		fileUploadField = new FileUploadField("fileUpload");
+		fileUploadField.setRequired(true);
 		fileUploadField.add(new XMLFileValidator());
 		uploadDocumentButton = new AjaxButton("uploadDocument", fileUploadForm) {
 			private static final long serialVersionUID = -1578455314617686312L;
@@ -142,9 +149,22 @@ public class EditDocumentPage extends MasterPage {
 
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-				documentService.saveDocument(documentDatamodel.getObject(),
+				documentService.saveDocument(documentDataModel.getObject(),
 						fileUploadForm.getModelObject());
-				setResponsePage(pageToReturn);
+				dialog.setTitle(getString("dialog.title"));
+				dialog.setContent(new MessageDialogContent(dialog
+						.getContentId(), new ResourceModel("save.message"),
+						MessageDialogContent.Buttons.OK) {
+
+					private static final long serialVersionUID = -156937675362688835L;
+
+					@Override
+					protected void onConfirm(AjaxRequestTarget target) {
+						setResponsePage(pageToReturn);
+						dialog.close(target);
+					}
+				});
+				dialog.show(target);
 			}
 
 			@Override
@@ -159,7 +179,29 @@ public class EditDocumentPage extends MasterPage {
 
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-				setResponsePage(pageToReturn);
+				dialog.setTitle(getString("dialog.title"));
+				dialog.setContent(new MessageDialogContent(
+						dialog.getContentId(),
+						new ResourceModel(
+								documentDataModel.getObject().getId() == null ? "cancel.document-creating.confirm"
+										: "cancel.document-editing.confirm"),
+						MessageDialogContent.Buttons.OK,
+						MessageDialogContent.Buttons.CANCEL) {
+
+					private static final long serialVersionUID = -156937675362688835L;
+
+					@Override
+					protected void onConfirm(AjaxRequestTarget target) {
+						setResponsePage(pageToReturn);
+						dialog.close(target);
+					}
+
+					@Override
+					protected void onCancel(AjaxRequestTarget target) {
+						dialog.close(target);
+					}
+				});
+				dialog.show(target);
 			}
 		};
 		form.add(saveButton, cancelButton);
