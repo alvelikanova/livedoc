@@ -18,6 +18,7 @@ import org.apache.wicket.validation.validator.StringValidator;
 
 import com.livedoc.bl.domain.entities.Category;
 import com.livedoc.bl.domain.entities.Project;
+import com.livedoc.bl.services.CategoryService;
 import com.livedoc.bl.services.ProjectService;
 import com.livedoc.ui.common.components.Feedback;
 import com.livedoc.ui.pages.MasterPage;
@@ -26,13 +27,19 @@ public class EditProjectPage extends MasterPage {
 
 	private static final long serialVersionUID = 6391339627405361984L;
 
+	// services
 	@SpringBean
 	private ProjectService projectService;
+	@SpringBean
+	private CategoryService categoryService;
 
+	// components
 	private Feedback feedbackPanel;
 	private Page pageToReturn;
 	private Form<Project> form;
 	private TextField<String> projectNameField;
+
+	// models
 	private IModel<Project> model = new Model<Project>(new Project());
 
 	public EditProjectPage(Page pageToReturn) {
@@ -78,6 +85,7 @@ public class EditProjectPage extends MasterPage {
 				Project project = (Project) form.getModelObject();
 				if (projectService.checkProjectNameUniqueness(project)) {
 					if (checkCategoriesNamesAreUnique(project)) {
+						deleteCategories(project);
 						projectService.saveProject(project);
 						setResponsePage(pageToReturn);
 					} else {
@@ -121,5 +129,24 @@ public class EditProjectPage extends MasterPage {
 			}
 		}
 		return true;
+	}
+
+	private void deleteCategories(Project project) {
+		if (project.getId() != null) {
+			List<Category> categories = project.getCategories();
+			List<Category> persistedCategories = categoryService
+					.getProjectCategories(project);
+			for (Category persistedCategory : persistedCategories) {
+				boolean found = false;
+				for (Category category : categories) {
+					if (persistedCategory.getId().equals(category.getId())) {
+						found = true;
+					}
+				}
+				if (!found) {
+					categoryService.deleteCategory(persistedCategory);
+				}
+			}
+		}
 	}
 }

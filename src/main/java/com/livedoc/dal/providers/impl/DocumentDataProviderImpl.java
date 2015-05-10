@@ -54,10 +54,11 @@ public class DocumentDataProviderImpl extends
 	}
 
 	public DocumentDataEntity saveDocument(DocumentDataEntity documentData) {
+		DocumentDataEntity docDataEntity = this.saveOrUpdate(documentData);
 		Set<DocumentPartEntity> parts = documentData.getParts();
 		for (DocumentPartEntity part : parts) {
 			documentPartProvider.saveOrUpdate(part);
 		}
-		return this.saveOrUpdate(documentData);
+		return docDataEntity;
 	}
 }

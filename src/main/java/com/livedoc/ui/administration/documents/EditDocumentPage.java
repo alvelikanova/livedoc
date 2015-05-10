@@ -7,6 +7,7 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
@@ -173,12 +174,12 @@ public class EditDocumentPage extends MasterPage {
 				target.add(feedbackPanel);
 			}
 		};
-		AjaxButton cancelButton = new AjaxButton("cancel") {
+		AjaxLink<Void> cancelButton = new AjaxLink<Void>("cancel") {
 
 			private static final long serialVersionUID = 6519349294466919297L;
 
 			@Override
-			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+			public void onClick(final AjaxRequestTarget target) {
 				dialog.setTitle(getString("dialog.title"));
 				dialog.setContent(new MessageDialogContent(
 						dialog.getContentId(),

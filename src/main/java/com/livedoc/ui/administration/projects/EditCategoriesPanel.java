@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.injection.Injector;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextArea;
@@ -15,27 +16,43 @@ import org.apache.wicket.markup.repeater.RefreshingView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.model.ResourceModel;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import com.livedoc.bl.domain.entities.Category;
 import com.livedoc.bl.domain.entities.Project;
+import com.livedoc.bl.services.CategoryService;
+import com.livedoc.ui.common.components.MessageDialogContent;
+import com.livedoc.ui.common.components.ModalDialog;
 import com.livedoc.ui.common.components.StubAjaxUpdate;
 
 public class EditCategoriesPanel extends GenericPanel<Project> {
 	private static final long serialVersionUID = -6417182211636805438L;
 
+	// services
+	@SpringBean
+	private CategoryService categoryService;
+
+	// components
 	private RefreshingView<Category> categoryList;
 	private WebMarkupContainer listContainer;
+	private ModalDialog dialog;
 
 	public EditCategoriesPanel(String id, IModel<Project> projectModel) {
 		super(id, projectModel);
 		if (getModelObject().getCategories().isEmpty()) {
 			addEmptyCategory();
 		}
+		Injector.get().inject(this);
 	}
 
 	@Override
 	public void onInitialize() {
 		super.onInitialize();
+
+		dialog = new ModalDialog("dialog");
+		add(dialog);
+
 		listContainer = new WebMarkupContainer("categoriesContainer");
 		categoryList = new RefreshingView<Category>("categories") {
 			private static final long serialVersionUID = -829818236805595829L;
@@ -65,9 +82,30 @@ public class EditCategoriesPanel extends GenericPanel<Project> {
 
 					@Override
 					public void onClick(AjaxRequestTarget target) {
-						EditCategoriesPanel.this.getModelObject()
-								.getCategories().remove(item.getModelObject());
-						target.add(listContainer);
+						final Category category = item.getModelObject();
+						dialog.setTitle(getString("delete.dialog.title"));
+						dialog.setContent(new MessageDialogContent(dialog
+								.getContentId(), new ResourceModel(
+								"delete.dialog.content"),
+								MessageDialogContent.Buttons.OK,
+								MessageDialogContent.Buttons.CANCEL) {
+
+							private static final long serialVersionUID = -156937675362688835L;
+
+							@Override
+							protected void onConfirm(AjaxRequestTarget target) {
+								EditCategoriesPanel.this.getModelObject()
+										.getCategories().remove(category);
+								target.add(listContainer);
+								dialog.close(target);
+							}
+
+							@Override
+							protected void onCancel(AjaxRequestTarget target) {
+								dialog.close(target);
+							}
+						});
+						dialog.show(target);
 					}
 
 					@Override

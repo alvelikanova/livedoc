@@ -42,10 +42,11 @@ public class ProjectDataProviderImpl extends
 	}
 
 	public ProjectEntity saveProject(ProjectEntity project) {
+		ProjectEntity projectEntity = this.saveOrUpdate(project);
 		Set<CategoryEntity> categories = project.getCategories();
 		for (CategoryEntity category : categories) {
 			categoryDataProvider.saveCategory(category);
 		}
-		return this.saveOrUpdate(project);
+		return projectEntity;
 	}
 }

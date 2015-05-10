@@ -44,10 +44,11 @@ public class CategoryDataProviderImpl extends
 	}
 
 	public CategoryEntity saveCategory(CategoryEntity category) {
+		CategoryEntity categoryEntity = this.saveOrUpdate(category);
 		Set<DocumentDataEntity> documents = category.getDocumentDataList();
 		for (DocumentDataEntity document : documents) {
 			documentDataProvider.saveDocument(document);
 		}
-		return this.saveOrUpdate(category);
+		return categoryEntity;
 	}
 }
