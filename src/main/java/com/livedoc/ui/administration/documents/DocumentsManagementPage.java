@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.ComponentTag;
@@ -28,16 +29,35 @@ public class DocumentsManagementPage extends AdministrationPage {
 
 	private static final long serialVersionUID = 5512650977534398494L;
 
+	// services
 	@SpringBean
 	private ProjectService projectService;
 	@SpringBean
 	private DocumentService documentService;
+
+	// components
 	private RefreshingView<Project> projectList;
+	private WebMarkupContainer placeholder;
 
 	@Override
 	public void onInitialize() {
 		super.onInitialize();
 		setDocumentMenuLinkSelected();
+
+		placeholder = new WebMarkupContainer("placeholder") {
+
+			private static final long serialVersionUID = 7339781999223005822L;
+
+			@Override
+			public void onConfigure() {
+				super.onConfigure();
+				List<Project> projects = projectService.findAllProjects();
+				setVisible(CollectionUtils.isEmpty(projects));
+			}
+		};
+		add(placeholder);
+		placeholder.setOutputMarkupId(true);
+		placeholder.setOutputMarkupPlaceholderTag(true);
 
 		projectList = new RefreshingView<Project>("projects-list") {
 			private static final long serialVersionUID = -8204515789661613116L;
@@ -107,7 +127,9 @@ public class DocumentsManagementPage extends AdministrationPage {
 						Label categoryName = new Label("category-name",
 								new PropertyModel<String>(item.getModel(),
 										"name"));
-						Label count = new Label("count", documentService.countDocumentsOfCategory(item.getModelObject()));
+						Label count = new Label("count",
+								documentService.countDocumentsOfCategory(item
+										.getModelObject()));
 						categoryLink.add(categoryName);
 						item.add(categoryLink, count);
 					}
