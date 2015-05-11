@@ -1,0 +1,26 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.3-strict.dtd"
+	xml:lang="en" lang="en">
+<wicket:panel>
+	<div class="page-header">
+		<h1>
+			<label wicket:id="documentTitle"></label>
+		</h1>
+		<p>
+			<label wicket:id="documentDescription"></label>
+		</p>
+		<p>
+			<wicket:message key="label.author"></wicket:message>
+			<label wicket:id="author"></label>
+			<wicket:message key="label.created"></wicket:message>
+			<label wicket:id="createdDate"></label>
+			<wicket:message key="label.lastModified"></wicket:message>
+			<label wicket:id="lastModDate"></label>
+			<wicket:message key="label.lastModUser"></wicket:message>
+			<label wicket:id="lastModUser"></label>
+		</p>
+	</div>
+	<div wicket:id="documentContent"></div>
+</wicket:panel>
+</html>

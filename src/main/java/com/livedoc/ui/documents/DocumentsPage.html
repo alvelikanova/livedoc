@@ -5,19 +5,11 @@
 <body>
 	<wicket:extend>
 		<div class="col-sm-3 col-md-2 sidenav">
-			<ul class="nav nav-sidebar">
-				<li wicket:id="categories-list"><a data-toggle="collapse"
-					wicket:id="toggle-link"><label wicket:id="category-name"></label></a>
-					<div wicket:id="documents-container"
-						class="panel-collapse collapse">
-						<div class="list-group">
-							<div class="list-group-item" wicket:id="documents">
-								<a class="list-group-item-text" href="#"
-									wicket:id="documentLink"><label wicket:id="document-name"></label></a>
-							</div>
-						</div>
-					</div></li>
-			</ul>
+			<div wicket:id="categories"></div>
+		</div>
+		<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main"
+			style="top: 0px; margin-top: 15px;">
+			<div wicket:id="document"></div>
 		</div>
 	</wicket:extend>
 </body>
