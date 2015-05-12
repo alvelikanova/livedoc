@@ -27,4 +27,22 @@
 			</list>
 		</property>
 	</bean>
+
+	<bean id="xsltSystemIdProvider" class="com.livedoc.bl.common.XsltSystemIdProvider">
+	</bean>
+
+	<bean id="stylesheetSource" class="javax.xml.transform.stream.StreamSource">
+		<property name="systemId">
+			<bean factory-bean="xsltSystemIdProvider" factory-method="getSystemId"></bean>
+		</property>
+	</bean>
+
+	<bean id="transformerFactory" class="javax.xml.transform.TransformerFactory"
+		factory-method="newInstance" />
+
+	<bean id="transformer" factory-bean="transformerFactory"
+		factory-method="newTransformer">
+		<constructor-arg ref="stylesheetSource" />
+	</bean>
+
 </beans>

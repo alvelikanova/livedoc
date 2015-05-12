@@ -21,4 +21,6 @@ public interface DocumentService {
 	List<DocumentData> getDocumentsByCategory(Category category);
 
 	void deleteDocument(DocumentData document);
+
+	Document buildDocument(DocumentData documentData);
 }

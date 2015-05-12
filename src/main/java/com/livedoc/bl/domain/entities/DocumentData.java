@@ -13,6 +13,7 @@ public class DocumentData extends BaseDomainEntity {
 	private User lastModUser;
 	private String description;
 	private Category category;
+	private String rootElement;
 
 	public DocumentData() {
 		super();
@@ -80,6 +81,14 @@ public class DocumentData extends BaseDomainEntity {
 
 	public void setCategory(Category category) {
 		this.category = category;
+	}
+
+	public String getRootElement() {
+		return rootElement;
+	}
+
+	public void setRootElement(String rootElement) {
+		this.rootElement = rootElement;
 	}
 
 }

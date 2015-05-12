@@ -1,19 +1,14 @@
 package com.livedoc.bl.services.impl;
 
-import java.io.StringWriter;
-
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
-import javax.xml.transform.stream.StreamSource;
 
 import org.apache.log4j.Logger;
 import org.dom4j.Document;
-import org.dom4j.DocumentException;
-import org.dom4j.io.DOMWriter;
+import org.dom4j.io.DocumentResult;
+import org.dom4j.io.DocumentSource;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.livedoc.bl.services.DocumentTransformationsService;
@@ -24,21 +19,16 @@ public class DocumentTransformationsServiceImpl implements
 	private static final Logger logger = Logger
 			.getLogger(DocumentTransformationsServiceImpl.class);
 
+	@Autowired
+	private Transformer transformer;
+
 	public String transformXMLToString(Document document) {
 		try {
-			DOMSource source = new DOMSource(new DOMWriter().write(document));
-			// xsl file
-			StreamSource xslStream = new StreamSource(this.getClass()
-					.getResourceAsStream("/xsl/docbook.xsl"));
-			// output
-			StringWriter sw = new StringWriter();
-			StreamResult result = new StreamResult(sw);
-
-			TransformerFactory factory = TransformerFactory.newInstance();
-
-			Transformer transformer = factory.newTransformer(xslStream);
+			DocumentSource source = new DocumentSource(document);
+			DocumentResult result = new DocumentResult();
 			transformer.transform(source, result);
-			return sw.toString();
+			Document transformedDoc = result.getDocument();
+			return transformedDoc.asXML();
 		} catch (TransformerConfigurationException ex) {
 			logger.error(String.format(
 					"Configuration error, cannot initialize Transformer: %s",
@@ -46,10 +36,6 @@ public class DocumentTransformationsServiceImpl implements
 		} catch (TransformerException ex) {
 			logger.error(String.format(
 					"Error occured while transforming document: %s",
-					ex.getMessage()));
-		} catch (DocumentException ex) {
-			logger.error(String.format(
-					"Error occured while converting dom4j document: %s",
 					ex.getMessage()));
 		}
 		return null;

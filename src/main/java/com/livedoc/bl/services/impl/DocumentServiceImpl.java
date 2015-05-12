@@ -1,14 +1,21 @@
 package com.livedoc.bl.services.impl;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.log4j.Logger;
 import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.dozer.DozerBeanMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,12 +31,22 @@ import com.livedoc.dal.providers.DocumentPartProvider;
 @Transactional
 public class DocumentServiceImpl implements DocumentService {
 
+	private static final Logger logger = Logger
+			.getLogger(DocumentServiceImpl.class);
+
 	@Autowired
 	private DocumentDataProvider documentDataProvider;
 	@Autowired
 	private DocumentPartProvider documentPartProvider;
 	@Autowired
 	private DozerBeanMapper mapper;
+
+	@Value("${xml.encoding}")
+	private String xmlEncoding;
+	@Value("${docbook.version}")
+	private String docbookVersion;
+	@Value("${docbook.xmlns}")
+	private String docbookXmlns;
 
 	public DocumentData saveDocument(DocumentData documentData,
 			Document document) {
@@ -82,5 +99,32 @@ public class DocumentServiceImpl implements DocumentService {
 					DocumentDataEntity.class);
 			documentDataProvider.deleteDocument(documentEntity);
 		}
+	}
+
+	public Document buildDocument(DocumentData documentData) {
+		Document document = DocumentHelper.createDocument();
+		List<DocumentPartEntity> parts = documentPartProvider
+				.getPartsOfDocument(documentData.getId());
+		document.setXMLEncoding(xmlEncoding);
+		Element root = document.addElement(documentData.getRootElement())
+				.addAttribute("version", docbookVersion)
+				.addAttribute("xmlns", docbookXmlns);
+		Collections.sort(parts, new Comparator<DocumentPartEntity>() {
+
+			public int compare(DocumentPartEntity o1, DocumentPartEntity o2) {
+				return o1.getDocumentPartOrder() - o2.getDocumentPartOrder();
+			}
+		});
+		try {
+			for (DocumentPartEntity part : parts) {
+				Element elem = DocumentHelper.parseText(
+						part.getDocumentPartContent()).getRootElement();
+				root.add(elem);
+			}
+		} catch (DocumentException ex) {
+			logger.error("Error occured while trying to parse database data: "
+					+ ex);
+		}
+		return document;
 	}
 }

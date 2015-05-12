@@ -30,7 +30,8 @@ public class MapperBuilder extends BeanMappingBuilder {
 				.fields("documentTitle", "title")
 				.fields("documentCreationTs", "createDate")
 				.fields("docDataDescription", "description")
-				.fields("documentModTs", "lastModDate");
+				.fields("documentModTs", "lastModDate")
+				.fields("rootElementType", "rootElement");
 		mapping(CategoryEntity.class, Category.class)
 				.fields("categoryId", "id").fields("categoryName", "name")
 				.fields("categoryDescription", "description");
