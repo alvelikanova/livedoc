@@ -7,7 +7,6 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.log4j.Logger;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
@@ -106,9 +105,8 @@ public class DocumentServiceImpl implements DocumentService {
 		List<DocumentPartEntity> parts = documentPartProvider
 				.getPartsOfDocument(documentData.getId());
 		document.setXMLEncoding(xmlEncoding);
-		Element root = document.addElement(documentData.getRootElement())
-				.addAttribute("version", docbookVersion)
-				.addAttribute("xmlns", docbookXmlns);
+		Element root = document.addElement(documentData.getRootElement(),
+				docbookXmlns).addAttribute("version", docbookVersion);
 		Collections.sort(parts, new Comparator<DocumentPartEntity>() {
 
 			public int compare(DocumentPartEntity o1, DocumentPartEntity o2) {
