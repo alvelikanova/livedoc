@@ -6,59 +6,57 @@
 	<wicket:extend>
 		<div wicket:id="dialog"></div>
 		<div class="container">
-			<div class="well well-lg">
-				<div class="page-header">
-					<h3 wicket:id="title"></h3>
-				</div>
-				<div class="list-group">
-					<div class="list-group-item">
-						<span class="glyphicon glyphicon-lock" aria-hidden="true"></span>
-						<a data-toggle="collapse" wicket:id="toggle-link"><wicket:message
-								key="passwordChange"></wicket:message></a>
-						<div wicket:id="password-change-container"
-							class="panel-collapse collapse">
-							<form class="form-horizontal" wicket:id="password-change-form"
-								style="padding-top: 15px;">
-								<div wicket:id="feedback"></div>
-								<div class="form-group">
-									<label class="col-sm-2 control-label"><wicket:message
-											key="label.old-password"></wicket:message></label>
-									<div class="col-sm-9">
-										<input class="form-control" type="password"
-											wicket:message="placeholder:placeholder.old-password"
-											wicket:id="old-password"></input>
-									</div>
+			<div class="jumbotron">
+				<h2 wicket:id="title"></h2>
+			</div>
+			<div class="list-group">
+				<div class="list-group-item">
+					<span class="glyphicon glyphicon-lock" aria-hidden="true"></span> <a
+						data-toggle="collapse" wicket:id="toggle-link"><wicket:message
+							key="passwordChange"></wicket:message></a>
+					<div wicket:id="password-change-container"
+						class="panel-collapse collapse">
+						<form class="form-horizontal" wicket:id="password-change-form"
+							style="padding-top: 15px;">
+							<div wicket:id="feedback"></div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label"><wicket:message
+										key="label.old-password"></wicket:message></label>
+								<div class="col-sm-9">
+									<input class="form-control" type="password"
+										wicket:message="placeholder:placeholder.old-password"
+										wicket:id="old-password"></input>
 								</div>
-								<div class="form-group">
-									<label class="col-sm-2 control-label"><wicket:message
-											key="label.new-password"></wicket:message></label>
-									<div class="col-sm-9">
-										<input class="form-control" type="password"
-											wicket:message="placeholder:placeholder.new-password"
-											wicket:id="new-password"></input>
-									</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label"><wicket:message
+										key="label.new-password"></wicket:message></label>
+								<div class="col-sm-9">
+									<input class="form-control" type="password"
+										wicket:message="placeholder:placeholder.new-password"
+										wicket:id="new-password"></input>
 								</div>
-								<div class="form-group">
-									<label class="col-sm-2 control-label"><wicket:message
-											key="label.repeat-new-password"></wicket:message></label>
-									<div class="col-sm-9">
-										<input class="form-control" type="password"
-											wicket:message="placeholder:placeholder.repeat-new-password"
-											wicket:id="repeat-new-password"></input>
-									</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label"><wicket:message
+										key="label.repeat-new-password"></wicket:message></label>
+								<div class="col-sm-9">
+									<input class="form-control" type="password"
+										wicket:message="placeholder:placeholder.repeat-new-password"
+										wicket:id="repeat-new-password"></input>
 								</div>
-								<div class="form-group last">
-									<div class="col-sm-offset-2 col-sm-9">
-										<input type="submit" class="btn btn-primary"
-											wicket:id="change-password"
-											wicket:message="value:passwords.save"></input> <input
-											type="button" data-toggle="collapse" class="btn btn-default"
-											wicket:id="cancel-change-password"
-											wicket:message="value:passwords.cancel"></input>
-									</div>
+							</div>
+							<div class="form-group last">
+								<div class="col-sm-offset-2 col-sm-9">
+									<input type="submit" class="btn btn-primary"
+										wicket:id="change-password"
+										wicket:message="value:passwords.save"></input> <input
+										type="button" data-toggle="collapse" class="btn btn-default"
+										wicket:id="cancel-change-password"
+										wicket:message="value:passwords.cancel"></input>
 								</div>
-							</form>
-						</div>
+							</div>
+						</form>
 					</div>
 				</div>
 			</div>
