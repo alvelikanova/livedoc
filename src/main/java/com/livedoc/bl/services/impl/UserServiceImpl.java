@@ -72,4 +72,15 @@ public class UserServiceImpl implements UserService {
 		UserEntity userEntity = mapper.map(user, UserEntity.class);
 		userDataProvider.delete(userEntity);
 	}
+
+	public List<User> findUsers(List<String> excludeUsersIds) {
+		List<User> users = new ArrayList<User>();
+		List<UserEntity> usersEntities = userDataProvider
+				.findUsers(excludeUsersIds);
+		for (UserEntity usersEntity : usersEntities) {
+			User user = mapper.map(usersEntity, User.class);
+			users.add(user);
+		}
+		return users;
+	}
 }

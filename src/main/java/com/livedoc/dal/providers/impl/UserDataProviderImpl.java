@@ -1,5 +1,8 @@
 package com.livedoc.dal.providers.impl;
 
+import java.util.List;
+
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
@@ -26,4 +29,10 @@ public class UserDataProviderImpl extends BaseDataProvider<UserEntity, String>
 				.add(criterion).uniqueResult();
 	}
 
+	public List<UserEntity> findUsers(List<String> excludeUsersIds) {
+		Session session = sessionFactory.getCurrentSession();
+		Criterion criterion = Restrictions.not(Restrictions.in("userId", excludeUsersIds));
+		Criteria cr = session.createCriteria(UserEntity.class).add(criterion);
+		return cr.list();
+	}
 }
