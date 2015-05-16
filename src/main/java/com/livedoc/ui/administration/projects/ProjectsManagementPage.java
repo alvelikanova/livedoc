@@ -15,7 +15,6 @@ public class ProjectsManagementPage extends AdministrationPage {
 	@Override
 	public void onInitialize() {
 		super.onInitialize();
-		setProjectsMenuLinkSelected();
 
 		AjaxLink<Void> createProjectLink = new AjaxLink<Void>("createProject") {
 			private static final long serialVersionUID = -6420561414459574501L;

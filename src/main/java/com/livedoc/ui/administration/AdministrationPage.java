@@ -1,9 +1,16 @@
 package com.livedoc.ui.administration;
 
-import org.apache.wicket.Page;
+import java.util.Arrays;
+import java.util.List;
+
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
-import org.apache.wicket.markup.ComponentTag;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.model.Model;
+import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import com.livedoc.bl.services.UserService;
@@ -16,67 +23,48 @@ public class AdministrationPage extends MasterPage {
 
 	private static final long serialVersionUID = 3341079353601186137L;
 
+	private static final String CSS_ACTIVE = "active";
+
+	@SuppressWarnings("unchecked")
+	private static final List<Class<? extends AdministrationPage>> adminPages = Arrays
+			.asList(UsersManagementPage.class, ProjectsManagementPage.class,
+					DocumentsManagementPage.class);
+
 	@SpringBean
 	private UserService userService;
-	private MenuLink usersMenuLink;
-	private MenuLink projectsMenuLink;
-	private MenuLink documentMenuLink;
-
-	protected void setUsersMenuLinkSelected() {
-		usersMenuLink.setSelected(true);
-	}
-
-	protected void setProjectsMenuLinkSelected() {
-		projectsMenuLink.setSelected(false);
-	}
-
-	protected void setDocumentMenuLinkSelected() {
-		documentMenuLink.setSelected(false);
-	}
 
 	@Override
 	public void onInitialize() {
 		super.onInitialize();
-		usersMenuLink = new MenuLink("users", UsersManagementPage.class);
-		projectsMenuLink = new MenuLink("projects",
-				ProjectsManagementPage.class);
-		documentMenuLink = new MenuLink("documents",
-				DocumentsManagementPage.class);
-		add(usersMenuLink, projectsMenuLink, documentMenuLink);
-	}
+		ListView<Class<? extends AdministrationPage>> menu = new ListView<Class<? extends AdministrationPage>>(
+				"menu", adminPages) {
+			private static final long serialVersionUID = 4356129357585260114L;
 
-	class MenuLink extends AjaxLink<Void> {
+			@Override
+			protected void populateItem(
+					final ListItem<Class<? extends AdministrationPage>> item) {
+				AjaxLink<Void> link = new AjaxLink<Void>("link") {
+					private static final long serialVersionUID = 4584533839750057685L;
 
-		private static final long serialVersionUID = -5715886500662880014L;
-		private Class<? extends Page> responsePage;
-		private boolean selected = false;
+					@Override
+					public void onClick(AjaxRequestTarget target) {
+						setResponsePage(item.getModelObject());
+					}
+				};
+				Label label = new Label("label", new ResourceModel(item
+						.getModelObject().getSimpleName() + ".link"));
+				link.add(label);
+				item.add(link);
+				item.add(new AttributeModifier("class", new Model<String>() {
+					private static final long serialVersionUID = 6117884528348055760L;
 
-		public MenuLink(String id, Class<? extends Page> responsePage) {
-			super(id);
-			this.responsePage = responsePage;
-		}
-
-		@Override
-		public void onClick(AjaxRequestTarget target) {
-			setResponsePage(responsePage);
-		}
-
-		@Override
-		public void onComponentTag(ComponentTag tag) {
-			super.onComponentTag(tag);
-			if (selected) {
-				tag.getAttributes().put("class", "active");
-			} else {
-				tag.getAttributes().put("class", "");
+					public String getObject() {
+						return getPage().getClass().equals(
+								item.getModelObject()) ? CSS_ACTIVE : "";
+					}
+				}));
 			}
-		}
-
-		public boolean isSelected() {
-			return selected;
-		}
-
-		public void setSelected(boolean selected) {
-			this.selected = selected;
-		}
+		};
+		add(menu);
 	}
 }

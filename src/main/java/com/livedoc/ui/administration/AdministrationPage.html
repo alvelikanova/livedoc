@@ -5,13 +5,9 @@
 <body>
 	<wicket:extend>
 		<div class="col-sm-3 col-md-2 sidenav">
-			<ul class="nav nav-sidebar">
-				<li><a href="#" wicket:id="users"><wicket:message
-							key="menu.users"></wicket:message></a></li>
-				<li><a href="#" wicket:id="projects"><wicket:message
-							key="menu.projects"></wicket:message></a></li>
-				<li><a href="#" wicket:id="documents"><wicket:message
-							key="menu.documents"></wicket:message></a></li>
+			<ul class="nav nav-pills nav-stacked">
+				<li wicket:id="menu"><a href="#" wicket:id="link"><label
+						wicket:id="label"></label></a></li>
 			</ul>
 		</div>
 		<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main"

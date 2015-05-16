@@ -42,7 +42,6 @@ public class DocumentsManagementPage extends AdministrationPage {
 	@Override
 	public void onInitialize() {
 		super.onInitialize();
-		setDocumentMenuLinkSelected();
 
 		placeholder = new WebMarkupContainer("placeholder") {
 
