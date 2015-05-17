@@ -3,17 +3,28 @@
 	xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.3-strict.dtd"
 	xml:lang="en" lang="en">
 <wicket:panel>
-	<ul class="nav nav-sidebar">
-		<li wicket:id="categories-list"><a data-toggle="collapse"
-			wicket:id="toggle-link"><label wicket:id="category-name"></label></a>
+	<div class="panel-group"
+		style="margin-left: -20px; margin-right: -20px;">
+		<div wicket:id="categories-list" class="panel panel-default">
+			<div class="panel-heading">
+				<h4 class="panel-title">
+					<a data-toggle="collapse" wicket:id="toggle-link"><label
+						wicket:id="category-name"></label></a>
+				</h4>
+			</div>
 			<div wicket:id="documents-container" class="panel-collapse collapse">
-				<div class="list-group">
-					<div class="list-group-item" wicket:id="documents">
-						<a class="list-group-item-text" href="#" wicket:id="documentLink"><label
-							wicket:id="document-name"></label></a>
-					</div>
+				<div class="panel-body" style="padding: 0px;">
+					<table class="table" style="margin-bottom: 0px;">
+						<tbody>
+							<tr wicket:id="documents">
+								<td><a href="#" wicket:id="documentLink"><label
+										wicket:id="document-name" style="margin-left: 5px;"></label></a></td>
+							</tr>
+						</tbody>
+					</table>
 				</div>
-			</div></li>
-	</ul>
+			</div>
+		</div>
+	</div>
 </wicket:panel>
 </html>
