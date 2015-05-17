@@ -67,11 +67,11 @@ public class DocumentsListPage extends MasterPage {
 		Settings settings = new Settings();
 		settings.setRowCount(5);
 		settings.setIncludeButtons(true);
-		settings.addItem("title", getString("table.doc.name"), 1);
+		settings.addItem("title", getString("table.doc.name"), 1, 3);
 		settings.addItem("description",
-				getString("table.doc.description"), 2);
+				getString("table.doc.description"), 2, 5);
 		settings.addItem("createUser.name",
-				getString("table.doc.creator"), 3);
+				getString("table.doc.creator"), 3, 3);
 		return settings;
 	}
 }

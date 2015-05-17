@@ -40,8 +40,17 @@ public class Settings implements Serializable {
 		return properties;
 	}
 
-	public void addItem(String propertyName, String columnName, Integer order) {
-		SettingsItem item = new SettingsItem(propertyName, columnName, order);
+	/**
+	 * 
+	 * @param propertyName
+	 * @param columnName
+	 * @param order
+	 * @param width - may be from 1 to 11. Sum of element width must be 11. 
+	 */
+	public void addItem(String propertyName, String columnName, Integer order,
+			Integer width) {
+		SettingsItem item = new SettingsItem(propertyName, columnName, order,
+				width);
 		properties.add(item);
 	}
 
@@ -51,13 +60,15 @@ public class Settings implements Serializable {
 		private String propertyName;
 		private String columnName;
 		private Integer order;
+		private Integer width;
 
 		public SettingsItem(String propertyName, String columnName,
-				Integer order) {
+				Integer order, Integer width) {
 			super();
 			this.propertyName = propertyName;
 			this.columnName = columnName;
 			this.order = order;
+			this.width = width;
 		}
 
 		public String getPropertyName() {
@@ -82,6 +93,14 @@ public class Settings implements Serializable {
 
 		public void setOrder(Integer order) {
 			this.order = order;
+		}
+
+		public Integer getWidth() {
+			return width;
+		}
+
+		public void setWidth(Integer width) {
+			this.width = width;
 		}
 	}
 }

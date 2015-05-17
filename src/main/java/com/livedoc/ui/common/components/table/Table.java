@@ -46,9 +46,19 @@ public class Table<T, M> extends Panel {
 			}
 		});
 		List<AbstractColumn<T, M>> columns = new ArrayList<AbstractColumn<T, M>>();
-		for (Settings.SettingsItem property : properties) {
-			columns.add(new PropertyColumn<T, M>(new Model<String>(property
-					.getColumnName()), property.getPropertyName()));
+		for (final Settings.SettingsItem property : properties) {
+			PropertyColumn<T, M> column = new PropertyColumn<T, M>(
+					new Model<String>(property.getColumnName()),
+					property.getPropertyName()) {
+
+				private static final long serialVersionUID = -3487696439111713112L;
+
+				@Override
+				public String getCssClass() {
+					return "col-md-" + property.getWidth();
+				}
+			};
+			columns.add(column);
 		}
 		if (settings.isIncludeButtons()) {
 			AbstractColumn<T, M> buttonColumn = new AbstractColumn<T, M>(
@@ -59,6 +69,11 @@ public class Table<T, M> extends Panel {
 						String componentId, IModel<T> rowModel) {
 					cellItem.add(new ButtonToolbar<T, M>(componentId, rowModel,
 							cellFunctionsProvider));
+				}
+
+				@Override
+				public String getCssClass() {
+					return "col-md-1";
 				}
 			};
 			columns.add(buttonColumn);

@@ -31,8 +31,8 @@ public class UsersManagementPage extends AdministrationPage {
 		Settings settings = new Settings();
 		settings.setRowCount(5);
 		settings.setIncludeButtons(true);
-		settings.addItem("name", getString("table.users.name"), 1);
-		settings.addItem("role.name", getString("table.users.role"), 2);
+		settings.addItem("name", getString("table.users.name"), 1, 3);
+		settings.addItem("role.name", getString("table.users.role"), 2, 8);
 		table = new Table<User, String>("users-table", settings,
 				new UsersProvider());
 		table.setCellFunctionsProvider(new UserCellFunctionsProvider(
