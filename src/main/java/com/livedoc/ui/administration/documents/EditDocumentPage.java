@@ -23,6 +23,7 @@ import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.IValidator;
+import org.apache.wicket.validation.validator.StringValidator;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.io.SAXReader;
@@ -92,9 +93,11 @@ public class EditDocumentPage extends MasterPage {
 		// document's title
 		titleTextField = new RequiredTextField<String>("title",
 				new PropertyModel<String>(documentDataModel, "title"));
+		titleTextField.add(StringValidator.maximumLength(64));
 		// document's description
 		descriptionTextField = new TextArea<String>("description",
 				new PropertyModel<String>(documentDataModel, "description"));
+		descriptionTextField.add(StringValidator.maximumLength(256));
 		form.add(titleTextField, descriptionTextField);
 
 		// file upload field
@@ -150,6 +153,11 @@ public class EditDocumentPage extends MasterPage {
 
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+				if (fileUploadForm.getModelObject() == null) {
+					Document document = parseDocumentFromInput(fileUploadField
+							.getFileUpload());
+					fileUploadForm.setModelObject(document);
+				}
 				documentService.saveDocument(documentDataModel.getObject(),
 						fileUploadForm.getModelObject());
 				dialog.setTitle(getString("dialog.title"));
