@@ -23,4 +23,6 @@ public interface DocumentService {
 	void deleteDocument(DocumentData document);
 
 	Document buildDocument(DocumentData documentData);
+
+	DocumentData getFullDocument(String docDataId);
 }

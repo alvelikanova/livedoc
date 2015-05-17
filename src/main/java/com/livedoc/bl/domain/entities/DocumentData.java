@@ -2,6 +2,8 @@ package com.livedoc.bl.domain.entities;
 
 import java.util.Date;
 
+import org.dom4j.Document;
+
 public class DocumentData extends BaseDomainEntity {
 
 	private static final long serialVersionUID = 658742102667348646L;
@@ -14,6 +16,7 @@ public class DocumentData extends BaseDomainEntity {
 	private String description;
 	private Category category;
 	private String rootElement;
+	private Document document;
 
 	public DocumentData() {
 		super();
@@ -89,6 +92,14 @@ public class DocumentData extends BaseDomainEntity {
 
 	public void setRootElement(String rootElement) {
 		this.rootElement = rootElement;
+	}
+
+	public Document getDocument() {
+		return document;
+	}
+
+	public void setDocument(Document document) {
+		this.document = document;
 	}
 
 }

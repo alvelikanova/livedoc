@@ -125,4 +125,12 @@ public class DocumentServiceImpl implements DocumentService {
 		}
 		return document;
 	}
+
+	public DocumentData getFullDocument(String docDataId) {
+		DocumentDataEntity docDataEntity = documentDataProvider
+				.findById(docDataId);
+		DocumentData docData = mapper.map(docDataEntity, DocumentData.class);
+		docData.setDocument(buildDocument(docData));
+		return docData;
+	}
 }

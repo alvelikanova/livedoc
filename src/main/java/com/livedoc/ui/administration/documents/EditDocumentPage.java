@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -16,8 +15,8 @@ import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
+import org.apache.wicket.model.ChainingModel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -51,8 +50,7 @@ public class EditDocumentPage extends MasterPage {
 
 	// models
 	private IModel<DocumentData> documentDataModel;
-	private Model<String> htmlModel;
-	private Document document;
+	private PropertyModel<Document> xmlModel;
 
 	// components
 	private MarkupProviderPanel markupPanel;
@@ -76,6 +74,13 @@ public class EditDocumentPage extends MasterPage {
 		super();
 		this.documentDataModel = documentDataModel;
 		this.pageToReturn = pageToReturn;
+
+		// get full document information if document is not null
+		DocumentData docData = documentDataModel.getObject();
+		if (docData != null && docData.getId() != null) {
+			documentDataModel.setObject(documentService.getFullDocument(docData
+					.getId()));
+		}
 	}
 
 	public void onInitialize() {
@@ -101,10 +106,9 @@ public class EditDocumentPage extends MasterPage {
 		form.add(titleTextField, descriptionTextField);
 
 		// file upload field
-		fileUploadForm = new Form<Document>("fileUploadForm",
-				new PropertyModel<Document>(this, "document"));
+		xmlModel = new PropertyModel<Document>(documentDataModel, "document");
+		fileUploadForm = new Form<Document>("fileUploadForm", xmlModel);
 		form.add(fileUploadForm);
-		htmlModel = new Model<String>("");
 		fileUploadField = new FileUploadField("fileUpload");
 		fileUploadField.setRequired(true);
 		fileUploadField.add(new XMLFileValidator());
@@ -116,8 +120,6 @@ public class EditDocumentPage extends MasterPage {
 				Document document = parseDocumentFromInput(fileUploadField
 						.getFileUpload());
 				fileUploadForm.setModelObject(document);
-				htmlModel.setObject(documentTransformationsService
-						.transformXMLToString(document));
 				target.add(feedbackPanel, previewContainer);
 			}
 
@@ -136,12 +138,13 @@ public class EditDocumentPage extends MasterPage {
 			@Override
 			public void onConfigure() {
 				super.onConfigure();
-				setVisible(!StringUtils.isEmpty(htmlModel.getObject()));
+				setVisible(xmlModel.getObject() != null);
 			}
 		};
 		previewContainer.setOutputMarkupPlaceholderTag(true);
 		previewContainer.setOutputMarkupId(true);
-		markupPanel = new MarkupProviderPanel("markupPanel", htmlModel);
+		markupPanel = new MarkupProviderPanel("markupPanel",
+				new DocumentToHTMLModel(xmlModel));
 		markupPanel.setOutputMarkupId(true);
 		form.add(previewContainer);
 		previewContainer.add(markupPanel);
@@ -258,11 +261,23 @@ public class EditDocumentPage extends MasterPage {
 		return doc;
 	}
 
-	public Document getDocument() {
-		return document;
-	}
+	private class DocumentToHTMLModel extends ChainingModel<String> {
 
-	public void setDocument(Document document) {
-		this.document = document;
+		private static final long serialVersionUID = -3007579368702760744L;
+
+		public DocumentToHTMLModel(Object modelObject) {
+			super(modelObject);
+		}
+
+		@SuppressWarnings("unchecked")
+		public String getObject() {
+			Document document = ((IModel<Document>) getChainedModel())
+					.getObject();
+			if (document == null) {
+				return null;
+			}
+			return documentTransformationsService
+					.transformXMLToString(document);
+		}
 	}
 }
