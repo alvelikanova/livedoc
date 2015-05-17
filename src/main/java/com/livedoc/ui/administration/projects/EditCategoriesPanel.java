@@ -18,6 +18,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.wicket.validation.validator.StringValidator;
 
 import com.livedoc.bl.domain.entities.Category;
 import com.livedoc.bl.domain.entities.Project;
@@ -63,10 +64,12 @@ public class EditCategoriesPanel extends GenericPanel<Project> {
 						"name", new PropertyModel<String>(
 								item.getModelObject(), "name"));
 				categoryName.add(new StubAjaxUpdate());
+				categoryName.add(StringValidator.maximumLength(64));
 				TextArea<String> categoryDescription = new TextArea<String>(
 						"description", new PropertyModel<String>(
 								item.getModelObject(), "description"));
 				categoryDescription.add(new StubAjaxUpdate());
+				categoryDescription.add(StringValidator.maximumLength(256));
 				AjaxLink<Void> addCategory = new AjaxLink<Void>("add-category") {
 					private static final long serialVersionUID = 2122420344011957059L;
 
