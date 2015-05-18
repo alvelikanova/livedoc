@@ -13,6 +13,8 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.model.ResourceModel;
+import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.validation.validator.StringValidator;
 
@@ -21,6 +23,8 @@ import com.livedoc.bl.domain.entities.Project;
 import com.livedoc.bl.services.CategoryService;
 import com.livedoc.bl.services.ProjectService;
 import com.livedoc.ui.common.components.Feedback;
+import com.livedoc.ui.common.components.MessageDialogContent;
+import com.livedoc.ui.common.components.ModalDialog;
 import com.livedoc.ui.pages.MasterPage;
 
 public class EditProjectPage extends MasterPage {
@@ -38,6 +42,7 @@ public class EditProjectPage extends MasterPage {
 	private Page pageToReturn;
 	private Form<Project> form;
 	private TextField<String> projectNameField;
+	private ModalDialog dialog;
 
 	// models
 	private IModel<Project> model = new Model<Project>(new Project());
@@ -56,6 +61,10 @@ public class EditProjectPage extends MasterPage {
 	@Override
 	public void onInitialize() {
 		super.onInitialize();
+
+		dialog = new ModalDialog("dialog");
+		add(dialog);
+
 		form = new Form<Project>("form", model);
 		form.setOutputMarkupId(true);
 		add(form);
@@ -83,19 +92,34 @@ public class EditProjectPage extends MasterPage {
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 				Project project = (Project) form.getModelObject();
-				if (projectService.checkProjectNameUniqueness(project)) {
-					if (checkCategoriesNamesAreUnique(project)) {
-						deleteCategories(project);
-						projectService.saveProject(project);
-						setResponsePage(pageToReturn);
-					} else {
-						feedbackPanel.error(getString("uniqueCategoryName"));
-						target.add(feedbackPanel);
-					}
-				} else {
+				if (!projectService.checkProjectNameUniqueness(project)) {
 					feedbackPanel.error(getString("projectNameExists"));
 					target.add(feedbackPanel);
+					return;
 				}
+				if (!checkCategoriesNamesAreUnique(project)) {
+					feedbackPanel.error(getString("uniqueCategoryName"));
+					target.add(feedbackPanel);
+					return;
+				}
+				deleteCategories(project);
+				projectService.saveProject(project);
+				StringResourceModel messageModel = new StringResourceModel(
+						"saving.success", null, project.getName());
+				dialog.setTitle(getString("saving.success.title"));
+				dialog.setContent(new MessageDialogContent(dialog
+						.getContentId(), messageModel,
+						MessageDialogContent.Buttons.OK) {
+
+					private static final long serialVersionUID = -156937675362688835L;
+
+					@Override
+					protected void onConfirm(AjaxRequestTarget target) {
+						setResponsePage(pageToReturn);
+						dialog.close(target);
+					}
+				});
+				dialog.show(target);
 			}
 
 			@Override
@@ -110,8 +134,26 @@ public class EditProjectPage extends MasterPage {
 
 			@Override
 			public void onClick(AjaxRequestTarget target) {
-				// TODO confirmation dialog
-				setResponsePage(pageToReturn);
+				dialog.setTitle(getString("confirmation"));
+				dialog.setContent(new MessageDialogContent(dialog
+						.getContentId(), new ResourceModel("cancel.confirm"),
+						MessageDialogContent.Buttons.OK,
+						MessageDialogContent.Buttons.CANCEL) {
+
+					private static final long serialVersionUID = -156937675362688835L;
+
+					@Override
+					protected void onConfirm(AjaxRequestTarget target) {
+						setResponsePage(pageToReturn);
+						dialog.close(target);
+					}
+
+					@Override
+					protected void onCancel(AjaxRequestTarget target) {
+						dialog.close(target);
+					}
+				});
+				dialog.show(target);
 			}
 		};
 		form.add(saveButton, cancelButton);
