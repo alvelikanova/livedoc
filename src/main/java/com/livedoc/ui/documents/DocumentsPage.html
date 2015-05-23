@@ -4,10 +4,23 @@
 	xml:lang="en" lang="en">
 <body>
 	<wicket:extend>
-		<div class="col-sm-3 col-md-2 sidenav">
+		<div class="container">
+			<div class="jumbotron" wicket:id="placeholder">
+				<div class="lead">
+					<wicket:message key="emptyCategoriesList"></wicket:message>
+				</div>
+				<button type="button" class="btn btn-danger pull-left"
+					wicket:id="backToHome">
+					<span class="glyphicon glyphicon-chevron-left" area-hidden="true"></span>
+					<wicket:message key="backToHome.button"></wicket:message>
+				</button>
+			</div>
+		</div>
+		<div wicket:id="categoriesContainer" class="col-sm-3 col-md-2 sidenav">
 			<div wicket:id="categories"></div>
 		</div>
-		<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main"
+		<div wicket:id="documentContainer"
+			class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main"
 			style="top: 0px; margin-top: 0px;">
 			<div wicket:id="document"></div>
 		</div>

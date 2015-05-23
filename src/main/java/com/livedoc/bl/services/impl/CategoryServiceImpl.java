@@ -3,6 +3,7 @@ package com.livedoc.bl.services.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.dozer.DozerBeanMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -40,4 +41,16 @@ public class CategoryServiceImpl implements CategoryService {
 		return categories;
 	}
 
+	public List<Category> getNonEmptyProjectCategories(Project project) {
+		List<Category> categories = new ArrayList<Category>();
+		List<CategoryEntity> categoryEntities = categoryDataProvider
+				.findAllCategoriesByProjectId(project.getId());
+		for (CategoryEntity entity : categoryEntities) {
+			if (!CollectionUtils.isEmpty(entity.getDocumentDataList())) {
+				Category caterory = mapper.map(entity, Category.class);
+				categories.add(caterory);
+			}
+		}
+		return categories;
+	}
 }

@@ -58,7 +58,7 @@
 .w_close:before {
 	content: "\00d7";
 	font-weight: bold;
-	font-size: 21pt;
+	font-size: 18pt;
 }
 
 .w_close:link {

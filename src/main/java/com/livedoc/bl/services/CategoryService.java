@@ -10,5 +10,7 @@ public interface CategoryService {
 	void deleteCategory(Category category);
 
 	List<Category> getProjectCategories(Project project);
+	
+	List<Category> getNonEmptyProjectCategories(Project project);
 
 }
