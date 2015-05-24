@@ -24,6 +24,9 @@ public abstract class CategoriesListPanel extends
 	// components
 	private ListView<Category> categoriesList;
 
+	private static final String CSS_EXPANDED = "glyphicon glyphicon-chevron-up pull-right";
+	private static final String CSS_COLLAPSED = "glyphicon glyphicon-chevron-down pull-right";
+
 	public CategoriesListPanel(String id, IModel<DocumentsCatalog> model) {
 		super(id, model);
 	}
@@ -43,12 +46,29 @@ public abstract class CategoriesListPanel extends
 						"documents-container");
 				collapsibleContainer.setOutputMarkupId(true);
 
+				final WebMarkupContainer expandIcon = new WebMarkupContainer(
+						"expandIcon") {
+					private static final long serialVersionUID = -5004078034930115862L;
+
+					@Override
+					public void onComponentTag(ComponentTag tag) {
+						super.onComponentTag(tag);
+						tag.getAttributes().put(
+								"class",
+								collapsibleContainer.isVisible() ? CSS_EXPANDED
+										: CSS_COLLAPSED);
+					}
+				};
+				expandIcon.setOutputMarkupId(true);
+
 				AjaxLink<Void> toggleLink = new AjaxLink<Void>("toggle-link") {
 					private static final long serialVersionUID = -5351766568804326818L;
 
 					@Override
 					public void onClick(AjaxRequestTarget target) {
-						// nothing to do
+						target.add(expandIcon);
+						collapsibleContainer.setVisible(!collapsibleContainer
+								.isVisible());
 					}
 
 					@Override
@@ -61,8 +81,9 @@ public abstract class CategoriesListPanel extends
 				Label categoryName = new Label(
 						"category-name",
 						new PropertyModel<String>(item.getModelObject(), "name"));
-				toggleLink.add(categoryName);
-				item.add(toggleLink, collapsibleContainer);
+
+				toggleLink.add(expandIcon);
+				item.add(toggleLink, categoryName, collapsibleContainer);
 
 				ListView<DocumentData> documentList = new ListView<DocumentData>(
 						"documents", item.getModelObject()
