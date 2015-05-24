@@ -11,6 +11,7 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 
 import com.livedoc.bl.domain.entities.Category;
@@ -42,6 +43,7 @@ public abstract class CategoriesListPanel extends
 
 			@Override
 			protected void populateItem(ListItem<Category> item) {
+				final CssModel cssModel = new CssModel();
 				final WebMarkupContainer collapsibleContainer = new WebMarkupContainer(
 						"documents-container");
 				collapsibleContainer.setOutputMarkupId(true);
@@ -53,10 +55,7 @@ public abstract class CategoriesListPanel extends
 					@Override
 					public void onComponentTag(ComponentTag tag) {
 						super.onComponentTag(tag);
-						tag.getAttributes().put(
-								"class",
-								collapsibleContainer.isVisible() ? CSS_EXPANDED
-										: CSS_COLLAPSED);
+						tag.getAttributes().put("class", cssModel.getObject());
 					}
 				};
 				expandIcon.setOutputMarkupId(true);
@@ -67,8 +66,7 @@ public abstract class CategoriesListPanel extends
 					@Override
 					public void onClick(AjaxRequestTarget target) {
 						target.add(expandIcon);
-						collapsibleContainer.setVisible(!collapsibleContainer
-								.isVisible());
+						cssModel.inverse();
 					}
 
 					@Override
@@ -122,4 +120,24 @@ public abstract class CategoriesListPanel extends
 	}
 
 	public abstract void onDocumentChoice(AjaxRequestTarget target);
+
+	class CssModel extends Model<String> {
+
+		private static final long serialVersionUID = 7565266653380449721L;
+
+		private boolean expanded = false;
+
+		public String getObject() {
+			return expanded ? CSS_EXPANDED : CSS_COLLAPSED;
+		}
+
+		public boolean isExpanded() {
+			return expanded;
+		}
+
+		public void inverse() {
+			this.expanded = !this.expanded;
+		}
+
+	}
 }
