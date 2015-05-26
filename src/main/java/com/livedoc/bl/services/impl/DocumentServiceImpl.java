@@ -1,8 +1,7 @@
 package com.livedoc.bl.services.impl;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -40,6 +39,13 @@ public class DocumentServiceImpl implements DocumentService {
 	@Autowired
 	private DozerBeanMapper mapper;
 
+	private static final String[] VALID_ROOT_ELEMENTS = new String[] {
+			"acknowledgements", "dedication", "reference", "sect3", "appendix",
+			"glossary", "refsect1", "sect4", "article", "index", "refsect2",
+			"sect5", "bibliography", "para", "refsect3", "section", "book",
+			"part", "refsection", "set", "chapter", "preface", "sect1",
+			"setindex", "colophon", "refentry", "sect2", "toc" };
+
 	@Value("${xml.encoding}")
 	private String xmlEncoding;
 	@Value("${docbook.version}")
@@ -75,6 +81,7 @@ public class DocumentServiceImpl implements DocumentService {
 			partEntity.setDocumentData(documentEntity);
 			partEntity.setDocumentPartContent(element.asXML());
 			partEntity.setDocumentPartOrder(index);
+			partEntity.setDocPartRootElemType(element.getName());
 			documentEntity.getParts().add(partEntity);
 		}
 		documentEntity = documentDataProvider.saveDocument(documentEntity);
@@ -107,12 +114,6 @@ public class DocumentServiceImpl implements DocumentService {
 		document.setXMLEncoding(xmlEncoding);
 		Element root = document.addElement(documentData.getRootElement(),
 				docbookXmlns).addAttribute("version", docbookVersion);
-		Collections.sort(parts, new Comparator<DocumentPartEntity>() {
-
-			public int compare(DocumentPartEntity o1, DocumentPartEntity o2) {
-				return o1.getDocumentPartOrder() - o2.getDocumentPartOrder();
-			}
-		});
 		try {
 			for (DocumentPartEntity part : parts) {
 				Element elem = DocumentHelper.parseText(
@@ -132,5 +133,52 @@ public class DocumentServiceImpl implements DocumentService {
 		DocumentData docData = mapper.map(docDataEntity, DocumentData.class);
 		docData.setDocument(buildDocument(docData));
 		return docData;
+	}
+
+	public int countDocumentChapters(DocumentData documentData) {
+		if (documentData != null && documentData.getId() != null) {
+			return documentPartProvider.countChapters(documentData.getId());
+		}
+		return 0;
+	}
+
+	public Document buildChapter(DocumentData documentData, int order) {
+		Document document = null;
+		DocumentPartEntity chapter = documentPartProvider.getChapter(
+				documentData.getId(), order);
+		if (chapter != null) {
+			try {
+				document = DocumentHelper.parseText(chapter
+						.getDocumentPartContent());
+				document.setXMLEncoding(xmlEncoding);
+			} catch (DocumentException ex) {
+				logger.error("Error occured while trying to parse database data: "
+						+ ex);
+			}
+		}
+		return document;
+	}
+
+	public List<Document> getChapters(DocumentData documentData) {
+		List<Document> chapters = new ArrayList<Document>();
+		// retrieve sorted list of parts
+		List<DocumentPartEntity> parts = documentPartProvider
+				.getPartsOfDocument(documentData.getId());
+		for (DocumentPartEntity part : parts) {
+			// filter out non-root elements
+			if (Arrays.asList(VALID_ROOT_ELEMENTS).contains(
+					part.getDocPartRootElemType())) {
+				try {
+					Document document = DocumentHelper.parseText(part
+							.getDocumentPartContent());
+					document.setXMLEncoding(xmlEncoding);
+					chapters.add(document);
+				} catch (DocumentException ex) {
+					logger.error("Error occured while trying to parse database data: "
+							+ ex);
+				}
+			}
+		}
+		return chapters;
 	}
 }

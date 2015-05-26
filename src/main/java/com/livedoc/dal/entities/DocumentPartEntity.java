@@ -8,11 +8,13 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
-@Table(name = "doc_part", schema = "public")
+@Table(name = "doc_part", schema = "public", uniqueConstraints = @UniqueConstraint(columnNames = {
+		"doc_part_doc_data_id", "doc_part_order" }))
 public class DocumentPartEntity extends BaseDalEntity {
 
 	private static final long serialVersionUID = -5420073724328175756L;
@@ -33,17 +35,21 @@ public class DocumentPartEntity extends BaseDalEntity {
 	@Column(name = "doc_part_content")
 	private String documentPartContent;
 
+	@Column(name = "doc_part_root_elem_type")
+	private String docPartRootElemType;
+
 	public DocumentPartEntity() {
 	}
 
 	public DocumentPartEntity(String documentPartId,
 			DocumentDataEntity documentData, int documentPartOrder,
-			String documentPartContent) {
+			String documentPartContent, String docPartRootElemType) {
 		super();
 		this.documentPartId = documentPartId;
 		this.documentData = documentData;
 		this.documentPartOrder = documentPartOrder;
 		this.documentPartContent = documentPartContent;
+		this.docPartRootElemType = docPartRootElemType;
 	}
 
 	public String getDocumentPartId() {
@@ -76,6 +82,14 @@ public class DocumentPartEntity extends BaseDalEntity {
 
 	public void setDocumentPartContent(String documentPartContent) {
 		this.documentPartContent = documentPartContent;
+	}
+
+	public String getDocPartRootElemType() {
+		return docPartRootElemType;
+	}
+
+	public void setDocPartRootElemType(String docPartRootElemType) {
+		this.docPartRootElemType = docPartRootElemType;
 	}
 
 }

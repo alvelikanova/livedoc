@@ -10,7 +10,7 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.PropertyModel;
 
 import com.livedoc.bl.domain.entities.Project;
-import com.livedoc.ui.documents.DocumentsPage;
+import com.livedoc.ui.project.CategoriesPage;
 
 public class HomePage extends MasterPage {
 
@@ -42,7 +42,7 @@ public class HomePage extends MasterPage {
 
 					@Override
 					public void onClick(AjaxRequestTarget target) {
-						DocumentsPage page = new DocumentsPage(
+						CategoriesPage page = new CategoriesPage(
 								item.getModelObject());
 						setResponsePage(page);
 					}

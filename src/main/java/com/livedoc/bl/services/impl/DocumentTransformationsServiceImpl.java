@@ -1,7 +1,6 @@
 package com.livedoc.bl.services.impl;
 
 import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 
 import org.apache.log4j.Logger;
@@ -23,20 +22,18 @@ public class DocumentTransformationsServiceImpl implements
 	private Transformer transformer;
 
 	public String transformXMLToString(Document document) {
-		try {
-			DocumentSource source = new DocumentSource(document);
-			DocumentResult result = new DocumentResult();
-			transformer.transform(source, result);
-			Document transformedDoc = result.getDocument();
-			return transformedDoc.asXML();
-		} catch (TransformerConfigurationException ex) {
-			logger.error(String.format(
-					"Configuration error, cannot initialize Transformer: %s",
-					ex.getMessage()));
-		} catch (TransformerException ex) {
-			logger.error(String.format(
-					"Error occured while transforming document: %s",
-					ex.getMessage()));
+		if (document != null) {
+			try {
+				DocumentSource source = new DocumentSource(document);
+				DocumentResult result = new DocumentResult();
+				transformer.transform(source, result);
+				Document transformedDocument = result.getDocument();
+				return transformedDocument.asXML();
+			} catch (TransformerException ex) {
+				logger.error(String.format(
+						"Error occured while transforming document: %s",
+						ex.getMessage()));
+			}
 		}
 		return null;
 	}

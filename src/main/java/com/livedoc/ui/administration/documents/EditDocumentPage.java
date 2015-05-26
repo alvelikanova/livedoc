@@ -110,7 +110,8 @@ public class EditDocumentPage extends MasterPage {
 		fileUploadForm = new Form<Document>("fileUploadForm", xmlModel);
 		form.add(fileUploadForm);
 		fileUploadField = new FileUploadField("fileUpload");
-		fileUploadField.setRequired(true);
+		fileUploadField
+				.setRequired(documentDataModel.getObject().getId() == null);
 		fileUploadField.add(new XMLFileValidator());
 		uploadDocumentButton = new AjaxButton("uploadDocument", fileUploadForm) {
 			private static final long serialVersionUID = -1578455314617686312L;

@@ -48,5 +48,19 @@
 			<column name="DOC_DATA_ROOT_ELEM_TYPE" type="varchar(16)" />
 		</addColumn>
 	</changeSet>
-	
+
+	<changeSet author="velikanova.alena" id="doc_data_add_non_null_constr_24052015">
+		<addNotNullConstraint columnDataType="varchar(16)"
+			columnName="DOC_DATA_ROOT_ELEM_TYPE" defaultNullValue="book"
+			tableName="DOC_DATA" />
+	</changeSet>
+
+	<changeSet id="doc_part_add_root_element_24052015" author="velikanova.alena">
+		<addColumn tableName="DOC_PART">
+			<column name="DOC_PART_ROOT_ELEM_TYPE" type="varchar(16)" defaultValue="chapter">
+				<constraints nullable="false" />
+			</column>
+		</addColumn>
+	</changeSet>
+
 </databaseChangeLog>
