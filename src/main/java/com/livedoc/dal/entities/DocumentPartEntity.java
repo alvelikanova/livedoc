@@ -1,5 +1,8 @@
 package com.livedoc.dal.entities;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -7,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
@@ -37,6 +41,9 @@ public class DocumentPartEntity extends BaseDalEntity {
 
 	@Column(name = "doc_part_root_elem_type")
 	private String docPartRootElemType;
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "docPart")
+	private Set<CommentEntity> comments = new HashSet<CommentEntity>(0);
 
 	public DocumentPartEntity() {
 	}
@@ -90,6 +97,14 @@ public class DocumentPartEntity extends BaseDalEntity {
 
 	public void setDocPartRootElemType(String docPartRootElemType) {
 		this.docPartRootElemType = docPartRootElemType;
+	}
+
+	public Set<CommentEntity> getComments() {
+		return comments;
+	}
+
+	public void setComments(Set<CommentEntity> comments) {
+		this.comments = comments;
 	}
 
 }

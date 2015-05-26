@@ -181,4 +181,10 @@ public class DocumentServiceImpl implements DocumentService {
 		}
 		return chapters;
 	}
+
+	public String getChapterId(DocumentData documentData, int order) {
+		DocumentPartEntity chapter = documentPartProvider.getChapter(
+				documentData.getId(), order);
+		return chapter == null ? null : chapter.getDocumentPartId();
+	}
 }

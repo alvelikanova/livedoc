@@ -26,6 +26,8 @@ public interface DocumentService {
 
 	Document buildChapter(DocumentData documentData, int order);
 
+	String getChapterId(DocumentData documentData, int order);
+
 	DocumentData getFullDocument(String docDataId);
 
 	int countDocumentChapters(DocumentData documentData);

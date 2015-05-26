@@ -3,11 +3,13 @@ package com.livedoc.bl.dozer;
 import org.dozer.loader.api.BeanMappingBuilder;
 
 import com.livedoc.bl.domain.entities.Category;
+import com.livedoc.bl.domain.entities.Comment;
 import com.livedoc.bl.domain.entities.DocumentData;
 import com.livedoc.bl.domain.entities.Project;
 import com.livedoc.bl.domain.entities.Role;
 import com.livedoc.bl.domain.entities.User;
 import com.livedoc.dal.entities.CategoryEntity;
+import com.livedoc.dal.entities.CommentEntity;
 import com.livedoc.dal.entities.DocumentDataEntity;
 import com.livedoc.dal.entities.ProjectEntity;
 import com.livedoc.dal.entities.RoleEntity;
@@ -35,5 +37,8 @@ public class MapperBuilder extends BeanMappingBuilder {
 		mapping(CategoryEntity.class, Category.class)
 				.fields("categoryId", "id").fields("categoryName", "name")
 				.fields("categoryDescription", "description");
+		mapping(CommentEntity.class, Comment.class).fields("commentId", "id")
+				.fields("commentSubmitTs", "submitDate")
+				.fields("commentContent", "comment");
 	}
 }

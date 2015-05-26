@@ -1,0 +1,36 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.3-strict.dtd"
+	xml:lang="en" lang="en">
+<wicket:panel>
+	<div class="container-fluid">
+		<div class="row">
+			<label class="lead"><wicket:message key="label.comments"></wicket:message></label>
+			<div wicket:id="commentsListContainer">
+				<div wicket:id="comments" class="panel panel-default">
+					<div class="panel-heading">
+						<wicket:message key="label.user"></wicket:message>
+						<b wicket:id="author"></b>
+						<wicket:message key="label.time"></wicket:message>
+						<b wicket:id="submitDate"></b>
+						<wicket:message key="label.sentComment"></wicket:message>
+					</div>
+					<div class="panel-body" wicket:id="comment"></div>
+				</div>
+			</div>
+			<form wicket:id="form">
+				<div>
+					<textarea class="form-control"
+						wicket:message="placeholder:comment.placeholder"
+						style="resize: none;" rows="3" wicket:id="commentText"></textarea>
+				</div>
+				<div>
+					<input type="submit" style="margin-top: 10px;"
+						class="btn btn-primary pull-right" wicket:id="submitComment"
+						wicket:message="value:submit.comment"></input>
+				</div>
+			</form>
+		</div>
+	</div>
+</wicket:panel>
+</html>

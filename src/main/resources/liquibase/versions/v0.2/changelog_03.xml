@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
+
+	<!-- temporary table for demonstration, has to be dropped later -->
+	<changeSet author="velikanova.alena" id="create_table_comment_27052015">
+		<createTable remarks="Chapter related comment" tableName="COMMENT">
+			<column name="COMMENT_ID" type="varchar(32)">
+				<constraints primaryKey="true" />
+			</column>
+			<column name="COMMENT_AUTHOR_ID" type="varchar(32)">
+				<constraints nullable="false" />
+			</column>
+			<column name="COMMENT_SUBMIT_TS" type="timestamp">
+				<constraints nullable="false" />
+			</column>
+			<column name="COMMENT_DOC_PART_ID" type="varchar(32)">
+				<constraints nullable="false" />
+			</column>
+			<column name="COMMENT_CONTENT" type="varchar(256)">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+	</changeSet>
+
+	<changeSet id="add_fk_author_comment_27052015" author="velikanova.alena">
+		<addForeignKeyConstraint baseColumnNames="COMMENT_AUTHOR_ID"
+			baseTableName="COMMENT" constraintName="FK_COMMENT_AUTHOR_ID"
+			referencedColumnNames="USERS_ID" referencedTableName="USERS" />
+	</changeSet>
+	
+	<changeSet id="add_fk_doc_part_27052015" author="velikanova.alena">
+		<addForeignKeyConstraint baseColumnNames="COMMENT_DOC_PART_ID"
+			baseTableName="COMMENT" constraintName="FK_COMMENT_DOC_PART_ID"
+			referencedColumnNames="DOC_PART_ID" referencedTableName="DOC_PART" />
+	</changeSet>
+	
+</databaseChangeLog>
