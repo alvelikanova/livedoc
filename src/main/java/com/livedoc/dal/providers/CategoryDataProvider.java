@@ -8,9 +8,5 @@ public interface CategoryDataProvider extends
 		GenericDataProvider<CategoryEntity, String> {
 	
 	List<CategoryEntity> findAllCategoriesByProjectId(String projectId);
-
-	void deleteCategory(CategoryEntity category);
-
-	CategoryEntity saveCategory(CategoryEntity category);
 	
 }

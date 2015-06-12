@@ -3,7 +3,6 @@ package com.livedoc.dal.entities;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -16,6 +15,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
@@ -40,8 +41,8 @@ public class UserEntity extends BaseDalEntity {
 	@Column(name = "users_password", nullable = false, length = 64)
 	private String password;
 
-	@ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.MERGE,
-			CascadeType.PERSIST, CascadeType.REFRESH })
+	@ManyToMany(fetch = FetchType.LAZY)
+	@Cascade({ CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH })
 	@JoinTable(name = "users_to_project", joinColumns = { @JoinColumn(name = "USERS_ID", nullable = false) }, inverseJoinColumns = { @JoinColumn(name = "PROJECT_ID", nullable = false) })
 	private Set<ProjectEntity> projects = new HashSet<ProjectEntity>();
 

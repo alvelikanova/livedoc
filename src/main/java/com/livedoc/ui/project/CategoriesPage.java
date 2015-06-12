@@ -3,18 +3,22 @@ package com.livedoc.ui.project;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.log4j.Logger;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.dom4j.Document;
 
+import com.livedoc.bl.common.MessageException;
 import com.livedoc.bl.domain.entities.Category;
 import com.livedoc.bl.domain.entities.DocumentData;
 import com.livedoc.bl.domain.entities.Project;
 import com.livedoc.bl.services.CategoryService;
 import com.livedoc.bl.services.DocumentService;
+import com.livedoc.bl.services.DocumentTransformationsService;
 import com.livedoc.ui.pages.HomePage;
 import com.livedoc.ui.pages.MasterPage;
 import com.livedoc.ui.project.document.DocumentPanel;
@@ -22,12 +26,16 @@ import com.livedoc.ui.project.document.DocumentPanel;
 public class CategoriesPage extends MasterPage {
 
 	private static final long serialVersionUID = 1573553502836695372L;
-
+	
+	private static final Logger logger = Logger.getLogger(CategoriesPage.class);
+	
 	// services
 	@SpringBean
 	private CategoryService categoryService;
 	@SpringBean
 	private DocumentService documentService;
+	@SpringBean
+	private DocumentTransformationsService transformationsService;
 
 	// models
 	private DocumentsCatalog documentsCatalog;
@@ -67,8 +75,15 @@ public class CategoriesPage extends MasterPage {
 			public void onDocumentChoice(AjaxRequestTarget target,
 					DocumentData selectedDocument) {
 				getDocumentsCatalog().setSelectedDocument(selectedDocument);
-				getDocumentsCatalog().setChapters(
-						documentService.getChapters(selectedDocument));
+				List<Document> chapters = null;
+				try {
+					chapters = transformationsService
+							.getChapters(selectedDocument);
+				} catch (MessageException e) {
+					logger.error("Could not retreive chapters list from document");
+					return;
+				}
+				getDocumentsCatalog().setChapters(chapters);
 				documentPanel.resetPagination();
 				target.add(documentPanel);
 			}

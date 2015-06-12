@@ -1,5 +1,6 @@
 package com.livedoc.bl.domain.entities;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class User extends BaseDomainEntity {
@@ -9,7 +10,7 @@ public class User extends BaseDomainEntity {
 	private String name;
 	private String password;
 	private Role role;
-	private List<Project> projects;
+	private List<Project> projects = new ArrayList<Project>();
 
 	public User() {
 		super();

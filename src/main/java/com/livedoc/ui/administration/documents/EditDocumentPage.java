@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.log4j.Logger;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -15,8 +16,8 @@ import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
-import org.apache.wicket.model.ChainingModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -27,6 +28,7 @@ import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.io.SAXReader;
 
+import com.livedoc.bl.common.MessageException;
 import com.livedoc.bl.domain.entities.DocumentData;
 import com.livedoc.bl.services.DocumentService;
 import com.livedoc.bl.services.DocumentTransformationsService;
@@ -50,7 +52,7 @@ public class EditDocumentPage extends MasterPage {
 
 	// models
 	private IModel<DocumentData> documentDataModel;
-	private PropertyModel<Document> xmlModel;
+	private Model<String> htmlModel = new Model<String>();
 
 	// components
 	private MarkupProviderPanel markupPanel;
@@ -60,7 +62,7 @@ public class EditDocumentPage extends MasterPage {
 	private Feedback feedbackPanel;
 	private FileUploadField fileUploadField;
 	private AjaxButton uploadDocumentButton;
-	private Form<Document> fileUploadForm;
+	private Form<DocumentData> fileUploadForm;
 	private ModalDialog dialog;
 
 	// pages
@@ -68,19 +70,14 @@ public class EditDocumentPage extends MasterPage {
 
 	// constants
 	private static final String XML_CONTENT_TYPE = "text/xml";
+	private static final String CANNOT_TRANSFORM = "DOC_ERROR-001";
+	private static final String CANNOT_LOAD = "DOC_ERROR-003";
 
 	public EditDocumentPage(WebPage pageToReturn,
 			IModel<DocumentData> documentDataModel) {
 		super();
 		this.documentDataModel = documentDataModel;
 		this.pageToReturn = pageToReturn;
-
-		// get full document information if document is not null
-		DocumentData docData = documentDataModel.getObject();
-		if (docData != null && docData.getId() != null) {
-			documentDataModel.setObject(documentService.getFullDocument(docData
-					.getId()));
-		}
 	}
 
 	public void onInitialize() {
@@ -106,8 +103,8 @@ public class EditDocumentPage extends MasterPage {
 		form.add(titleTextField, descriptionTextField);
 
 		// file upload field
-		xmlModel = new PropertyModel<Document>(documentDataModel, "document");
-		fileUploadForm = new Form<Document>("fileUploadForm", xmlModel);
+		fileUploadForm = new Form<DocumentData>("fileUploadForm",
+				documentDataModel);
 		form.add(fileUploadForm);
 		fileUploadField = new FileUploadField("fileUpload");
 		fileUploadField
@@ -118,10 +115,20 @@ public class EditDocumentPage extends MasterPage {
 
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-				Document document = parseDocumentFromInput(fileUploadField
-						.getFileUpload());
-				fileUploadForm.setModelObject(document);
-				target.add(feedbackPanel, previewContainer);
+				try {
+					Document document = parseDocumentFromInput(fileUploadField
+							.getFileUpload());
+					String html = documentTransformationsService
+							.transformXMLToString(document);
+					htmlModel.setObject(html);
+					DocumentData documentData = documentDataModel.getObject();
+					documentDataModel.setObject(documentTransformationsService
+							.updateDomainDocument(documentData, document));
+					target.add(previewContainer);
+				} catch (MessageException e) {
+					error(getString(e.getMessageCode()));
+				}
+				target.add(feedbackPanel);
 			}
 
 			@Override
@@ -139,13 +146,12 @@ public class EditDocumentPage extends MasterPage {
 			@Override
 			public void onConfigure() {
 				super.onConfigure();
-				setVisible(xmlModel.getObject() != null);
+				setVisible(htmlModel.getObject() != null);
 			}
 		};
 		previewContainer.setOutputMarkupPlaceholderTag(true);
 		previewContainer.setOutputMarkupId(true);
-		markupPanel = new MarkupProviderPanel("markupPanel",
-				new DocumentToHTMLModel(xmlModel));
+		markupPanel = new MarkupProviderPanel("markupPanel", htmlModel);
 		markupPanel.setOutputMarkupId(true);
 		form.add(previewContainer);
 		previewContainer.add(markupPanel);
@@ -157,13 +163,22 @@ public class EditDocumentPage extends MasterPage {
 
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-				if (fileUploadForm.getModelObject() == null) {
-					Document document = parseDocumentFromInput(fileUploadField
-							.getFileUpload());
-					fileUploadForm.setModelObject(document);
+				DocumentData documentData = documentDataModel.getObject();
+				if (CollectionUtils.isEmpty(documentDataModel.getObject()
+						.getParts())) {
+					Document document;
+					try {
+						document = parseDocumentFromInput(fileUploadField
+								.getFileUpload());
+					} catch (MessageException e) {
+						error(getString(e.getMessageCode()));
+						target.add(feedbackPanel);
+						return;
+					}
+					documentData = documentTransformationsService
+							.updateDomainDocument(documentData, document);
 				}
-				documentService.saveDocument(documentDataModel.getObject(),
-						fileUploadForm.getModelObject());
+				documentService.saveDocument(documentData);
 				dialog.setTitle(getString("dialog.title"));
 				dialog.setContent(new MessageDialogContent(dialog
 						.getContentId(), new ResourceModel("save.message"),
@@ -239,9 +254,10 @@ public class EditDocumentPage extends MasterPage {
 	 * 
 	 * @param uploadedFile
 	 * @return Document
+	 * @throws MessageException
 	 */
-	private Document parseDocumentFromInput(FileUpload uploadedFile) {
-		Document doc = null;
+	private Document parseDocumentFromInput(FileUpload uploadedFile)
+			throws MessageException {
 		try {
 			/*
 			 * The InputStream return will be closed by Wicket at the end of the
@@ -249,36 +265,22 @@ public class EditDocumentPage extends MasterPage {
 			 */
 			SAXReader reader = new SAXReader();
 			InputStream stream = uploadedFile.getInputStream();
-			doc = reader.read(stream);
+			return reader.read(stream);
 		} catch (IOException ex) {
 			logger.error(String
 					.format("An I/O Error occured while getting document with name %s: %s",
 							uploadedFile.getClientFileName(), ex.getMessage()));
+			MessageException me = new MessageException();
+			me.setMessageCode(CANNOT_LOAD);
+			throw me;
 		} catch (DocumentException ex) {
 			logger.error(String
 					.format("An error occured while processing document with name %s: %s",
 							uploadedFile.getClientFileName(), ex.getMessage()));
-		}
-		return doc;
-	}
-
-	private class DocumentToHTMLModel extends ChainingModel<String> {
-
-		private static final long serialVersionUID = -3007579368702760744L;
-
-		public DocumentToHTMLModel(Object modelObject) {
-			super(modelObject);
-		}
-
-		@SuppressWarnings("unchecked")
-		public String getObject() {
-			Document document = ((IModel<Document>) getChainedModel())
-					.getObject();
-			if (document == null) {
-				return null;
-			}
-			return documentTransformationsService
-					.transformXMLToString(document);
+			MessageException me = new MessageException();
+			me.setMessageCode(CANNOT_LOAD);
+			throw me;
 		}
 	}
+
 }

@@ -16,6 +16,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
@@ -59,7 +61,8 @@ public class DocumentDataEntity extends BaseDalEntity {
 	@JoinColumn(name = "doc_data_category_id", nullable = false)
 	private CategoryEntity category;
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "documentData")
+	@OneToMany(fetch = FetchType.LAZY, orphanRemoval = true, mappedBy = "documentData")
+	@Cascade({ CascadeType.ALL })
 	private Set<DocumentPartEntity> parts = new HashSet<DocumentPartEntity>(0);
 
 	public DocumentDataEntity() {

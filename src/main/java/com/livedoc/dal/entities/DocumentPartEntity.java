@@ -14,6 +14,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
@@ -42,7 +44,8 @@ public class DocumentPartEntity extends BaseDalEntity {
 	@Column(name = "doc_part_root_elem_type")
 	private String docPartRootElemType;
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "docPart")
+	@OneToMany(fetch = FetchType.LAZY, orphanRemoval = true, mappedBy = "docPart")
+	@Cascade({ CascadeType.ALL })
 	private Set<CommentEntity> comments = new HashSet<CommentEntity>(0);
 
 	public DocumentPartEntity() {

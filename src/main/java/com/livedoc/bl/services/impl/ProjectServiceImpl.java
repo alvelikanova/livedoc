@@ -46,12 +46,12 @@ public class ProjectServiceImpl implements ProjectService {
 
 	public void saveProject(Project project) {
 		ProjectEntity projectEntity = mapper.map(project, ProjectEntity.class);
-		projectDataProvider.saveProject(projectEntity);
+		projectDataProvider.saveOrUpdate(projectEntity);
 	}
 
 	public void deleteProject(Project project) {
 		ProjectEntity projectEntity = mapper.map(project, ProjectEntity.class);
-		projectDataProvider.deleteProject(projectEntity);
+		projectDataProvider.delete(projectEntity);
 	}
 
 	public boolean checkProjectNameUniqueness(Project project) {

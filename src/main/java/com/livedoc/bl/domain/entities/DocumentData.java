@@ -1,8 +1,8 @@
 package com.livedoc.bl.domain.entities;
 
+import java.util.ArrayList;
 import java.util.Date;
-
-import org.dom4j.Document;
+import java.util.List;
 
 public class DocumentData extends BaseDomainEntity {
 
@@ -16,7 +16,7 @@ public class DocumentData extends BaseDomainEntity {
 	private String description;
 	private Category category;
 	private String rootElement;
-	private Document document;
+	private List<DocumentPart> parts = new ArrayList<DocumentPart>();
 
 	public DocumentData() {
 		super();
@@ -94,12 +94,12 @@ public class DocumentData extends BaseDomainEntity {
 		this.rootElement = rootElement;
 	}
 
-	public Document getDocument() {
-		return document;
+	public List<DocumentPart> getParts() {
+		return parts;
 	}
 
-	public void setDocument(Document document) {
-		this.document = document;
+	public void setParts(List<DocumentPart> parts) {
+		this.parts = parts;
 	}
 
 }

@@ -2,16 +2,18 @@ package com.livedoc.ui.project.document;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.PageableListView;
 import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.model.AbstractReadOnlyModel;
-import org.apache.wicket.model.ChainingModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.dom4j.Document;
 
+import com.livedoc.bl.common.MessageException;
 import com.livedoc.bl.domain.entities.Comment;
 import com.livedoc.bl.domain.entities.DocumentData;
 import com.livedoc.bl.services.CommentService;
@@ -25,6 +27,8 @@ import com.livedoc.ui.project.document.comments.CommentsPanel;
 public class DocumentPanel extends GenericPanel<DocumentsCatalog> {
 
 	private static final long serialVersionUID = 6585895264284178455L;
+
+	private static final Logger logger = Logger.getLogger(DocumentPanel.class);
 
 	// services
 	@SpringBean
@@ -60,9 +64,17 @@ public class DocumentPanel extends GenericPanel<DocumentsCatalog> {
 
 			@Override
 			protected void populateItem(final ListItem<Document> item) {
-				HTMLModel htmlModel = new HTMLModel(item.getModel());
+				Document document = item.getModelObject();
+				String html = "";
+				try {
+					html = documentTransformationsService
+							.transformXMLToString(document);
+				} catch (MessageException e) {
+					logger.error("Could not transform document", e);
+					error(getString(e.getMessageCode()));
+				}
 				MarkupProviderPanel markupPanel = new MarkupProviderPanel(
-						"markupPanel", htmlModel);
+						"markupPanel", new Model<String>(html));
 				item.add(markupPanel);
 				IModel<List<Comment>> commentsModel = new AbstractReadOnlyModel<List<Comment>>() {
 
@@ -87,7 +99,8 @@ public class DocumentPanel extends GenericPanel<DocumentsCatalog> {
 					protected String getCurrentChapterId() {
 						DocumentsCatalog catalog = DocumentPanel.this
 								.getModelObject();
-						return documentService.getChapterId(catalog.getSelectedDocument(), item.getIndex());
+						return documentService.getChapterId(
+								catalog.getSelectedDocument(), item.getIndex());
 					}
 
 				};
@@ -101,24 +114,5 @@ public class DocumentPanel extends GenericPanel<DocumentsCatalog> {
 
 	public void resetPagination() {
 		chaptersList.setCurrentPage(0);
-	}
-
-	class HTMLModel extends ChainingModel<String> {
-
-		private static final long serialVersionUID = -6596111106515977616L;
-
-		public HTMLModel(IModel<Document> modelObject) {
-			super(modelObject);
-		}
-
-		public String getObject() {
-			Document document = (Document) this.getChainedModel().getObject();
-			if (document != null) {
-				String html = documentTransformationsService
-						.transformXMLToString(document);
-				return html;
-			}
-			return null;
-		}
 	}
 }

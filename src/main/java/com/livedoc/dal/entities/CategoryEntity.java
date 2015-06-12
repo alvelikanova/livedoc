@@ -14,6 +14,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
@@ -39,7 +41,8 @@ public class CategoryEntity extends BaseDalEntity {
 	@JoinColumn(name = "category_project_id", nullable = false)
 	private ProjectEntity project;
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "category")
+	@OneToMany(fetch = FetchType.LAZY, orphanRemoval = true, mappedBy = "category")
+	@Cascade({ CascadeType.ALL })
 	private Set<DocumentDataEntity> documentDataList = new HashSet<DocumentDataEntity>(
 			0);
 

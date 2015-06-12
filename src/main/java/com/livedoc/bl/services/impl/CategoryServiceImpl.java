@@ -27,7 +27,7 @@ public class CategoryServiceImpl implements CategoryService {
 	public void deleteCategory(Category category) {
 		CategoryEntity categoryEntity = mapper.map(category,
 				CategoryEntity.class);
-		categoryDataProvider.deleteCategory(categoryEntity);
+		categoryDataProvider.delete(categoryEntity);
 	}
 
 	public List<Category> getProjectCategories(Project project) {
