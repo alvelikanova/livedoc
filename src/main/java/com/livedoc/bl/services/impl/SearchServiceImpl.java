@@ -1,5 +1,6 @@
 package com.livedoc.bl.services.impl;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
 import java.net.URL;
@@ -219,6 +220,7 @@ public class SearchServiceImpl implements SearchService {
 
 	private Path preparePathForProject(String projectId)
 			throws MessageException {
+		System.out.println(new File(".").getAbsolutePath());
 		URL generalPath = SearchServiceImpl.class.getClassLoader().getResource(
 				INDICES_PATH);
 		if (generalPath == null) {
