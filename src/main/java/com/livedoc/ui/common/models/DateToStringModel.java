@@ -1,4 +1,4 @@
-package com.livedoc.ui.common.components;
+package com.livedoc.ui.common.models;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

@@ -8,9 +8,9 @@ import org.apache.wicket.model.IModel;
 
 import com.livedoc.security.SecurityUserDetails;
 import com.livedoc.ui.administration.users.UsersManagementPage;
-import com.livedoc.ui.pages.HomePage;
 import com.livedoc.ui.pages.LoginPage;
 import com.livedoc.ui.profile.UserProfilePage;
+import com.livedoc.ui.projects.ProjectsPage;
 
 public class Header extends GenericPanel<SecurityUserDetails> {
 	private static final long serialVersionUID = 891726251828753954L;
@@ -81,7 +81,7 @@ public class Header extends GenericPanel<SecurityUserDetails> {
 
 			@Override
 			public void onClick(AjaxRequestTarget target) {
-				setResponsePage(HomePage.class);
+				setResponsePage(ProjectsPage.class);
 			}
 		};
 		add(homeLink);

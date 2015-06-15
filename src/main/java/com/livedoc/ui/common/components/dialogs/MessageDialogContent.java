@@ -1,4 +1,4 @@
-package com.livedoc.ui.common.components;
+package com.livedoc.ui.common.components.dialogs;
 
 import java.util.Arrays;
 

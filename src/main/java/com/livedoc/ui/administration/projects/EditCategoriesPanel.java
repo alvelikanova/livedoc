@@ -23,9 +23,9 @@ import org.apache.wicket.validation.validator.StringValidator;
 import com.livedoc.bl.domain.entities.Category;
 import com.livedoc.bl.domain.entities.Project;
 import com.livedoc.bl.services.CategoryService;
-import com.livedoc.ui.common.components.MessageDialogContent;
-import com.livedoc.ui.common.components.ModalDialog;
-import com.livedoc.ui.common.components.StubAjaxUpdate;
+import com.livedoc.ui.common.components.dialogs.MessageDialogContent;
+import com.livedoc.ui.common.components.dialogs.ModalDialog;
+import com.livedoc.ui.common.helpers.StubAjaxUpdate;
 
 public class EditCategoriesPanel extends GenericPanel<Project> {
 	private static final long serialVersionUID = -6417182211636805438L;

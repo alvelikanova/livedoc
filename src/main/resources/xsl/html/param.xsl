@@ -97,7 +97,7 @@ http://docbook.sourceforge.net/release/images/annot-close.png</xsl:param>
 <xsl:param name="callout.unicode.number.limit">10</xsl:param>
 <xsl:param name="callout.unicode.start.character">10102</xsl:param>
 <xsl:param name="callouts.extension" select="1"/>
-<xsl:param name="chapter.autolabel" select="1"/>
+<xsl:param name="chapter.autolabel" select="0"/>
 <xsl:param name="chunk.append"/>
 <xsl:param name="chunk.first.sections" select="0"/>
 <xsl:param name="chunk.quietly" select="0"/>
@@ -167,7 +167,7 @@ task before
 <xsl:param name="function.parens" select="0"/>
 <xsl:param name="generate.consistent.ids" select="0"/>
 <xsl:param name="generate.css.header" select="0"/>
-<xsl:param name="generate.id.attributes" select="0"/>
+<xsl:param name="generate.id.attributes" select="1"/>
 <xsl:param name="generate.index" select="1"/>
 <xsl:param name="generate.legalnotice.link" select="0"/>
 <xsl:param name="generate.manifest" select="0"/>
@@ -376,7 +376,7 @@ set       toc,title
   <xsl:attribute name="bgcolor">#E0E0E0</xsl:attribute>
 </xsl:attribute-set>
 
-<xsl:param name="show.comments" select="1"/>
+<xsl:param name="show.comments" select="0"/>
 <xsl:param name="show.revisionflag" select="0"/>
 <xsl:param name="simplesect.in.toc" select="0"/>
 <xsl:param name="spacing.paras" select="0"/>

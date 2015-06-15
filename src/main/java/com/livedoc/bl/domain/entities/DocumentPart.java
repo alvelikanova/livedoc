@@ -6,19 +6,19 @@ import java.util.List;
 public class DocumentPart extends BaseDomainEntity {
 
 	private static final long serialVersionUID = -4095836844694071147L;
-	
+
 	private DocumentData documentData;
 	private int order;
 	private String content;
 	private String rootElementType;
-	private List<Category> comments = new ArrayList<Category>();
+	private List<Comment> comments = new ArrayList<Comment>();
 
 	public DocumentPart() {
 		super();
 	}
 
 	public DocumentPart(String id, DocumentData documentData, int order,
-			String content, String rootElementType, List<Category> comments) {
+			String content, String rootElementType, List<Comment> comments) {
 		super(id);
 		this.documentData = documentData;
 		this.order = order;
@@ -59,11 +59,11 @@ public class DocumentPart extends BaseDomainEntity {
 		this.rootElementType = rootElementType;
 	}
 
-	public List<Category> getComments() {
+	public List<Comment> getComments() {
 		return comments;
 	}
 
-	public void setComments(List<Category> comments) {
+	public void setComments(List<Comment> comments) {
 		this.comments = comments;
 	}
 }

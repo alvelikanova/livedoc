@@ -1,4 +1,4 @@
-package com.livedoc.ui.project;
+package com.livedoc.ui.projects.categories;
 
 import java.io.Serializable;
 import java.util.ArrayList;

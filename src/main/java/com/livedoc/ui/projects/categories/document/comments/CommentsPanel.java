@@ -1,4 +1,4 @@
-package com.livedoc.ui.project.document.comments;
+package com.livedoc.ui.projects.categories.document.comments;
 
 import java.util.Date;
 import java.util.List;
@@ -22,7 +22,7 @@ import com.livedoc.bl.domain.entities.Comment;
 import com.livedoc.bl.services.CommentService;
 import com.livedoc.bl.services.UserService;
 import com.livedoc.security.SecurityUserDetails;
-import com.livedoc.ui.common.components.DateToStringModel;
+import com.livedoc.ui.common.models.DateToStringModel;
 
 public abstract class CommentsPanel extends GenericPanel<List<Comment>> {
 

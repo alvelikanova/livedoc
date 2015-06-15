@@ -5,11 +5,12 @@ import java.util.Date;
 public class Comment extends BaseDomainEntity {
 
 	private static final long serialVersionUID = -4404465684129949193L;
-	
+
 	private String documentPartId;
 	private User author;
 	private Date submitDate;
 	private String comment;
+	private DocumentPart docPart;
 
 	public Comment() {
 		super();
@@ -54,5 +55,13 @@ public class Comment extends BaseDomainEntity {
 
 	public void setComment(String comment) {
 		this.comment = comment;
+	}
+
+	public DocumentPart getDocPart() {
+		return docPart;
+	}
+
+	public void setDocPart(DocumentPart docPart) {
+		this.docPart = docPart;
 	}
 }

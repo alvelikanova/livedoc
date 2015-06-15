@@ -23,8 +23,8 @@ import com.livedoc.bl.domain.entities.Project;
 import com.livedoc.bl.services.CategoryService;
 import com.livedoc.bl.services.ProjectService;
 import com.livedoc.ui.common.components.Feedback;
-import com.livedoc.ui.common.components.MessageDialogContent;
-import com.livedoc.ui.common.components.ModalDialog;
+import com.livedoc.ui.common.components.dialogs.MessageDialogContent;
+import com.livedoc.ui.common.components.dialogs.ModalDialog;
 import com.livedoc.ui.pages.MasterPage;
 
 public class EditProjectPage extends MasterPage {

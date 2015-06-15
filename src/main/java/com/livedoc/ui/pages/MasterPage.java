@@ -10,22 +10,22 @@ import com.livedoc.ui.common.components.Header;
 
 public class MasterPage extends WebPage {
 
-	private static final long serialVersionUID = 8255562492976923335L;
+    private static final long serialVersionUID = 8255562492976923335L;
 
-	public MasterPage() {
-		super();
-		Injector.get().inject(this);
-	}
+    public MasterPage() {
+	super();
+	Injector.get().inject(this);
+    }
 
-	@Override
-	protected void onInitialize() {
-		super.onInitialize();
-		add(new Header("header-panel", new Model<SecurityUserDetails>(getUserData())));
-	}
+    @Override
+    protected void onInitialize() {
+	super.onInitialize();
+	add(new Header("header-panel", new Model<SecurityUserDetails>(
+		getUserData())));
+    }
 
-	protected SecurityUserDetails getUserData()
-	{
-		return (SecurityUserDetails) SecurityContextHolder.getContext().getAuthentication()
-				.getPrincipal();
-	}
+    protected SecurityUserDetails getUserData() {
+	return (SecurityUserDetails) SecurityContextHolder.getContext()
+		.getAuthentication().getPrincipal();
+    }
 }

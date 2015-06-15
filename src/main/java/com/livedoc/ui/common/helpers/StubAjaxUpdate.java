@@ -1,4 +1,4 @@
-package com.livedoc.ui.common.components;
+package com.livedoc.ui.common.helpers;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;

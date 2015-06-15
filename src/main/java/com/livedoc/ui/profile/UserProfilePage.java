@@ -20,9 +20,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import com.livedoc.bl.domain.entities.User;
 import com.livedoc.bl.services.UserService;
 import com.livedoc.ui.common.components.Feedback;
-import com.livedoc.ui.common.components.MessageDialogContent;
-import com.livedoc.ui.common.components.MessageDialogContent.Buttons;
-import com.livedoc.ui.common.components.ModalDialog;
+import com.livedoc.ui.common.components.dialogs.MessageDialogContent;
+import com.livedoc.ui.common.components.dialogs.ModalDialog;
+import com.livedoc.ui.common.components.dialogs.MessageDialogContent.Buttons;
 import com.livedoc.ui.pages.MasterPage;
 
 public class UserProfilePage extends MasterPage {

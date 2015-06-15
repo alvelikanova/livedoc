@@ -1,4 +1,4 @@
-package com.livedoc.ui.project.document;
+package com.livedoc.ui.projects.categories.document;
 
 import java.util.Date;
 
@@ -8,7 +8,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 
 import com.livedoc.bl.domain.entities.DocumentData;
-import com.livedoc.ui.common.components.DateToStringModel;
+import com.livedoc.ui.common.models.DateToStringModel;
 
 public class DocumentInformationPanel extends GenericPanel<DocumentData> {
 

@@ -4,27 +4,10 @@
 	xml:lang="en" lang="en">
 <body>
 	<wicket:extend>
+		<div class="col-sm-2 col-md-4" wicket:id="searchField"
+			style="top: 10px; position: fixed; z-index: 2001;"></div>
 		<div class="container">
-			<div class="jumbotron">
-				<h2>
-					<wicket:message key="projects.title"></wicket:message>
-				</h2>
-			</div>
-			<ul class="list-group">
-				<li class="list-group-item" wicket:id="projects-list">
-					<div class="lead">
-						<label wicket:id="project-name"></label>
-					</div>
-					<p class="text-muted">
-						<label wicket:id="project-description"></label>
-					</p>
-					<button type="button" class="btn btn-success"
-						wicket:id="viewProject">
-						<wicket:message key="projects.button"></wicket:message>
-						<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-					</button>
-				</li>
-			</ul>
+			<wicket:child />
 		</div>
 	</wicket:extend>
 </body>
