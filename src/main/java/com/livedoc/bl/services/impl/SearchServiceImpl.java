@@ -220,7 +220,6 @@ public class SearchServiceImpl implements SearchService {
 
 	private Path preparePathForProject(String projectId)
 			throws MessageException {
-		System.out.println(new File(".").getAbsolutePath());
 		URL generalPath = SearchServiceImpl.class.getClassLoader().getResource(
 				INDICES_PATH);
 		if (generalPath == null) {
@@ -230,7 +229,6 @@ public class SearchServiceImpl implements SearchService {
 			throw ex;
 		}
 		String filePath = generalPath.getFile();
-		logger.info("Generated path is: " + filePath);
 		Path path = Paths.get(filePath.substring(1, filePath.length())
 				+ projectId + "/");
 		return path;
