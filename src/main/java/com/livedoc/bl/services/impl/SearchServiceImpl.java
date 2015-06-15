@@ -226,6 +226,7 @@ public class SearchServiceImpl implements SearchService {
 			throw new MessageException();
 		}
 		String filePath = generalPath.getFile();
+		logger.info("Generated path is: " + filePath);
 		Path path = Paths.get(filePath.substring(1, filePath.length())
 				+ projectId + "/");
 		return path;
