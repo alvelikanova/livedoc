@@ -14,33 +14,33 @@ import com.livedoc.ui.common.components.table.CellFunctionsProvider;
 import com.livedoc.ui.common.components.table.Table;
 
 public class DocumentCellFunctionsProvider extends
-	CellFunctionsProvider<DocumentData, String> {
-    private static final long serialVersionUID = -6724701427801287995L;
+		CellFunctionsProvider<DocumentData, String> {
+	private static final long serialVersionUID = -6724701427801287995L;
 
-    @SpringBean
-    private DocumentService documentService;
-    private WebPage pageToReturn;
+	@SpringBean
+	private DocumentService documentService;
+	private WebPage pageToReturn;
 
-    public DocumentCellFunctionsProvider(WebPage pageToReturn,
-	    Table<DocumentData, String> table) {
-	super(table);
-	this.pageToReturn = pageToReturn;
-    }
-
-    @Override
-    public Page edit(IModel<DocumentData> model) {
-	EditDocumentPage page = new EditDocumentPage(pageToReturn, model);
-	return page;
-    }
-
-    @Override
-    public void delete(IModel<DocumentData> model) {
-	try {
-	    documentService.deleteDocument(model.getObject());
-	} catch (MessageException e) {
-	    getTable().error(getTable().getString(e.getMessageCode()));
+	public DocumentCellFunctionsProvider(WebPage pageToReturn,
+			Table<DocumentData, String> table) {
+		super(table);
+		this.pageToReturn = pageToReturn;
 	}
-	RequestCycle.get().find(AjaxRequestTarget.class).add(getTable());
-    }
+
+	@Override
+	public Page edit(IModel<DocumentData> model) {
+		EditDocumentPage page = new EditDocumentPage(pageToReturn, model);
+		return page;
+	}
+
+	@Override
+	public void delete(IModel<DocumentData> model) {
+		try {
+			documentService.deleteDocument(model.getObject());
+		} catch (MessageException e) {
+			getTable().error(getTable().getString(e.getMessageCode()));
+		}
+		RequestCycle.get().find(AjaxRequestTarget.class).add(getTable());
+	}
 
 }
