@@ -223,7 +223,9 @@ public class SearchServiceImpl implements SearchService {
 				INDICES_PATH);
 		if (generalPath == null) {
 			logger.error("Could not find root indices directory");
-			throw new MessageException();
+			MessageException ex = new MessageException();
+			ex.setMessageCode(IND_READ);
+			throw ex;
 		}
 		String filePath = generalPath.getFile();
 		logger.info("Generated path is: " + filePath);
