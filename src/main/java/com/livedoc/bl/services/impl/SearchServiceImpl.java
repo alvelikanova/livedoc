@@ -1,6 +1,5 @@
 package com.livedoc.bl.services.impl;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
 import java.net.URL;
