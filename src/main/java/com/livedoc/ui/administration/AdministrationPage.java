@@ -25,7 +25,6 @@ public class AdministrationPage extends MasterPage {
 
 	private static final String CSS_ACTIVE = "active";
 
-	@SuppressWarnings("unchecked")
 	private static final List<Class<? extends AdministrationPage>> adminPages = Arrays
 			.asList(UsersManagementPage.class, ProjectsManagementPage.class,
 					DocumentsManagementPage.class);

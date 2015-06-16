@@ -26,17 +26,20 @@ public class BaseDataProvider<T extends BaseDalEntity, ID extends Serializable>
 		this.entityClass = entityClass;
 	}
 
+	@SuppressWarnings("unchecked")
 	public T findById(ID id) {
 		Session session = sessionFactory.getCurrentSession();
 		return (T) session.load(entityClass, id);
 	}
 	
+	@SuppressWarnings("unchecked")
 	public List<T> findAll() {
 		Session session = sessionFactory.getCurrentSession();
 		Criteria criteria = session.createCriteria(entityClass);
 		return criteria.list();
 	}
 
+	@SuppressWarnings("unchecked")
 	public List<T> findByCriterion(Criterion criterion) {
 		Session session = sessionFactory.getCurrentSession();
 		Criteria criteria = session.createCriteria(entityClass).add(criterion);

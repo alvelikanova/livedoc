@@ -70,7 +70,6 @@ public class EditDocumentPage extends MasterPage {
 
 	// constants
 	private static final String XML_CONTENT_TYPE = "text/xml";
-	private static final String CANNOT_TRANSFORM = "DOC_ERROR-001";
 	private static final String CANNOT_LOAD = "DOC_ERROR-003";
 
 	public EditDocumentPage(WebPage pageToReturn,

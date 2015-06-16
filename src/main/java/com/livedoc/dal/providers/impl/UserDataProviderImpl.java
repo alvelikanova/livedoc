@@ -29,6 +29,7 @@ public class UserDataProviderImpl extends BaseDataProvider<UserEntity, String>
 				.add(criterion).uniqueResult();
 	}
 
+	@SuppressWarnings("unchecked")
 	public List<UserEntity> findUsers(List<String> excludeUsersIds) {
 		Session session = sessionFactory.getCurrentSession();
 		Criterion criterion = Restrictions.not(Restrictions.in("userId", excludeUsersIds));
