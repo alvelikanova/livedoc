@@ -32,7 +32,7 @@ public class CommentEntity extends BaseDalEntity {
 	private DocumentPartEntity docPart;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "comment_author_id", nullable = false)
+	@JoinColumn(name = "comment_author_id")
 	private UserEntity author;
 
 	@Temporal(TemporalType.TIMESTAMP)

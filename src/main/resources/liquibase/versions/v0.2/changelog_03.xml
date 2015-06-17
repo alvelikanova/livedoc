@@ -12,7 +12,6 @@
 				<constraints primaryKey="true" />
 			</column>
 			<column name="COMMENT_AUTHOR_ID" type="varchar(32)">
-				<constraints nullable="false" />
 			</column>
 			<column name="COMMENT_SUBMIT_TS" type="timestamp">
 				<constraints nullable="false" />

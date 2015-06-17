@@ -11,7 +11,10 @@ public class User extends BaseDomainEntity {
 	private String password;
 	private Role role;
 	private List<Project> projects = new ArrayList<Project>();
-
+	private List<DocumentData> modifiedDocuments = new ArrayList<DocumentData>();
+	private List<DocumentData> createdDocuments = new ArrayList<DocumentData>();
+	private List<Comment> comments = new ArrayList<Comment>();
+	
 	public User() {
 		super();
 	}
@@ -52,5 +55,29 @@ public class User extends BaseDomainEntity {
 
 	public void setProjects(List<Project> projects) {
 		this.projects = projects;
+	}
+
+	public List<DocumentData> getModifiedDocuments() {
+		return modifiedDocuments;
+	}
+
+	public void setModifiedDocuments(List<DocumentData> modifiedDocuments) {
+		this.modifiedDocuments = modifiedDocuments;
+	}
+
+	public List<DocumentData> getCreatedDocuments() {
+		return createdDocuments;
+	}
+
+	public void setCreatedDocuments(List<DocumentData> createdDocuments) {
+		this.createdDocuments = createdDocuments;
+	}
+
+	public List<Comment> getComments() {
+		return comments;
+	}
+
+	public void setComments(List<Comment> comments) {
+		this.comments = comments;
 	}
 }

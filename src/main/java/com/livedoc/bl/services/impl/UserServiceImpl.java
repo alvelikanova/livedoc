@@ -12,8 +12,12 @@ import org.springframework.transaction.annotation.Transactional;
 import com.livedoc.bl.domain.entities.Project;
 import com.livedoc.bl.domain.entities.User;
 import com.livedoc.bl.services.UserService;
+import com.livedoc.dal.entities.CommentEntity;
+import com.livedoc.dal.entities.DocumentDataEntity;
 import com.livedoc.dal.entities.ProjectEntity;
 import com.livedoc.dal.entities.UserEntity;
+import com.livedoc.dal.providers.CommentDataProvider;
+import com.livedoc.dal.providers.DocumentDataProvider;
 import com.livedoc.dal.providers.UserDataProvider;
 
 @Service
@@ -22,6 +26,10 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private UserDataProvider userDataProvider;
+	@Autowired
+	private DocumentDataProvider documentDataProvider;
+	@Autowired
+	private CommentDataProvider commentDataProvider;
 	@Autowired
 	private DozerBeanMapper mapper;
 
@@ -70,6 +78,21 @@ public class UserServiceImpl implements UserService {
 
 	public void deleteUser(User user) {
 		UserEntity userEntity = mapper.map(user, UserEntity.class);
+		for (DocumentDataEntity md : userEntity.getModifiedDocuments()) {
+			md.setLastModUser(null);
+			documentDataProvider.saveOrUpdate(md);
+		}
+		userEntity.setModifiedDocuments(null);
+		for (DocumentDataEntity cd : userEntity.getCreatedDocuments()) {
+			cd.setCreateUser(null);
+			documentDataProvider.saveOrUpdate(cd);
+		}
+		userEntity.setCreatedDocuments(null);
+		for (CommentEntity c : userEntity.getComments()) {
+			c.setAuthor(null);
+			commentDataProvider.saveOrUpdate(c);
+		}
+		userEntity.setComments(null);
 		userDataProvider.delete(userEntity);
 	}
 

@@ -12,6 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
@@ -45,6 +46,17 @@ public class UserEntity extends BaseDalEntity {
 	@Cascade({ CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH })
 	@JoinTable(name = "users_to_project", joinColumns = { @JoinColumn(name = "USERS_ID", nullable = false) }, inverseJoinColumns = { @JoinColumn(name = "PROJECT_ID", nullable = false) })
 	private Set<ProjectEntity> projects = new HashSet<ProjectEntity>();
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "lastModUser")
+	private Set<DocumentDataEntity> modifiedDocuments = new HashSet<DocumentDataEntity>(
+			0);
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "createUser")
+	private Set<DocumentDataEntity> createdDocuments = new HashSet<DocumentDataEntity>(
+			0);
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "author")
+	private Set<CommentEntity> comments = new HashSet<CommentEntity>(0);
 
 	public UserEntity() {
 	}
@@ -95,5 +107,29 @@ public class UserEntity extends BaseDalEntity {
 
 	public void setProjects(Set<ProjectEntity> projects) {
 		this.projects = projects;
+	}
+
+	public Set<DocumentDataEntity> getModifiedDocuments() {
+		return modifiedDocuments;
+	}
+
+	public void setModifiedDocuments(Set<DocumentDataEntity> modifiedDocuments) {
+		this.modifiedDocuments = modifiedDocuments;
+	}
+
+	public Set<DocumentDataEntity> getCreatedDocuments() {
+		return createdDocuments;
+	}
+
+	public void setCreatedDocuments(Set<DocumentDataEntity> createdDocuments) {
+		this.createdDocuments = createdDocuments;
+	}
+
+	public Set<CommentEntity> getComments() {
+		return comments;
+	}
+
+	public void setComments(Set<CommentEntity> comments) {
+		this.comments = comments;
 	}
 }

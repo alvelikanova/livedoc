@@ -66,7 +66,7 @@ public class SearchServiceImpl implements SearchService {
 			.getLogger(SearchServiceImpl.class);
 
 	// constants
-	private static final String INDICES_PATH = "/lucene/indices/";
+	private static final String INDICES_PATH = "/lucene/indexes/";
 	private static final String HIGHLIGHT_CSS = "bg-primary";
 	private static final String SEARCH_RESULTS_SEPARATOR = "...";
 	private static final int MAX_LENGTH = 50;

@@ -42,7 +42,7 @@ public class DocumentDataEntity extends BaseDalEntity {
 	private String rootElementType;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "doc_data_create_user_id", nullable = false)
+	@JoinColumn(name = "doc_data_create_user_id")
 	private UserEntity createUser;
 
 	@Temporal(TemporalType.TIMESTAMP)
@@ -50,7 +50,7 @@ public class DocumentDataEntity extends BaseDalEntity {
 	private Date documentCreationTs;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "doc_data_last_mod_user_id", nullable = false)
+	@JoinColumn(name = "doc_data_last_mod_user_id")
 	private UserEntity lastModUser;
 
 	@Temporal(TemporalType.TIMESTAMP)

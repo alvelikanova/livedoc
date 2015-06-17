@@ -146,14 +146,12 @@
 				remarks="Document's description" />
 			<column name="DOC_DATA_CREATE_USER_ID" type="varchar(32)"
 				remarks="User who has created document">
-				<constraints nullable="false" />
 			</column>
 			<column name="DOC_DATA_CREATE_TS" type="timestamp" remarks="Creation timestamp">
 				<constraints nullable="false" />
 			</column>
 			<column name="DOC_DATA_LAST_MOD_USER_ID" type="varchar(32)"
 				remarks="User who has last modified document">
-				<constraints nullable="false" />
 			</column>
 			<column name="DOC_DATA_LAST_MOD_TS" type="timestamp"
 				remarks="Last modification timestamp">
