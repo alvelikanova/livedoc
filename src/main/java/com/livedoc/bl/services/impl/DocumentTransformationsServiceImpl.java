@@ -15,6 +15,9 @@ import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
+import org.dom4j.QName;
+import org.dom4j.dom.DOMAttribute;
+import org.dom4j.dom.DOMText;
 import org.dom4j.io.DocumentResult;
 import org.dom4j.io.DocumentSource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +25,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.livedoc.bl.common.MessageException;
+import com.livedoc.bl.domain.entities.Comment;
 import com.livedoc.bl.domain.entities.DocumentData;
 import com.livedoc.bl.domain.entities.DocumentPart;
 import com.livedoc.bl.services.DocumentTransformationsService;
@@ -178,5 +182,40 @@ public class DocumentTransformationsServiceImpl implements
 			documentData.getParts().add(part);
 		}
 		return documentData;
+	}
+
+	@Override
+	public String getDocumentWithComments(DocumentData documentData)
+			throws MessageException {
+		if (documentData == null) {
+			logger.warn("Null document has been retreived");
+			return null;
+		}
+		Document document = DocumentHelper.createDocument();
+		List<DocumentPart> parts = documentData.getParts();
+		document.setXMLEncoding(xmlEncoding);
+		Element root = document.addElement(documentData.getRootElement(),
+				docbookXmlns).addAttribute("version", docbookVersion);
+		try {
+			for (DocumentPart part : parts) {
+				Element elem = DocumentHelper.parseText(part.getContent())
+						.getRootElement();
+				List<Comment> comments = part.getComments();
+				for (Comment comment : comments) {
+					Element remark = elem.addElement("remark");
+					remark.add(new DOMAttribute(new QName("author"), comment
+							.getAuthor().getName()));
+					remark.add(new DOMText(comment.getComment()));
+				}
+				root.add(elem);
+			}
+		} catch (DocumentException ex) {
+			logger.error("Error occured while trying to parse database data: "
+					+ ex);
+			MessageException me = new MessageException();
+			me.setMessageCode(CANNOT_PARSE);
+			throw me;
+		}
+		return document.asXML();
 	}
 }

@@ -26,36 +26,19 @@
 								wicket:id="description"></textarea>
 						</div>
 					</div>
+					<div wicket:id="documentContentPanel"></div>
 					<div class="form-group">
-						<label class="col-sm-2 control-label"><wicket:message
-								key="document.upload"></wicket:message></label>
-						<div class="col-sm-9">
-							<form wicket:id="fileUploadForm">
-								<div class="input-group">
-									<div class="form-control">
-										<input type="file" accept=".xml" wicket:id="fileUpload" />
-									</div>
-									<div class="input-group-btn">
-										<button type="button" class="btn btn-primary"
-											wicket:id="uploadDocument">
-											<span class="glyphicon glyphicon-upload" aria-hidden="true"></span>
-											<wicket:message key="docinfopanel.submit"></wicket:message>
-										</button>
-									</div>
-								</div>
-							</form>
-						</div>
-					</div>
-					<div class="form-group" wicket:id="preview">
-						<label class="col-sm-2 control-label"><wicket:message
-								key="document.preview"></wicket:message></label>
-						<div class="col-sm-9">
-							<div class="panel panel-default"
-								style="max-height: 300px; overflow: scroll;">
-								<div class="panel-body">
-									<div wicket:id="markupPanel" />
-								</div>
-							</div>
+						<div class="col-sm-offset-2 col-sm-9">
+							<button type="button" class="btn btn-primary"
+								wicket:id="refreshDocumentButton">
+								<span class="glyphicon glyphicon-refresh"></span>
+								<wicket:message key="document.refresh"></wicket:message>
+							</button>
+							<button type="button" class="btn btn-primary"
+								wicket:id="downloadButton">
+								<span class="glyphicon glyphicon-download"></span>
+								<wicket:message key="document.download"></wicket:message>
+							</button>
 						</div>
 					</div>
 					<div class="form-group last">

@@ -23,4 +23,7 @@ public interface DocumentTransformationsService {
 
 	DocumentData updateDomainDocument(DocumentData documentData,
 			Document document);
+
+	String getDocumentWithComments(DocumentData documentData)
+			throws MessageException;
 }

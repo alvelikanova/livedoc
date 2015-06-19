@@ -24,9 +24,9 @@ import com.livedoc.bl.common.SearchFieldEnum;
 import com.livedoc.bl.domain.entities.DocumentData;
 import com.livedoc.bl.domain.entities.DocumentPart;
 import com.livedoc.bl.services.SearchService;
-import com.livedoc.ui.pages.HomePage;
+import com.livedoc.ui.pages.MasterPage;
 
-public class SearchResultsPage extends HomePage {
+public class SearchResultsPage extends MasterPage {
 
 	private static final long serialVersionUID = 7748850467635903083L;
 
@@ -130,6 +130,7 @@ public class SearchResultsPage extends HomePage {
 		resultsContainer.add(searchResultList);
 	}
 
+	@Override
 	protected void onSearch(AjaxRequestTarget target, String query) {
 		try {
 			Map<DocumentData, List<DocumentPart>> results = searchService
